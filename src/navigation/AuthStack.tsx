@@ -3,6 +3,7 @@ import SignIn from "../screens/AuthScreens/Signin/SignIn";
 import Signup from "../screens/AuthScreens/Signup/Signup";
 import Home from "../screens/Home/Home";
 import { useAppSelector } from "../hooks/useAppselector";
+import LandingPage from "../screens/AuthScreens/LandingPage/LandingPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -12,8 +13,9 @@ export default function AuthStack() {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName={isLoggedIn ? "Home" : "Signin"}
+      initialRouteName={isLoggedIn ? "Home" : "LandingPage"}
     >
+      <Stack.Screen name="LandingPage" component={LandingPage} />
       <Stack.Screen name="Signin" component={SignIn} />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Home" component={Home} />

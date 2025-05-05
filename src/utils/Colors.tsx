@@ -1,9 +1,12 @@
 export const LightColors = {
   primary: "#EB9E3C",
   secondary: "#8E1A7B",
-  txtblack: "#000",
+  txtblack: "#111827",
   white: "#fff",
   gradientmid: "#b980b4",
+  gradient1: "#e99c3b",
+  gradient2: "#b36f17",
+  grey: "#6C7278",
 };
 
 export const DarkColors = {
@@ -12,4 +15,5 @@ export const DarkColors = {
   txtblack: "#fff",
   white: "#fff",
   gradientmid: "#b980b4",
+  grey: "#6C7278",
 };

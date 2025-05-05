@@ -23,6 +23,7 @@ interface ContainerProps {
   edges?: SafeAreaViewProps["edges"];
   withScroll?: boolean;
   enableKeyboardAvoiding?: boolean;
+  enableBar?: boolean;
 }
 
 const Container: React.FC<ContainerProps> = ({
@@ -32,6 +33,7 @@ const Container: React.FC<ContainerProps> = ({
   edges,
   withScroll = true,
   enableKeyboardAvoiding = true,
+  enableBar = false,
 }) => {
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
@@ -46,27 +48,26 @@ const Container: React.FC<ContainerProps> = ({
   const dismissKeyboard = () => Keyboard.dismiss();
 
   return (
-    <SafeAreaView
-      edges={edges}
-      style={[styles.headingcontainer, containerStyle]}
-    >
-      {Platform.OS === "ios" ? (
-        <View
-          style={[
-            styles.iosCustomStatusBar,
-            {
-              backgroundColor: statusBgClr ? statusBgClr : theme.white,
-              height: insets.top,
-            },
-          ]}
-        />
-      ) : (
-        <StatusBar
-          barStyle={isDark ? "light-content" : "dark-content"}
-          backgroundColor={statusBgClr ? statusBgClr : theme.white}
-          hidden={isStatusBarhidden}
-        />
-      )}
+    <SafeAreaView edges={edges} style={[styles.headingcontainer]}>
+      {enableBar &&
+        (Platform.OS === "ios" ? (
+          <View
+            style={[
+              styles.iosCustomStatusBar,
+              {
+                backgroundColor: statusBgClr ? statusBgClr : theme.white,
+                height: insets.top,
+              },
+            ]}
+          />
+        ) : (
+          <StatusBar
+            barStyle={isDark ? "light-content" : "dark-content"}
+            backgroundColor={statusBgClr ? statusBgClr : theme.white}
+            hidden={isStatusBarhidden}
+            translucent
+          />
+        ))}
       <KeyboardAvoidingView
         enabled={enableKeyboardAvoiding}
         style={styles.headingcontainer}

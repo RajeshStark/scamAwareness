@@ -1,14 +1,14 @@
 import React from "react";
 import {
   ActivityIndicator,
-  StyleProp,
-  TextStyle,
+  StyleSheet,
   TouchableOpacity,
   View,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Typography from "../Typography/Typography.tsx";
 import useAppTheme from "../../hooks/useAppTheme";
+import Fonts from "../../utils/Fonts.tsx";
 
 export type CustomButtonProps = {
   title: string;
@@ -18,7 +18,7 @@ export type CustomButtonProps = {
   isHalf?: boolean;
   isText?: boolean;
   isLinear?: boolean;
-  buttonStyle: any;
+  buttonStyle?: any;
 };
 
 export default function CustomButton({
@@ -37,8 +37,13 @@ export default function CustomButton({
     isLoading ? (
       <ActivityIndicator size="small" />
     ) : (
-      <View style={[{ flexDirection: "row" }]}>
-        <Typography fontType="bold">{title}</Typography>
+      <View style={[styles.row]}>
+        <Typography
+          fontType="bold"
+          style={[styles.txt, { color: theme.white }]}
+        >
+          {title}
+        </Typography>
       </View>
     );
 
@@ -46,14 +51,12 @@ export default function CustomButton({
     <TouchableOpacity
       onPress={!isDisabled && !isLoading ? onPress : undefined}
       disabled={isDisabled || isLoading}
-      style={[{ borderRadius: 15 }]}
+      style={[{ borderRadius: 15 }, styles.btnContainer]}
     >
       {isLinear && !isDisabled ? (
         <LinearGradient
           colors={[theme.gradient1, theme.gradient2]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={buttonStyle}
+          style={[buttonStyle, styles.btnContainer]}
         >
           {renderContent()}
         </LinearGradient>
@@ -63,3 +66,18 @@ export default function CustomButton({
     </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  btnContainer: {
+    width: "90%",
+    borderRadius: 10,
+    margin: 10,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  row: { flexDirection: "row" },
+  txt: {
+    fontFamily: Fonts.Bold,
+  },
+});

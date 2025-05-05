@@ -4,10 +4,12 @@ import Container from "../../../components/Container/Container";
 import LineraBgContainer from "../../../components/Container/LineraBgContainer";
 import CustomButton from "../../../components/Button/CustomButton";
 import useAppTheme from "../../../hooks/useAppTheme";
-import { createStyles } from "./styles";
 import { Images } from "../../../utils/Images";
+import { createStyles } from "./styles";
+import Typography from "../../../components/Typography/Typography";
+import { strings } from "../../../utils/Strings";
 
-export default function SignIn() {
+export default function LandingPage() {
   const { theme, isDark } = useAppTheme();
   const styles = createStyles(theme);
   return (
@@ -21,8 +23,13 @@ export default function SignIn() {
               style={styles.logo}
               resizeMode="contain"
             />
-
-            <CustomButton isLinear title="Title" onPress={() => {}} />
+            <Typography style={styles.title}>
+              {strings.signuporlogin}
+            </Typography>
+            <CustomButton isLinear title={strings.signup} onPress={() => {}} />
+            <Typography style={styles.or}>{strings.or}</Typography>
+            <CustomButton isLinear title={strings.Login} onPress={() => {}} />
+            <Typography style={styles.or}>{strings.signloginwith}</Typography>
           </View>
         </View>
       </Container>
