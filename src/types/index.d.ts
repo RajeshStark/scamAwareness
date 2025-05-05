@@ -7,4 +7,5 @@ type Theme = {
   gradient1: string;
   gradient2: string;
   grey: string;
+  info: string;
 };

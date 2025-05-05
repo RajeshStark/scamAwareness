@@ -6,23 +6,29 @@ import CustomButton from "../../../components/Button/CustomButton";
 import useAppTheme from "../../../hooks/useAppTheme";
 import { createStyles } from "./styles";
 import { Images } from "../../../utils/Images";
+import { strings } from "../../../utils/Strings";
+import Typography from "../../../components/Typography/Typography";
 
 export default function SignIn() {
   const { theme, isDark } = useAppTheme();
   const styles = createStyles(theme);
   return (
-    <LineraBgContainer reverse>
+    <LineraBgContainer>
       <Container>
+        <Image
+          source={Images.darkLogo}
+          style={styles.logo}
+          resizeMode="contain"
+        />
         <View style={styles.mainContainer}>
           <View style={styles.cardcontainer}>
-            <View style={styles.cardBackground} />
-            <Image
-              source={isDark ? Images.darkLogo : Images.whiteLogo}
-              style={styles.logo}
-              resizeMode="contain"
-            />
-
-            <CustomButton isLinear title="Title" onPress={() => {}} />
+            <Typography style={styles.title}>{strings.Login}</Typography>
+            <View style={styles.txtcontainer}>
+              <Typography style={styles.txtgrey}>{strings.dont}</Typography>
+              <Typography style={styles.txtblue}>{strings.sign}</Typography>
+            </View>
+            <CustomButton isLinear title={strings.Login} onPress={() => {}} />
+            <Typography style={styles.or}>{strings.or}</Typography>
           </View>
         </View>
       </Container>

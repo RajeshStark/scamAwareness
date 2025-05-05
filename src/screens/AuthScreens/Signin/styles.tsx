@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { height } from "../../../utils/Dimensions";
+import Fonts from "../../../utils/Fonts";
 
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
@@ -16,6 +17,7 @@ export const createStyles = (theme: Theme) =>
       position: "relative",
       alignItems: "center",
       justifyContent: "center",
+      backgroundColor: theme.white,
     },
 
     cardBackground: {
@@ -28,5 +30,29 @@ export const createStyles = (theme: Theme) =>
       width: 130,
       height: 80,
       margin: 10,
+      alignSelf: "center",
+    },
+    title: {
+      fontSize: 28,
+      margin: 15,
+    },
+    txtgrey: {
+      fontSize: 12,
+      fontFamily: Fonts.Medium,
+      color: theme.grey,
+    },
+    txtblue: {
+      fontSize: 12,
+      fontFamily: Fonts.Medium,
+      color: theme.info,
+      marginLeft: 5,
+    },
+    txtcontainer: {
+      flexDirection: "row",
+    },
+    or: {
+      fontSize: 12,
+      color: theme.grey,
+      marginVertical: 8,
     },
   });

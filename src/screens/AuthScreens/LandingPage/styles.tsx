@@ -28,13 +28,25 @@ export const createStyles = (theme: Theme) =>
       width: 130,
       height: 80,
       margin: 10,
+      marginTop: 40,
     },
     title: {
       fontSize: 28,
-      margin: 10,
+      margin: 15,
     },
     or: {
       fontSize: 8,
       color: theme.grey,
+      marginVertical: 8,
     },
+    imgContainer: {
+      padding: 10,
+      backgroundColor: theme.white,
+      borderRadius: 10,
+      margin: 10,
+      width: 60,
+      height: 50,
+      alignItems: "center",
+    },
+    img: { width: 25, height: 25 },
   });

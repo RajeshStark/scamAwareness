@@ -10,6 +10,7 @@ type Props = {
 
 export default function LineraBgContainer({ children, reverse }: Props) {
   const { isDark } = useAppTheme();
+  console.log({ isDark });
 
   return (
     <ImageBackground
