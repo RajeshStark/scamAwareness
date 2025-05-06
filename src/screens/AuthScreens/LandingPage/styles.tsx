@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { height } from "../../../utils/Dimensions";
+import Fonts from "../../../utils/Fonts";
 
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
@@ -33,6 +34,7 @@ export const createStyles = (theme: Theme) =>
     title: {
       fontSize: 28,
       margin: 15,
+      fontFamily: Fonts.Bold,
     },
     or: {
       fontSize: 8,

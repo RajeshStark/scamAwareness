@@ -35,6 +35,7 @@ export const createStyles = (theme: Theme) =>
     title: {
       fontSize: 28,
       margin: 15,
+      fontFamily: Fonts.Bold,
     },
     txtgrey: {
       fontSize: 12,
