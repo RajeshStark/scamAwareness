@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { height } from "../../../utils/Dimensions";
+import { height, width } from "../../../utils/Dimensions";
 import Fonts from "../../../utils/Fonts";
 
 export const createStyles = (theme: Theme) =>
@@ -11,13 +11,14 @@ export const createStyles = (theme: Theme) =>
     },
     cardcontainer: {
       width: "90%",
-      height: height * 0.6,
+      // height: height * 0.65,
       borderRadius: 10,
       overflow: "hidden",
       position: "relative",
       alignItems: "center",
       justifyContent: "center",
       backgroundColor: theme.white,
+      paddingBottom: 40,
     },
 
     cardBackground: {
@@ -55,5 +56,38 @@ export const createStyles = (theme: Theme) =>
       fontSize: 12,
       color: theme.grey,
       marginVertical: 8,
+    },
+    remmain: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      width: "88%",
+      marginVertical: 10,
+    },
+    rememberContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    mr: {
+      marginRight: 10,
+    },
+    imgContainer: {
+      padding: 10,
+      backgroundColor: theme.white,
+      borderRadius: 10,
+      margin: 3,
+      height: 50,
+      alignItems: "center",
+      borderColor: theme.grey,
+      borderWidth: 0.2,
+      width: "98%",
+      flexDirection: "row",
+      justifyContent: "center",
+    },
+    img: { width: 25, height: 25 },
+    socialtitle: {
+      fontSize: 16,
+      fontFamily: Fonts.Medium,
+      marginLeft: 10,
     },
   });

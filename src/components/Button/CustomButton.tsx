@@ -9,6 +9,7 @@ import LinearGradient from "react-native-linear-gradient";
 import Typography from "../Typography/Typography.tsx";
 import useAppTheme from "../../hooks/useAppTheme";
 import Fonts from "../../utils/Fonts.tsx";
+import { width } from "../../utils/Dimensions.tsx";
 
 export type CustomButtonProps = {
   title: string;
@@ -32,6 +33,7 @@ export default function CustomButton({
   buttonStyle,
 }: CustomButtonProps) {
   const { theme } = useAppTheme();
+  const styles = createStyles(theme, isHalf);
 
   const renderContent = () =>
     isLoading ? (
@@ -67,17 +69,18 @@ export default function CustomButton({
   );
 }
 
-const styles = StyleSheet.create({
-  btnContainer: {
-    width: "90%",
-    borderRadius: 10,
-    margin: 10,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  row: { flexDirection: "row" },
-  txt: {
-    fontFamily: Fonts.Bold,
-  },
-});
+export const createStyles = (theme: Theme, isHalf) =>
+  StyleSheet.create({
+    btnContainer: {
+      width: isHalf ? "45%" : "95%",
+      borderRadius: 10,
+      margin: 10,
+      height: 50,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    row: { flexDirection: "row" },
+    txt: {
+      fontFamily: Fonts.Bold,
+    },
+  });

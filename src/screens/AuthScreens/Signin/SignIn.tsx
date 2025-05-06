@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, FlatList } from "react-native";
 import React, { useState } from "react";
 import Container from "../../../components/Container/Container";
 import LineraBgContainer from "../../../components/Container/LineraBgContainer";
@@ -11,13 +11,24 @@ import Typography from "../../../components/Typography/Typography";
 import CustomInput from "../../../components/Input/Input";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-export default function SignIn() {
+export default function SignIn({ navigation }) {
   const { theme, isDark } = useAppTheme();
   const styles = createStyles(theme);
   const [inputData, setInputData] = useState({
     email: "",
     password: "",
   });
+
+  const arr = [
+    {
+      id: "1",
+      uri: Images.google,
+      title: "Continue with Google",
+    },
+    { id: "2", uri: Images.facebook, title: "Continue with Facebook" },
+    // { id: "3", uri: Images.apple },
+    // { id: "4", uri: Images.mobile },
+  ];
 
   const onChangeText = () => {};
   return (
@@ -33,7 +44,12 @@ export default function SignIn() {
             <Typography style={styles.title}>{strings.Login}</Typography>
             <View style={styles.txtcontainer}>
               <Typography style={styles.txtgrey}>{strings.dont}</Typography>
-              <Typography style={styles.txtblue}>{strings.sign}</Typography>
+              <Typography
+                style={styles.txtblue}
+                onPress={() => navigation.navigate("Signup")}
+              >
+                {strings.sign}
+              </Typography>
             </View>
             <CustomInput
               label="Email"
@@ -49,12 +65,38 @@ export default function SignIn() {
                   name="eye-off-outline"
                   size={20}
                   color={theme.grey}
-                  style={{ marginRight: 10 }}
+                  style={styles.mr}
                 />
               }
             />
+            <View style={styles.remmain}>
+              <View style={styles.rememberContainer}>
+                <Ionicons name={"square-outline"} size={15} style={styles.mr} />
+                <Typography style={styles.txtgrey}>
+                  {strings.remember}
+                </Typography>
+              </View>
+              <Typography style={styles.txtblue}>{strings.forgot}</Typography>
+            </View>
             <CustomButton isLinear title={strings.Login} onPress={() => {}} />
             <Typography style={styles.or}>{strings.or}</Typography>
+            <FlatList
+              data={arr}
+              style={{ width: "90%" }}
+              renderItem={({ item }) => (
+                <View style={styles.imgContainer}>
+                  <Image
+                    source={item.uri}
+                    style={styles.img}
+                    resizeMode="contain"
+                  />
+                  <Typography style={styles.socialtitle}>
+                    {item.title}
+                  </Typography>
+                </View>
+              )}
+              keyExtractor={(item) => item.id}
+            />
           </View>
         </View>
       </Container>

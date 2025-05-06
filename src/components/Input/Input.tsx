@@ -3,6 +3,7 @@ import React from "react";
 import Typography from "../Typography/Typography";
 import Fonts from "../../utils/Fonts";
 import useAppTheme from "../../hooks/useAppTheme";
+import { width } from "../../utils/Dimensions";
 
 type CustomInputProps = {
   label?: string;
@@ -12,6 +13,7 @@ type CustomInputProps = {
   isHalf?: boolean;
   rightIcon?: React.ReactNode;
   placeholder?: string;
+  size?: any;
 };
 
 export default function CustomInput({
@@ -22,9 +24,10 @@ export default function CustomInput({
   isHalf,
   rightIcon,
   placeholder,
+  size,
 }: CustomInputProps) {
   const { theme } = useAppTheme();
-  const styles = createStyles(theme);
+  const styles = createStyles(theme, isHalf);
   return (
     <View style={styles.mainView}>
       {label && <Typography style={styles.label}>{label}</Typography>}
@@ -33,6 +36,11 @@ export default function CustomInput({
           placeholder={placeholder}
           value={value}
           onChangeText={onChangeText}
+          style={[
+            styles.input,
+            { width: size ? size : rightIcon ? "90%" : "100%" },
+          ]}
+          placeholderTextColor={theme.grey}
         />
         {rightIcon ?? rightIcon}
       </View>
@@ -40,7 +48,7 @@ export default function CustomInput({
   );
 }
 
-export const createStyles = (theme: Theme) =>
+export const createStyles = (theme: Theme, isHalf) =>
   StyleSheet.create({
     mainView: {
       width: "90%",
@@ -59,5 +67,11 @@ export const createStyles = (theme: Theme) =>
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
+      width: isHalf ? "45%" : "100%",
+      backgroundColor: theme.white,
+      height: 50,
+    },
+    input: {
+      borderRadius: 10,
     },
   });
