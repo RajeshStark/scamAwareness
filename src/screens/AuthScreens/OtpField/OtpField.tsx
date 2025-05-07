@@ -18,10 +18,13 @@ import {
 } from "react-native-confirmation-code-field";
 import CustomHeader from "../../../components/Input/Header/Header";
 import { createStyles } from "./styles";
+import { useDispatch } from "react-redux";
+import { logIn } from "../../../redux/features/login/loginSlice";
 
 export default function OtpField({ navigation }) {
   const { theme, isDark } = useAppTheme();
   const styles = createStyles(theme);
+  const dispatch = useDispatch();
   const [inputData, setInputData] = useState({
     email: "",
     password: "",
@@ -88,7 +91,7 @@ export default function OtpField({ navigation }) {
           <CustomButton
             isLinear
             title="Confirm"
-            onPress={() => navigation.navigate("OtpField")}
+            onPress={() => dispatch(logIn())}
           />
         </View>
       </Container>
