@@ -75,7 +75,11 @@ export default function Signup({ navigation }) {
             />
           </View>
 
-          <CustomButton isLinear title="Register" onPress={() => {}} />
+          <CustomButton
+            isLinear
+            title="Register"
+            onPress={() => navigation.navigate("OtpField")}
+          />
           <View style={styles.txtcontainer}>
             <Typography style={[styles.txtgrey, { color: theme.white }]}>
               {strings.alreadyhave}

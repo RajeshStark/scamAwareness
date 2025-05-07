@@ -4,19 +4,12 @@ import Signup from "../screens/AuthScreens/Signup/Signup";
 import Home from "../screens/Home/Home";
 import { useAppSelector } from "../hooks/useAppselector";
 import LandingPage from "../screens/AuthScreens/LandingPage/LandingPage";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { setDarkMode, toggleTheme } from "../redux/features/theme/themeSlice";
+import OtpField from "../screens/AuthScreens/OtpField/OtpField";
 
 const Stack = createNativeStackNavigator();
 
 export default function AuthStack() {
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
-  const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch(setDarkMode(true));
-  // }, []);
 
   return (
     <Stack.Navigator
@@ -27,6 +20,7 @@ export default function AuthStack() {
       <Stack.Screen name="Signin" component={SignIn} />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="OtpField" component={OtpField} />
     </Stack.Navigator>
   );
 }
