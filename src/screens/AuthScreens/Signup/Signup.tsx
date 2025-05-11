@@ -16,12 +16,28 @@ import CustomHeader from "../../../components/Input/Header/Header";
 export default function Signup({ navigation }) {
   const { theme, isDark } = useAppTheme();
   const styles = createStyles(theme);
+
   const [inputData, setInputData] = useState({
+    first: "",
+    last: "",
     email: "",
+    DOB: "",
+    countrycode: "",
+    phone: "",
     password: "",
   });
 
-  const onChangeText = () => {};
+  const onChangeText = (txt, type) => {
+    if (type === "countrycode") {
+      setInputData({ ...inputData, countrycode: txt.callingCode[0] });
+      return;
+    }
+    setInputData({ ...inputData, [type]: txt });
+  };
+
+  const onSignup = () => {
+    console.log({ inputData });
+  };
 
   return (
     <LineraBgContainer reverse>
@@ -36,34 +52,45 @@ export default function Signup({ navigation }) {
 
             <CustomInput
               placeholder="First name"
-              value={inputData?.email}
-              onChangeText={onChangeText}
+              value={inputData?.first}
+              onChangeText={(txt) => onChangeText(txt, "first")}
             />
             <CustomInput
               placeholder="Last name"
-              value={inputData?.email}
-              onChangeText={onChangeText}
+              value={inputData?.last}
+              onChangeText={(txt) => onChangeText(txt, "last")}
             />
             <CustomInput
               placeholder="Email"
               value={inputData?.email}
-              onChangeText={onChangeText}
+              onChangeText={(txt) => onChangeText(txt, "email")}
             />
             <CustomInput
               placeholder="DOB"
-              value={inputData?.email}
-              onChangeText={onChangeText}
+              value={inputData?.DOB}
+              onChangeText={(txt) => onChangeText(txt, "DOB")}
+              isDatePicker
+              rightIcon={
+                <Ionicons
+                  name="calendar-clear-outline"
+                  size={20}
+                  color={theme.grey}
+                  style={styles.mr}
+                />
+              }
             />
             <CustomInput
               placeholder="Phone"
-              value={inputData?.email}
-              onChangeText={onChangeText}
+              value={inputData?.phone}
+              onChangeText={(txt) => onChangeText(txt, "phone")}
+              onChangeCountry={(txt) => onChangeText(txt, "countrycode")}
+              isPhoneNumber
             />
 
             <CustomInput
               placeholder="Password"
-              value={inputData?.email}
-              onChangeText={onChangeText}
+              value={inputData?.password}
+              onChangeText={(txt) => onChangeText(txt, "password")}
               rightIcon={
                 <Ionicons
                   name="eye-off-outline"
@@ -78,7 +105,8 @@ export default function Signup({ navigation }) {
           <CustomButton
             isLinear
             title="Register"
-            onPress={() => navigation.navigate("OtpField")}
+            onPress={() => onSignup()}
+            // isDisabled={}
           />
           <View style={styles.txtcontainer}>
             <Typography style={[styles.txtgrey, { color: theme.white }]}>

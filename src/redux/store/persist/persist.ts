@@ -6,7 +6,7 @@ const persistConfig = {
   key: "root",
   storage: AsyncStorage,
   blacklist: [],
-  whitelist: ["signup", "login", "theme", "viewConfig"],
+  // whitelist: ["signup", "login", "theme", "viewConfig"],
 };
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);
