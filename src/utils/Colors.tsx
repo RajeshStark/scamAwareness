@@ -8,6 +8,8 @@ export const LightColors = {
   gradient2: "#b36f17",
   grey: "#6C7278",
   info: "#4D81E7",
+  disable: "#898989",
+  error: "#f22c3d",
 };
 
 export const DarkColors = {
@@ -18,4 +20,6 @@ export const DarkColors = {
   gradientmid: "#b980b4",
   grey: "#6C7278",
   info: "#4D81E7",
+  disable: "#898989",
+  error: "#f22c3d",
 };

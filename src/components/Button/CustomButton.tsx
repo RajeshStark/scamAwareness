@@ -63,7 +63,9 @@ export default function CustomButton({
           {renderContent()}
         </LinearGradient>
       ) : (
-        <View style={buttonStyle}>{renderContent()}</View>
+        <View style={[buttonStyle, styles.btnContainer1]}>
+          {renderContent()}
+        </View>
       )}
     </TouchableOpacity>
   );
@@ -78,6 +80,16 @@ export const createStyles = (theme: Theme, isHalf) =>
       height: 50,
       alignItems: "center",
       justifyContent: "center",
+    },
+
+    btnContainer1: {
+      width: isHalf ? "45%" : "95%",
+      borderRadius: 15,
+      margin: 10,
+      height: 50,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: theme.disable,
     },
     row: { flexDirection: "row" },
     txt: {

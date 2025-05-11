@@ -28,9 +28,19 @@ const dummyPosts = [
   },
 ];
 
-export default function Home() {
+export default function Home({ navigation }) {
+  const dispatch = useDispatch();
+
+  const logingOut = () => {
+    dispatch(logOut());
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "LandingPage" }],
+    });
+  };
   return (
     <Container>
+      <CustomButton title="Logout" onPress={() => logingOut()} />
       {/* <ScrollView> */}
       {dummyPosts.map((post, index) => (
         <PostCard key={index} {...post} />

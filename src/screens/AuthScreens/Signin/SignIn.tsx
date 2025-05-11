@@ -10,10 +10,13 @@ import { strings } from "../../../utils/Strings";
 import Typography from "../../../components/Typography/Typography";
 import CustomInput from "../../../components/Input/Input";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useDispatch } from "react-redux";
+import { logIn } from "../../../redux/features/login/loginSlice";
 
 export default function SignIn({ navigation }) {
   const { theme, isDark } = useAppTheme();
   const styles = createStyles(theme);
+  const dispatch = useDispatch();
   const [inputData, setInputData] = useState({
     email: "",
     password: "",
@@ -26,11 +29,17 @@ export default function SignIn({ navigation }) {
       title: "Continue with Google",
     },
     { id: "2", uri: Images.facebook, title: "Continue with Facebook" },
-    // { id: "3", uri: Images.apple },
-    // { id: "4", uri: Images.mobile },
   ];
 
   const onChangeText = () => {};
+
+  const loginToApp = () => {
+    dispatch(logIn());
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "BottomTabs" }],
+    });
+  };
   return (
     <LineraBgContainer>
       <Container>
@@ -78,7 +87,11 @@ export default function SignIn({ navigation }) {
               </View>
               <Typography style={styles.txtblue}>{strings.forgot}</Typography>
             </View>
-            <CustomButton isLinear title={strings.Login} onPress={() => {}} />
+            <CustomButton
+              isLinear
+              title={strings.Login}
+              onPress={() => loginToApp()}
+            />
             <Typography style={styles.or}>{strings.or}</Typography>
             <FlatList
               data={arr}

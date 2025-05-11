@@ -18,7 +18,7 @@ export default function AuthStack() {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName={true ? "BottomTabs" : "LandingPage"}
+      initialRouteName={isLoggedIn ? "BottomTabs" : "LandingPage"}
     >
       <Stack.Screen name="BottomTabs" component={BottomTabs} />
       <Stack.Screen name="Settings" component={Settings} />

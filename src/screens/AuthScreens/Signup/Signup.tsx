@@ -12,28 +12,50 @@ import CustomInput from "../../../components/Input/Input";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { createStyles } from "./styles";
 import CustomHeader from "../../../components/Input/Header/Header";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { SignupSchema } from "../../../utils/ValidationScemas";
 
 export default function Signup({ navigation }) {
   const { theme, isDark } = useAppTheme();
   const styles = createStyles(theme);
 
-  const [inputData, setInputData] = useState({
-    first: "",
-    last: "",
-    email: "",
-    DOB: "",
-    countrycode: "",
-    phone: "",
-    password: "",
+  const {
+    control,
+    watch,
+    formState: { errors, isValid },
+    getValues,
+  } = useForm({
+    mode: "all",
+    defaultValues: {
+      first: "",
+      last: "",
+      email: "",
+      DOB: "",
+      countrycode: "",
+      phone: "",
+      password: "",
+    },
+    resolver: yupResolver(SignupSchema),
   });
 
-  const onChangeText = (txt, type) => {
-    if (type === "countrycode") {
-      setInputData({ ...inputData, countrycode: txt.callingCode[0] });
-      return;
-    }
-    setInputData({ ...inputData, [type]: txt });
-  };
+  // const [inputData, setInputData] = useState({
+  //   first: "",
+  //   last: "",
+  //   email: "",
+  //   DOB: "",
+  //   countrycode: "",
+  //   phone: "",
+  //   password: "",
+  // });
+
+  // const onChangeText = (txt, type) => {
+  //   if (type === "countrycode") {
+  //     setInputData({ ...inputData, countrycode: txt.callingCode[0] });
+  //     return;
+  //   }
+  //   setInputData({ ...inputData, [type]: txt });
+  // };
 
   const onSignup = () => {
     console.log({ inputData });
@@ -51,24 +73,28 @@ export default function Signup({ navigation }) {
             </Typography>
 
             <CustomInput
-              placeholder="First name"
-              value={inputData?.first}
-              onChangeText={(txt) => onChangeText(txt, "first")}
+              placeholder="First Name"
+              control={control}
+              name="first"
+              error={errors}
             />
             <CustomInput
               placeholder="Last name"
-              value={inputData?.last}
-              onChangeText={(txt) => onChangeText(txt, "last")}
+              control={control}
+              name="email"
+              error={errors}
             />
             <CustomInput
-              placeholder="Email"
-              value={inputData?.email}
-              onChangeText={(txt) => onChangeText(txt, "email")}
+              placeholder="Enter email"
+              control={control}
+              name="email"
+              error={errors}
             />
             <CustomInput
               placeholder="DOB"
-              value={inputData?.DOB}
-              onChangeText={(txt) => onChangeText(txt, "DOB")}
+              control={control}
+              error={errors}
+              name="DOB"
               isDatePicker
               rightIcon={
                 <Ionicons
@@ -81,16 +107,18 @@ export default function Signup({ navigation }) {
             />
             <CustomInput
               placeholder="Phone"
-              value={inputData?.phone}
-              onChangeText={(txt) => onChangeText(txt, "phone")}
+              control={control}
+              error={errors}
+              name="phone"
               onChangeCountry={(txt) => onChangeText(txt, "countrycode")}
               isPhoneNumber
             />
 
             <CustomInput
               placeholder="Password"
-              value={inputData?.password}
-              onChangeText={(txt) => onChangeText(txt, "password")}
+              control={control}
+              error={errors}
+              name="password"
               rightIcon={
                 <Ionicons
                   name="eye-off-outline"
@@ -106,7 +134,7 @@ export default function Signup({ navigation }) {
             isLinear
             title="Register"
             onPress={() => onSignup()}
-            // isDisabled={}
+            isDisabled={!isValid}
           />
           <View style={styles.txtcontainer}>
             <Typography style={[styles.txtgrey, { color: theme.white }]}>
