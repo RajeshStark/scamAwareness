@@ -1,5 +1,5 @@
 import { View, StyleSheet, TextInput, Pressable, Platform } from "react-native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import PhoneInput from "react-native-phone-number-input";
 import Typography from "../Typography/Typography";
@@ -9,7 +9,7 @@ import { Controller, Control } from "react-hook-form";
 
 type CustomInputProps = {
   label?: string;
-  onChangeText?: (txt: string, type?: string) => void;
+  onChangeText?: (txt: string) => void;
   value?: string;
   isHalf?: boolean;
   rightIcon?: React.ReactNode;
@@ -17,7 +17,7 @@ type CustomInputProps = {
   size?: any;
   isDatePicker?: boolean;
   isPhoneNumber?: boolean;
-  onChangeCountry?: (txt: string, type: string) => void;
+  onChangeCountry?: (txt: string) => void;
 
   name?: string;
   control?: Control<any>;
@@ -39,8 +39,7 @@ export default function CustomInput({
   name,
   error,
 }: CustomInputProps) {
-  console.log({ error });
-
+  const phoneInputRef = useRef<PhoneInput>(null);
   const { theme } = useAppTheme();
   const styles = createStyles(theme, isHalf, !!error);
   const [showPicker, setShowPicker] = useState(false);
@@ -93,22 +92,39 @@ export default function CustomInput({
             borderRightColor: theme.txtblack,
             borderRightWidth: 0.4,
           }}
-          onChangeText={onChange}
-          onChangeCountry={onChangeCountry}
+          onChangeText={(text) => {
+            onChange(text); // update the form's phone value
+            const countryCode = phoneInputRef.current?.getCallingCode(); // ✅ get country code
+            if (onChangeCountry && countryCode) {
+              onChangeCountry(`+${countryCode}`);
+            }
+          }}
           containerStyle={[
-            styles.input,
+            {
+              height: 50,
+              borderRadius: 10,
+              backgroundColor: theme.white,
+            },
             {
               width: size ? size : rightIcon ? "90%" : "100%",
             },
           ]}
           textContainerStyle={{
+            height: 50,
             backgroundColor: theme.white,
             borderRadius: 10,
+            paddingVertical: 0,
+            paddingHorizontal: 0,
           }}
-          textInputStyle={{ color: theme.txtblack }}
+          textInputStyle={{
+            color: theme.txtblack,
+            paddingVertical: 10,
+            fontSize: 14,
+          }}
           codeTextStyle={{
             color: theme.txtblack,
-            marginVertical: 10,
+            fontSize: 14,
+            paddingTop: 5,
           }}
           placeholder={placeholder}
         />
@@ -165,7 +181,7 @@ export const createStyles = (
   StyleSheet.create({
     mainView: {
       width: "90%",
-      marginVertical: 5,
+      marginVertical: 2,
     },
     label: {
       fontSize: 12,
@@ -187,7 +203,7 @@ export const createStyles = (
       borderRadius: 10,
     },
     errorText: {
-      marginTop: 4,
+      // marginTop: 4,
       fontSize: 12,
       color: theme.error,
       fontFamily: Fonts.Regular,

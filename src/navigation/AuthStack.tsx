@@ -13,7 +13,6 @@ const Stack = createNativeStackNavigator();
 
 export default function AuthStack() {
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
-  console.log({ isLoggedIn });
 
   return (
     <Stack.Navigator

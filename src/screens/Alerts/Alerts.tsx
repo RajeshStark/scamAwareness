@@ -6,21 +6,23 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Pressable,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import CustomButton from "../../components/Button/CustomButton";
+import { width } from "../../utils/Dimensions";
+import { Image } from "react-native";
 
 export default function EmergencyScreen() {
   const [text, setText] = useState("");
 
   return (
     <ScrollView style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
-        <Ionicons name="arrow-back" size={24} color="black" />
         <Text style={styles.title}>Emergency</Text>
       </View>
 
-      {/* Description */}
       <Text style={styles.description}>
         Report emergencies instantly. Fast, secure, & trackable
       </Text>
@@ -29,7 +31,6 @@ export default function EmergencyScreen() {
         Submit your complaint now, & we’ll take action immediately!
       </Text>
 
-      {/* Text input */}
       <View style={styles.inputCard}>
         <TextInput
           multiline
@@ -39,42 +40,62 @@ export default function EmergencyScreen() {
           style={styles.textInput}
         />
         <View style={styles.inputActions}>
-          <Ionicons name="image-outline" size={20} style={styles.icon} />
-          <Ionicons name="logo-github" size={20} style={styles.icon} />
-          <Ionicons name="happy-outline" size={20} style={styles.icon} />
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Ionicons name="image-outline" size={20} style={styles.icon} />
+            <MaterialCommunityIcons
+              name="file-gif-box"
+              size={20}
+              style={styles.icon}
+            />
+            <Ionicons name="happy-outline" size={20} style={styles.icon} />
+          </View>
           <TouchableOpacity style={styles.postBtn}>
             <Text style={styles.postBtnText}>Post</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* Buttons */}
       <View style={styles.line} />
 
       <View style={styles.actionRow}>
-        <TouchableOpacity style={styles.actionButton}>
-          <Text style={styles.actionText}>CALL</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton}>
-          <Text style={styles.actionText}>MESSAGE</Text>
-        </TouchableOpacity>
+        <CustomButton
+          title="Call"
+          onPress={() => {}}
+          isLinear
+          width={width * 0.4}
+        />
+        <CustomButton
+          title="Message"
+          onPress={() => {}}
+          isHalf
+          isLinear
+          width={width * 0.4}
+        />
       </View>
 
       <View style={styles.line} />
 
-      <TouchableOpacity style={styles.raiseBtn}>
-        <Text style={styles.raiseText}>+ RAISE A COMPLAINT</Text>
+      <View style={styles.raiseBtn}>
+        <Pressable>
+          <Image
+            source={require("../../assets/images/AnotherImages/Button.png")}
+            style={{ width: width * 0.6, height: 50 }}
+            resizeMode="contain"
+          />
+        </Pressable>
         <Text style={styles.raiseSubText}>
           Redirects to the govt complaint website
         </Text>
-      </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 60,
+    paddingTop: 20,
     paddingHorizontal: 16,
     backgroundColor: "#fff",
     flex: 1,
@@ -100,8 +121,8 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   subText: {
-    fontSize: 13,
-    color: "#666",
+    fontSize: 8,
+    color: "#000",
     marginBottom: 20,
   },
   inputCard: {
@@ -111,6 +132,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 12,
     marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   textInput: {
     height: 100,
@@ -128,7 +158,7 @@ const styles = StyleSheet.create({
   },
   postBtn: {
     backgroundColor: "#a22184",
-    borderRadius: 6,
+    borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 20,
   },
@@ -162,9 +192,6 @@ const styles = StyleSheet.create({
   },
   raiseBtn: {
     marginTop: 20,
-    borderWidth: 1,
-    borderColor: "#777",
-    borderRadius: 8,
     paddingVertical: 14,
     alignItems: "center",
   },

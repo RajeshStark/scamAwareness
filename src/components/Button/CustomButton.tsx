@@ -6,10 +6,9 @@ import {
   View,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import Typography from "../Typography/Typography.tsx";
 import useAppTheme from "../../hooks/useAppTheme";
 import Fonts from "../../utils/Fonts.tsx";
-import { width } from "../../utils/Dimensions.tsx";
+import Typography from "../Typography/Typography.tsx";
 
 export type CustomButtonProps = {
   title: string;
@@ -20,6 +19,9 @@ export type CustomButtonProps = {
   isText?: boolean;
   isLinear?: boolean;
   buttonStyle?: any;
+  width?: number;
+  nomargin?: boolean;
+  borderRadius?: number;
 };
 
 export default function CustomButton({
@@ -31,6 +33,9 @@ export default function CustomButton({
   isText = false,
   isLinear = false,
   buttonStyle,
+  width,
+  nomargin,
+  borderRadius,
 }: CustomButtonProps) {
   const { theme } = useAppTheme();
   const styles = createStyles(theme, isHalf);
@@ -53,12 +58,27 @@ export default function CustomButton({
     <TouchableOpacity
       onPress={!isDisabled && !isLoading ? onPress : undefined}
       disabled={isDisabled || isLoading}
-      style={[{ borderRadius: 15 }, styles.btnContainer]}
+      style={[
+        {
+          borderRadius: borderRadius ? borderRadius : 15,
+          width: width ? width : isHalf ? "45%" : "95%",
+          margin: nomargin ? 0 : 10,
+        },
+        styles.btnContainer,
+      ]}
     >
       {isLinear && !isDisabled ? (
         <LinearGradient
           colors={[theme.gradient1, theme.gradient2]}
-          style={[buttonStyle, styles.btnContainer]}
+          style={[
+            buttonStyle,
+            styles.btnContainer,
+            {
+              borderRadius: borderRadius ? borderRadius : 15,
+              width: width ? width : isHalf ? "45%" : "95%",
+              margin: nomargin ? 0 : 10,
+            },
+          ]}
         >
           {renderContent()}
         </LinearGradient>
@@ -74,9 +94,7 @@ export default function CustomButton({
 export const createStyles = (theme: Theme, isHalf) =>
   StyleSheet.create({
     btnContainer: {
-      width: isHalf ? "45%" : "95%",
       borderRadius: 10,
-      margin: 10,
       height: 50,
       alignItems: "center",
       justifyContent: "center",

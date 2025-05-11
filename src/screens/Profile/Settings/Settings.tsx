@@ -7,6 +7,8 @@ import {
   SafeAreaView,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useDispatch } from "react-redux";
+import { logOut } from "../../../redux/features/login/loginSlice";
 
 export default function SettingsScreen({ navigation }: any) {
   const settingsOptions = [
@@ -17,8 +19,24 @@ export default function SettingsScreen({ navigation }: any) {
       icon: "information-circle-outline",
       onPress: () => {},
     },
-    { label: "Logout", icon: "log-out-outline", onPress: () => {} },
+    {
+      label: "Logout",
+      icon: "log-out-outline",
+      onPress: () => {
+        logingOut();
+      },
+    },
   ];
+
+  const dispatch = useDispatch();
+
+  const logingOut = () => {
+    dispatch(logOut());
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "LandingPage" }],
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>

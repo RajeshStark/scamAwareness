@@ -8,7 +8,12 @@ import {
   Pressable,
   ScrollView,
 } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+const img =
+  "https://www.foodandwine.com/thmb/0SHv4wzGz7OBOcYtVbRWQeuR2CQ=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/MSG-Smash-Burger-FT-RECIPE0124-d9682401f3554ef683e24311abdf342b.jpg";
+
+const build =
+  "https://images.unsplash.com/photo-1612380783707-d759e46ee5cf?q=80&w=3144&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
 const notifications = {
   new: [
@@ -16,16 +21,16 @@ const notifications = {
       id: "1",
       title: "SALE IS LIVE",
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "https://source.unsplash.com/random/100x100?burger",
-      thumb: "https://source.unsplash.com/random/100x100?building",
+      image: img,
+      thumb: build,
       badge: 2,
     },
     {
       id: "2",
       title: "SALE IS LIVE",
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "https://source.unsplash.com/random/100x100?burger2",
-      thumb: "https://source.unsplash.com/random/100x100?building2",
+      image: img,
+      thumb: build,
       badge: 2,
     },
   ],
@@ -34,22 +39,22 @@ const notifications = {
       id: "3",
       title: "SALE IS LIVE",
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "https://source.unsplash.com/random/100x100?burger3",
-      thumb: "https://source.unsplash.com/random/100x100?building3",
+      image: img,
+      thumb: build,
     },
     {
       id: "4",
       title: "SALE IS LIVE",
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "https://source.unsplash.com/random/100x100?burger4",
-      thumb: "https://source.unsplash.com/random/100x100?building4",
+      image: img,
+      thumb: build,
     },
     {
       id: "5",
       title: "SALE IS LIVE",
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "https://source.unsplash.com/random/100x100?burger5",
-      thumb: "https://source.unsplash.com/random/100x100?building5",
+      image: img,
+      thumb: build,
     },
   ],
 };
@@ -76,7 +81,7 @@ export default function NotificationScreen() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <Ionicons name="arrow-back" size={24} color="black" />
+        {/* <MaterialCommunityIcons name="arrow-back" size={24} color="black" /> */}
         <Text style={styles.headerTitle}>Notifications</Text>
       </View>
 
@@ -90,7 +95,11 @@ export default function NotificationScreen() {
 
       <Pressable style={styles.showMore}>
         <Text style={styles.showMoreText}>Show More</Text>
-        <Ionicons name="chevron-down" size={18} color="#1b3b6f" />
+        <MaterialCommunityIcons
+          name="chevron-double-down"
+          size={18}
+          color="#1b3b6f"
+        />
       </Pressable>
     </ScrollView>
   );
@@ -98,7 +107,7 @@ export default function NotificationScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 60,
+    paddingTop: 20,
     paddingHorizontal: 16,
     backgroundColor: "#fff",
     flex: 1,
@@ -151,11 +160,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    color: "#1b3b6f",
+    color: "#0E3173",
   },
   desc: {
     fontSize: 12,
-    color: "#333",
+    color: "#0E3173",
   },
   thumbnail: {
     width: 44,

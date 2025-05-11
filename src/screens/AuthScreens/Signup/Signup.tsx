@@ -1,20 +1,19 @@
-import { View, Text, Image, FlatList } from "react-native";
-import React, { useState } from "react";
+import React from "react";
+import { View } from "react-native";
+import CustomButton from "../../../components/Button/CustomButton";
 import Container from "../../../components/Container/Container";
 import LineraBgContainer from "../../../components/Container/LineraBgContainer";
-import CustomButton from "../../../components/Button/CustomButton";
 import useAppTheme from "../../../hooks/useAppTheme";
 
-import { Images } from "../../../utils/Images";
-import { strings } from "../../../utils/Strings";
-import Typography from "../../../components/Typography/Typography";
-import CustomInput from "../../../components/Input/Input";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { createStyles } from "./styles";
-import CustomHeader from "../../../components/Input/Header/Header";
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import CustomHeader from "../../../components/Input/Header/Header";
+import CustomInput from "../../../components/Input/Input";
+import Typography from "../../../components/Typography/Typography";
+import { strings } from "../../../utils/Strings";
 import { SignupSchema } from "../../../utils/ValidationScemas";
+import { createStyles } from "./styles";
 
 export default function Signup({ navigation }) {
   const { theme, isDark } = useAppTheme();
@@ -23,8 +22,10 @@ export default function Signup({ navigation }) {
   const {
     control,
     watch,
+    handleSubmit,
     formState: { errors, isValid },
     getValues,
+    setValue,
   } = useForm({
     mode: "all",
     defaultValues: {
@@ -39,26 +40,8 @@ export default function Signup({ navigation }) {
     resolver: yupResolver(SignupSchema),
   });
 
-  // const [inputData, setInputData] = useState({
-  //   first: "",
-  //   last: "",
-  //   email: "",
-  //   DOB: "",
-  //   countrycode: "",
-  //   phone: "",
-  //   password: "",
-  // });
-
-  // const onChangeText = (txt, type) => {
-  //   if (type === "countrycode") {
-  //     setInputData({ ...inputData, countrycode: txt.callingCode[0] });
-  //     return;
-  //   }
-  //   setInputData({ ...inputData, [type]: txt });
-  // };
-
-  const onSignup = () => {
-    console.log({ inputData });
+  const onSignup = (values) => {
+    console.log({ values });
   };
 
   return (
@@ -81,7 +64,7 @@ export default function Signup({ navigation }) {
             <CustomInput
               placeholder="Last name"
               control={control}
-              name="email"
+              name="last"
               error={errors}
             />
             <CustomInput
@@ -110,8 +93,11 @@ export default function Signup({ navigation }) {
               control={control}
               error={errors}
               name="phone"
-              onChangeCountry={(txt) => onChangeText(txt, "countrycode")}
               isPhoneNumber
+              onChangeCountry={(code) => {
+                setValue("countrycode", code);
+                console.log({ code });
+              }} // ✅ update here
             />
 
             <CustomInput
@@ -133,7 +119,8 @@ export default function Signup({ navigation }) {
           <CustomButton
             isLinear
             title="Register"
-            onPress={() => onSignup()}
+            onPress={handleSubmit(onSignup)}
+            // onPress={() => navigation.navigate("OtpField")}
             isDisabled={!isValid}
           />
           <View style={styles.txtcontainer}>

@@ -25,7 +25,7 @@ const screenOptions = ({ route }) => ({
     const icons = {
       Home: {
         active: require("../assets/images/BottomTab/HomeActive.png"),
-        inactive: require("../assets/images/BottomTab/HomeActive.png"),
+        inactive: require("../assets/images/BottomTab/HomeInactive.png"),
       },
       Search: {
         active: require("../assets/images/BottomTab/searchactive.png"),

@@ -1,4 +1,4 @@
-import { View, Text, Image, FlatList } from "react-native";
+import { View, Text, Image, FlatList, Alert } from "react-native";
 import React, { useState } from "react";
 import Container from "../../../components/Container/Container";
 import LineraBgContainer from "../../../components/Container/LineraBgContainer";
@@ -12,14 +12,28 @@ import CustomInput from "../../../components/Input/Input";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useDispatch } from "react-redux";
 import { logIn } from "../../../redux/features/login/loginSlice";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { signinSchema } from "../../../utils/ValidationScemas";
 
 export default function SignIn({ navigation }) {
   const { theme, isDark } = useAppTheme();
   const styles = createStyles(theme);
   const dispatch = useDispatch();
-  const [inputData, setInputData] = useState({
-    email: "",
-    password: "",
+
+  const {
+    control,
+    watch,
+    formState: { errors, isValid },
+    getValues,
+    handleSubmit,
+  } = useForm({
+    mode: "all",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    resolver: yupResolver(signinSchema),
   });
 
   const arr = [
@@ -31,14 +45,20 @@ export default function SignIn({ navigation }) {
     { id: "2", uri: Images.facebook, title: "Continue with Facebook" },
   ];
 
-  const onChangeText = () => {};
-
-  const loginToApp = () => {
-    dispatch(logIn());
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "BottomTabs" }],
-    });
+  const loginToApp = (values) => {
+    console.log({ values });
+    if (
+      values.email === "admin@yopmail.com" &&
+      values.password === "Admin@123"
+    ) {
+      dispatch(logIn());
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "BottomTabs" }],
+      });
+    } else {
+      Alert.alert("Please try with valid credentials");
+    }
   };
   return (
     <LineraBgContainer>
@@ -62,13 +82,17 @@ export default function SignIn({ navigation }) {
             </View>
             <CustomInput
               label="Email"
-              value={inputData?.email}
-              onChangeText={onChangeText}
+              placeholder="email"
+              control={control}
+              name="email"
+              error={errors}
             />
             <CustomInput
               label="Password"
-              value={inputData?.email}
-              onChangeText={onChangeText}
+              placeholder="Password"
+              control={control}
+              error={errors}
+              name="password"
               rightIcon={
                 <Ionicons
                   name="eye-off-outline"
@@ -90,7 +114,7 @@ export default function SignIn({ navigation }) {
             <CustomButton
               isLinear
               title={strings.Login}
-              onPress={() => loginToApp()}
+              onPress={handleSubmit(loginToApp)}
             />
             <Typography style={styles.or}>{strings.or}</Typography>
             <FlatList

@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 type PostCardProps = {
   avatar: string;
@@ -11,6 +12,7 @@ type PostCardProps = {
   comments: number;
   likes: number;
   shares: number;
+  noShadow?: boolean;
 };
 
 const PostCard: React.FC<PostCardProps> = ({
@@ -22,33 +24,41 @@ const PostCard: React.FC<PostCardProps> = ({
   comments,
   likes,
   shares,
+  noShadow,
 }) => {
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { elevation: noShadow ? 0 : 3 }]}>
       <View style={styles.header}>
-        <Image source={{ uri: avatar }} style={styles.avatar} />
-        <View>
+        <View style={styles.header}>
+          <Image source={{ uri: avatar }} style={styles.avatar} />
+
           <Text style={styles.username}>{username}</Text>
           <Text style={styles.handle}>@{handle}</Text>
         </View>
+        <Ionicons name="ellipsis-vertical" size={20} />
       </View>
 
-      <Text style={styles.caption}>{caption}</Text>
+      <View style={styles.contentContainer}>
+        <Text style={styles.caption}>{caption}</Text>
 
-      <Image source={{ uri: imageUrl }} style={styles.postImage} />
+        <Image source={{ uri: imageUrl }} style={styles.postImage} />
 
-      <View style={styles.footer}>
-        <View style={styles.iconRow}>
-          <Icon name="message-circle" size={16} color="#555" />
-          <Text style={styles.iconText}>{comments}</Text>
-        </View>
-        <View style={styles.iconRow}>
-          <Icon name="heart" size={16} color="#555" />
-          <Text style={styles.iconText}>{likes}</Text>
-        </View>
-        <View style={styles.iconRow}>
-          <Icon name="repeat" size={16} color="#555" />
-          <Text style={styles.iconText}>{shares}</Text>
+        <View style={styles.footer}>
+          <View style={styles.iconRow}>
+            <Ionicons name="chatbubble-outline" size={16} color="#555" />
+            <Text style={styles.iconText}>{comments}</Text>
+          </View>
+          <View style={styles.iconRow}>
+            <Ionicons name="heart-outline" size={16} color="#555" />
+            <Text style={styles.iconText}>{likes}</Text>
+          </View>
+          <View style={styles.iconRow}>
+            <Ionicons name="repeat" size={16} color="#555" />
+            <Text style={styles.iconText}>{shares}</Text>
+          </View>
+          <View style={styles.iconRow}>
+            <Ionicons name="bookmark-outline" size={16} color="#555" />
+          </View>
         </View>
       </View>
     </View>
@@ -61,12 +71,15 @@ const styles = StyleSheet.create({
     padding: 12,
     backgroundColor: "#fff",
     borderRadius: 12,
-    elevation: 3,
+  },
+  contentContainer: {
+    marginLeft: 45,
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 8,
+    justifyContent: "space-between",
   },
   avatar: {
     width: 40,
@@ -81,13 +94,14 @@ const styles = StyleSheet.create({
   handle: {
     fontSize: 12,
     color: "#666",
+    marginLeft: 5,
   },
   caption: {
     fontSize: 14,
     marginBottom: 8,
   },
   postImage: {
-    width: "100%",
+    width: "96%",
     height: 200,
     borderRadius: 10,
     marginBottom: 10,

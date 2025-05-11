@@ -31,7 +31,13 @@ export default function OtpField({ navigation }) {
   });
   const [otp, setOtp] = useState("");
 
-  const onChangeText = () => {};
+  const loginToApp = () => {
+    dispatch(logIn());
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "BottomTabs" }],
+    });
+  };
 
   return (
     <LineraBgContainer reverse>
@@ -88,11 +94,7 @@ export default function OtpField({ navigation }) {
             </Typography>
           </View>
 
-          <CustomButton
-            isLinear
-            title="Confirm"
-            onPress={() => dispatch(logIn())}
-          />
+          <CustomButton isLinear title="Confirm" onPress={() => loginToApp()} />
         </View>
       </Container>
     </LineraBgContainer>
