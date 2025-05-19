@@ -1,0 +1,13 @@
+export const Api = {
+  LOGIN: "api/user/login",
+  SIGNUP: "api/user/signup",
+  CHANGE_PASSWORD: "api/user/change-password",
+  FORGOT_PASSWORD: "api/user/forgot-password",
+  POST_LIST: "api/post/list",
+  POST_CREATE: "api/post/create",
+  POST_SHARE_COUNT: "api/post/share-count",
+  POST_LIKE: "api/post/create-like",
+  POST_DISLIKE: "api/post/disLike",
+  POST_COMMENT: "api/post/create-comment",
+  POST_REPLY: "api/post/create-replies",
+};

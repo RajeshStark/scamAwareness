@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { height, width } from "../../utils/Dimensions";
 
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
@@ -42,4 +43,9 @@ export const createStyles = (theme: Theme) =>
     mainContainer: {
       marginBottom: 100,
     },
+    center: {
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    fillContianer: { height: height, width: width },
   });

@@ -1,21 +1,29 @@
 import React, { useState } from "react";
-import { Animated as RNAnimated, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Animated as RNAnimated,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useDispatch } from "react-redux";
 import Container from "../../components/Container/Container";
 import LineraBgContainer from "../../components/Container/LineraBgContainer";
 import PostCard from "../../components/PostCard/PostCard";
-import { dummyPosts } from "../../dummydata/Dummydata";
+import Typography from "../../components/Typography/Typography";
 import useAppTheme from "../../hooks/useAppTheme";
+import { usePostList } from "../../services/hooks/usePost";
 import EmergencyTicker from "./Emergencyticker/EmergencyTicker";
 import { createStyles } from "./styles";
 
 export default function Home({ navigation }) {
-  const dispatch = useDispatch();
   const [fabOpen, setFabOpen] = useState(false);
   const fadeAnim = useState(new RNAnimated.Value(0))[0];
   const { theme } = useAppTheme();
   const styles = createStyles(theme);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    usePostList();
+
+  const posts = data?.pages.flatMap((page) => page) ?? [];
 
   const toggleFab = () => {
     setFabOpen(!fabOpen);
@@ -32,9 +40,25 @@ export default function Home({ navigation }) {
         <EmergencyTicker />
         <LineraBgContainer>
           <View style={styles.mainContainer}>
-            {dummyPosts.map((post, index) => (
-              <PostCard key={index} {...post} />
-            ))}
+            <FlatList
+              data={posts}
+              style={styles.fillContianer}
+              keyExtractor={(item, index) => item._id + index}
+              renderItem={({ item, index }) => (
+                <PostCard key={index} {...post} />
+              )}
+              ListEmptyComponent={
+                !isLoading ? (
+                  <View style={[styles.fillContianer, styles.center]}>
+                    <Typography>No posts</Typography>
+                  </View>
+                ) : null
+              }
+              onEndReached={() => {
+                if (hasNextPage) fetchNextPage();
+              }}
+              onEndReachedThreshold={0.5}
+            />
           </View>
         </LineraBgContainer>
       </Container>

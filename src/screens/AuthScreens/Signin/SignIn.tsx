@@ -11,16 +11,21 @@ import Typography from "../../../components/Typography/Typography";
 import CustomInput from "../../../components/Input/Input";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useDispatch } from "react-redux";
-import { logIn } from "../../../redux/features/login/loginSlice";
+import {
+  logIn,
+  setUserInfo,
+  setuserToken,
+} from "../../../redux/features/login/loginSlice";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signinSchema } from "../../../utils/ValidationScemas";
+import { useLogin } from "../../../services/hooks/useLogin";
 
 export default function SignIn({ navigation }) {
   const { theme, isDark } = useAppTheme();
   const styles = createStyles(theme);
   const dispatch = useDispatch();
-
+  const { mutate: login, isPending } = useLogin();
   const {
     control,
     watch,
@@ -46,20 +51,38 @@ export default function SignIn({ navigation }) {
   ];
 
   const loginToApp = (values) => {
-    console.log({ values });
-    if (
-      values.email === "admin@yopmail.com" &&
-      values.password === "Admin@123"
-    ) {
-      dispatch(logIn());
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "BottomTabs" }],
-      });
-    } else {
-      Alert.alert("Please try with valid credentials");
-    }
+    const payload = {
+      ...values,
+      userType: 2,
+      fcmToken: "",
+    };
+    login(payload, {
+      onSuccess: (response) => {
+        if (response.status) {
+          const user = response.output.userDetails;
+          const token = response.accessToken;
+          dispatch(setUserInfo(user));
+          dispatch(setuserToken(token));
+          dispatch(logIn());
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "BottomTabs" }],
+          });
+        } else {
+          Alert.alert(
+            "Login failed",
+            response.message || "Something went wrong."
+          );
+        }
+      },
+      onError: (error: any) => {
+        const message = error?.response?.data?.message || "Login failed";
+        console.log(message);
+        Alert.alert("Error", message);
+      },
+    });
   };
+
   return (
     <LineraBgContainer>
       <Container>
