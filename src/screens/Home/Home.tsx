@@ -96,7 +96,8 @@ export default function Home({ navigation }) {
             styles.fabMain,
             { backgroundColor: fabOpen ? theme.primary : theme.secondary },
           ]}
-          onPress={toggleFab}
+          onPress={() => navigation.navigate("EditorScreen")}
+          // onPress={toggleFab}
         >
           <Ionicons name={fabOpen ? "close" : "add"} size={24} color="#fff" />
         </TouchableOpacity>

@@ -19,7 +19,7 @@ import {
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signinSchema } from "../../../utils/ValidationScemas";
-import { useLogin } from "../../../services/hooks/useLogin";
+import { useLogin } from "../../../services/hooks/useAuth";
 
 export default function SignIn({ navigation }) {
   const { theme, isDark } = useAppTheme();

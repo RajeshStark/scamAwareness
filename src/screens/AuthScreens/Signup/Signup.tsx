@@ -14,10 +14,14 @@ import Typography from "../../../components/Typography/Typography";
 import { strings } from "../../../utils/Strings";
 import { SignupSchema } from "../../../utils/ValidationScemas";
 import { createStyles } from "./styles";
+import { useDispatch } from "react-redux";
+import { useSignup } from "../../../services/hooks/useAuth";
 
 export default function Signup({ navigation }) {
   const { theme, isDark } = useAppTheme();
   const styles = createStyles(theme);
+  const dispatch = useDispatch();
+  const { mutate: login, isPending } = useSignup();
 
   const {
     control,
@@ -29,19 +33,50 @@ export default function Signup({ navigation }) {
   } = useForm({
     mode: "all",
     defaultValues: {
-      first: "",
-      last: "",
+      firstName: "",
+      lastName: "",
       email: "",
-      DOB: "",
-      countrycode: "",
-      phone: "",
+      dob: "",
+      countryCode: "",
+      phoneNumber: "",
       password: "",
     },
     resolver: yupResolver(SignupSchema),
   });
 
   const onSignup = (values) => {
-    console.log({ values });
+    const payload = {
+      ...values,
+      userType: 2,
+    };
+    console.log({ payload });
+
+    return;
+    login(payload, {
+      onSuccess: (response) => {
+        if (response.status) {
+          const user = response.output.userDetails;
+          const token = response.accessToken;
+          dispatch(setUserInfo(user));
+          dispatch(setuserToken(token));
+          dispatch(logIn());
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "BottomTabs" }],
+          });
+        } else {
+          Alert.alert(
+            "Login failed",
+            response.message || "Something went wrong."
+          );
+        }
+      },
+      onError: (error: any) => {
+        const message = error?.response?.data?.message || "Login failed";
+        console.log(message);
+        Alert.alert("Error", message);
+      },
+    });
   };
 
   return (
@@ -58,13 +93,13 @@ export default function Signup({ navigation }) {
             <CustomInput
               placeholder="First Name"
               control={control}
-              name="first"
+              name="firstName"
               error={errors}
             />
             <CustomInput
               placeholder="Last name"
               control={control}
-              name="last"
+              name="lastName"
               error={errors}
             />
             <CustomInput
@@ -77,7 +112,7 @@ export default function Signup({ navigation }) {
               placeholder="DOB"
               control={control}
               error={errors}
-              name="DOB"
+              name="dob"
               isDatePicker
               rightIcon={
                 <Ionicons
@@ -92,12 +127,12 @@ export default function Signup({ navigation }) {
               placeholder="Phone"
               control={control}
               error={errors}
-              name="phone"
+              name="phoneNumber"
               isPhoneNumber
               onChangeCountry={(code) => {
-                setValue("countrycode", code);
+                setValue("countryCode", code);
                 console.log({ code });
-              }} // ✅ update here
+              }}
             />
 
             <CustomInput
@@ -120,7 +155,6 @@ export default function Signup({ navigation }) {
             isLinear
             title="Register"
             onPress={handleSubmit(onSignup)}
-            // onPress={() => navigation.navigate("OtpField")}
             isDisabled={!isValid}
           />
           <View style={styles.txtcontainer}>

@@ -8,6 +8,7 @@ import OtpField from "../screens/AuthScreens/OtpField/OtpField";
 import BottomTabs from "./BottomTabs";
 import Settings from "../screens/Profile/Settings/Settings";
 import EditProfile from "../screens/Profile/EditProfile/EditProfile";
+import EditorScreen from "../screens/Editor/Editor";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ export default function AuthStack() {
       <Stack.Screen name="BottomTabs" component={BottomTabs} />
       <Stack.Screen name="Settings" component={Settings} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="EditorScreen" component={EditorScreen} />
       <Stack.Screen name="LandingPage" component={LandingPage} />
       <Stack.Screen name="Signin" component={SignIn} />
       <Stack.Screen name="Signup" component={Signup} />

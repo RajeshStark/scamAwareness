@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 type props = {
   canGoback?: boolean;
   title?: string;
-  style: any;
+  style?: any;
 };
 export default function CustomHeader({ canGoback, title, style }: props) {
   const { theme } = useAppTheme();
