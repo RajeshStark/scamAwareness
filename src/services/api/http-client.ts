@@ -5,7 +5,7 @@ export const BaseURL = "https://api.scamalertpro.in/";
 // Basic Auth credentials
 const username = "3scam_alertUser!@3#";
 const password = "9scam_alert@3!)#@done";
-const encodedCredentials = base64Encode(`${username}:${password}`);
+export const encodedCredentials = base64Encode(`${username}:${password}`);
 
 export const http = axios.create({
   baseURL: BaseURL,

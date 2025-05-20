@@ -22,6 +22,8 @@ import { showToast } from "../../components/Toast";
 import { useUploadMedia } from "../../services/hooks/usePost";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import Video from "react-native-video";
+import Typography from "../../components/Typography/Typography";
+import MediaView from "./MediaView/MediaView";
 
 export default function EditorScreen() {
   const [text, setText] = useState("");
@@ -97,6 +99,15 @@ export default function EditorScreen() {
     checkAndRequestPermissions();
   }, []);
 
+  const transformResponse = (res: any) => {
+    const raw = res?.data?.output?.imageUrl1;
+    if (!raw?.image?.length) return [];
+    return raw.image.map((url: string) => ({
+      type: raw.type,
+      image: url,
+    }));
+  };
+
   const handlePick = () => {
     launchImageLibrary({ mediaType: "mixed", selectionLimit: 5 }, (res) => {
       if (res.didCancel || !res.assets) return;
@@ -109,8 +120,8 @@ export default function EditorScreen() {
 
       uploadMedia(files, {
         onSuccess: (res) => {
-          setMedia((prev) => [...prev, ...(res.data || [])]);
-          setLocalFiles((prev) => [...prev, ...res.assets]);
+          const transformed = transformResponse(res);
+          setMedia((prev) => [...prev, ...transformed]);
         },
         onError: () => {
           showToast("custom", "Upload failed");
@@ -132,8 +143,8 @@ export default function EditorScreen() {
 
       uploadMedia([file], {
         onSuccess: (res) => {
-          setMedia((prev) => [...prev, ...(res.data || [])]);
-          setLocalFiles((prev) => [...prev, asset]);
+          const transformed = transformResponse(res);
+          setMedia((prev) => [...prev, ...transformed]);
         },
         onError: () => {
           showToast("custom", "Upload failed");
@@ -155,11 +166,8 @@ export default function EditorScreen() {
 
       uploadMedia([file], {
         onSuccess: (res) => {
-          console.log(res);
-          return;
-
-          setMedia((prev) => [...prev, ...(res.data || [])]);
-          setLocalFiles((prev) => [...prev, asset]);
+          const transformed = transformResponse(res);
+          setMedia((prev) => [...prev, ...transformed]);
         },
         onError: () => {
           showToast("custom", "Upload failed");
@@ -228,43 +236,8 @@ export default function EditorScreen() {
             <Text style={styles.postBtnText}>Post</Text>
           </TouchableOpacity>
         </View>
-
-        <ScrollView horizontal style={{ marginTop: 10 }}>
-          {media.map((m, i) => {
-            const isVideo = m.type?.includes("video");
-            return (
-              <View key={i} style={{ marginRight: 10, position: "relative" }}>
-                {isVideo ? (
-                  <Video
-                    source={{ uri: m.url }}
-                    style={{ width: 100, height: 100, borderRadius: 8 }}
-                    paused
-                    resizeMode="cover"
-                  />
-                ) : (
-                  <Image
-                    source={{ uri: m.url }}
-                    style={{ width: 100, height: 100, borderRadius: 8 }}
-                  />
-                )}
-                <Pressable
-                  style={{
-                    position: "absolute",
-                    top: 4,
-                    right: 4,
-                    backgroundColor: "rgba(0,0,0,0.6)",
-                    borderRadius: 12,
-                    padding: 2,
-                  }}
-                  onPress={() => handleRemove(i)}
-                >
-                  <Ionicons name="close" size={16} color="#fff" />
-                </Pressable>
-              </View>
-            );
-          })}
-        </ScrollView>
       </View>
+      <MediaView media={media} handleRemove={handleRemove} />
     </ScrollView>
   );
 }
