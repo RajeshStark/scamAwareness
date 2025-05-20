@@ -14,6 +14,7 @@ import useAppTheme from "../../hooks/useAppTheme";
 import { usePostList } from "../../services/hooks/usePost";
 import EmergencyTicker from "./Emergencyticker/EmergencyTicker";
 import { createStyles } from "./styles";
+import { useAppSelector } from "../../hooks/useAppselector";
 
 export default function Home({ navigation }) {
   const [fabOpen, setFabOpen] = useState(false);
@@ -22,6 +23,8 @@ export default function Home({ navigation }) {
   const styles = createStyles(theme);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     usePostList();
+
+  const { userToken, usserInfo } = useAppSelector((state) => state.login);
 
   const posts = data?.pages.flatMap((page) => page) ?? [];
 

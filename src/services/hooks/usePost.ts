@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { PostService } from "../post.service";
 
 export const usePostList = () => {
@@ -14,3 +14,8 @@ export const usePostList = () => {
     },
   });
 };
+
+export const useUploadMedia = () =>
+  useMutation({
+    mutationFn: PostService.uploadMedia,
+  });

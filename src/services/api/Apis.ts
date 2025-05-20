@@ -10,4 +10,6 @@ export const Api = {
   POST_DISLIKE: "api/post/disLike",
   POST_COMMENT: "api/post/create-comment",
   POST_REPLY: "api/post/create-replies",
+  UPLOAD_MULTIPLE_IMAGES: "/api/user/upload-multipleimages",
+  VERIFY_OTP: "api/user/verify-otp",
 };

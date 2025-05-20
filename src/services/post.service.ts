@@ -16,6 +16,23 @@ export const PostService = {
     replyId?: string;
   }) => http.post(Api.POST_LIKE, payload),
 
+  uploadMedia: (files: { uri: string; type: string; name: string }[]) => {
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append("files", {
+        uri: file.uri,
+        name: file.name,
+        type: file.type,
+      } as any);
+    });
+
+    return http.post(Api.UPLOAD_MULTIPLE_IMAGES, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+
   dislike: (payload: { id: string }) => http.post(Api.POST_DISLIKE, payload),
 
   comment: (payload: { postId: string; comment: string }) =>

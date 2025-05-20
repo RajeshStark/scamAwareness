@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import CustomButton from "../../../components/Button/CustomButton";
 import Container from "../../../components/Container/Container";
 import LineraBgContainer from "../../../components/Container/LineraBgContainer";
@@ -16,6 +16,7 @@ import { SignupSchema } from "../../../utils/ValidationScemas";
 import { createStyles } from "./styles";
 import { useDispatch } from "react-redux";
 import { useSignup } from "../../../services/hooks/useAuth";
+import { showToast } from "../../../components/Toast";
 
 export default function Signup({ navigation }) {
   const { theme, isDark } = useAppTheme();
@@ -51,19 +52,24 @@ export default function Signup({ navigation }) {
     };
     console.log({ payload });
 
-    return;
     login(payload, {
       onSuccess: (response) => {
+        console.log(response);
+
         if (response.status) {
-          const user = response.output.userDetails;
-          const token = response.accessToken;
-          dispatch(setUserInfo(user));
-          dispatch(setuserToken(token));
-          dispatch(logIn());
-          navigation.reset({
-            index: 0,
-            routes: [{ name: "BottomTabs" }],
+          // const user = response.output.userDetails;
+          // const token = response.accessToken;
+          // dispatch(setUserInfo(user));
+          // dispatch(setuserToken(token));
+          // dispatch(logIn());
+          // navigation.reset({
+          //   index: 0,
+          //   routes: [{ name: "BottomTabs" }],
+          // });
+          navigation.navigate("OtpField", {
+            email: values?.email,
           });
+          showToast("custom", response.output);
         } else {
           Alert.alert(
             "Login failed",

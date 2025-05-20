@@ -1,4 +1,4 @@
-import { View, Text, Image, FlatList, Platform } from "react-native";
+import { View, Text, Image, FlatList, Platform, Alert } from "react-native";
 import React, { useState } from "react";
 import Container from "../../../components/Container/Container";
 import LineraBgContainer from "../../../components/Container/LineraBgContainer";
@@ -19,23 +19,55 @@ import {
 import CustomHeader from "../../../components/Input/Header/Header";
 import { createStyles } from "./styles";
 import { useDispatch } from "react-redux";
-import { logIn } from "../../../redux/features/login/loginSlice";
+import {
+  logIn,
+  setUserInfo,
+  setuserToken,
+} from "../../../redux/features/login/loginSlice";
+import { useVerify } from "../../../services/hooks/useAuth";
+import { showToast } from "../../../components/Toast";
 
-export default function OtpField({ navigation }) {
+export default function OtpField({ navigation, route }) {
+  const email = route?.params?.email;
   const { theme, isDark } = useAppTheme();
   const styles = createStyles(theme);
   const dispatch = useDispatch();
-  const [inputData, setInputData] = useState({
-    email: "",
-    password: "",
-  });
+  const { mutate: verify, isPending } = useVerify();
+
   const [otp, setOtp] = useState("");
 
   const loginToApp = () => {
-    dispatch(logIn());
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "BottomTabs" }],
+    const payload = {
+      otp,
+    };
+
+    verify(payload, {
+      onSuccess: (response) => {
+        console.log(response);
+
+        if (response.status) {
+          const user = response.output.userDetails;
+          const token = response.output.accessToken;
+          dispatch(setUserInfo(user));
+          dispatch(setuserToken(token));
+          dispatch(logIn());
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "BottomTabs" }],
+          });
+          showToast("custom", "Account created successfully!");
+        } else {
+          Alert.alert(
+            "Verify failed",
+            response.message || "Something went wrong."
+          );
+        }
+      },
+      onError: (error: any) => {
+        const message = error?.response?.data?.message || "Login failed";
+        console.log(message);
+        Alert.alert("Error", message);
+      },
     });
   };
 
@@ -52,14 +84,11 @@ export default function OtpField({ navigation }) {
               style={styles.title}
             >{`OTP\nVerification Code`}</Typography>
             <Typography style={styles.txtgrey}>
-              {"We have sent the code to nyandoonotex@gmail.com "}
+              {`We have sent the code to  ${email}`}
             </Typography>
           </View>
 
           <CodeField
-            // ref={ref}
-            // {...props}
-            // Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
             value={otp}
             onChangeText={setOtp}
             cellCount={6}
@@ -72,11 +101,7 @@ export default function OtpField({ navigation }) {
             })}
             testID="my-code-input"
             renderCell={({ index, symbol, isFocused }) => (
-              <Text
-                key={index}
-                style={[styles.cell]}
-                // onLayout={getCellOnLayoutHandler(index)}
-              >
+              <Text key={index} style={[styles.cell]}>
                 {symbol || (isFocused ? <Cursor /> : null)}
               </Text>
             )}
