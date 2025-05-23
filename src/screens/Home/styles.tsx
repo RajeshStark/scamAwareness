@@ -41,11 +41,14 @@ export const createStyles = (theme: Theme) =>
       marginBottom: 10,
     },
     mainContainer: {
-      marginBottom: 100,
+      paddingBottom: 100,
     },
     center: {
       justifyContent: "center",
       alignItems: "center",
     },
-    fillContianer: { height: height, width: width },
+    fillContianer: {
+      height: height,
+      width: width,
+    },
   });

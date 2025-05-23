@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    marginBottom: 20,
+    marginTop: 40,
   },
   title: {
     fontWeight: "bold",
@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
   },
   inputCard: {
-    marginTop: 30,
+    marginTop: 10,
     backgroundColor: "#fdfdfd",
     borderRadius: 12,
     borderColor: "#eee",

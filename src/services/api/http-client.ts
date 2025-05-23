@@ -1,5 +1,7 @@
 import axios from "axios";
 import { encode as base64Encode } from "base-64";
+import { store } from "../../redux/store/store";
+
 export const BaseURL = "https://api.scamalertpro.in/";
 
 // Basic Auth credentials
@@ -11,23 +13,38 @@ export const http = axios.create({
   baseURL: BaseURL,
   headers: {
     "Content-type": "application/json",
-    Authorization: `Basic ${encodedCredentials}`,
+    Authorization: `Basic ${encodedCredentials}`, // Always included
   },
 });
 
+// ✅ Add `accessToken` if token exists
+http.interceptors.request.use(
+  (config) => {
+    const token = store?.getState()?.login?.userToken;
+    console.log("Token at API", token);
+
+    if (token) {
+      config.headers["accessToken"] = token; // Add token as custom header
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// 🔁 Response interceptor for error handling
 http.interceptors.response.use(
   (response) => response,
   async (error) => {
     const errorResponse = error.message;
-    console.log("errorResponse===", error?.response?.data, errorResponse);
+    console.log("errorResponse ===", error?.response?.data, errorResponse);
     if (error?.response?.status === 401 || error?.response?.status === 403) {
-      // Optionally show a toast or logout user
-    } else {
-      return Promise.reject(error);
+      // Show toast or logout logic
     }
+    return Promise.reject(error);
   }
 );
 
+// ✅ Typing API Response
 export type ApiResponse<T> = {
   status: boolean;
   message: string;

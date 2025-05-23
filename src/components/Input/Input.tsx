@@ -135,7 +135,9 @@ export default function CustomInput({
       <TextInput
         placeholder={placeholder}
         value={fieldValue}
-        onChangeText={onChange}
+        onChangeText={(text) =>
+          onChange(name === "email" ? text.toLowerCase() : text)
+        }
         onBlur={onBlur}
         style={[
           styles.input,

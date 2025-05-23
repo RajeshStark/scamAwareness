@@ -21,12 +21,11 @@ export default function Home({ navigation }) {
   const fadeAnim = useState(new RNAnimated.Value(0))[0];
   const { theme } = useAppTheme();
   const styles = createStyles(theme);
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    usePostList();
 
   const { userToken, usserInfo } = useAppSelector((state) => state.login);
-
-  const posts = data?.pages.flatMap((page) => page) ?? [];
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    usePostList();
+  const posts = data?.pages.flatMap((page) => page.output?.list || []) ?? [];
 
   const toggleFab = () => {
     setFabOpen(!fabOpen);
@@ -42,27 +41,28 @@ export default function Home({ navigation }) {
       <Container withScroll>
         <EmergencyTicker />
         <LineraBgContainer>
-          <View style={styles.mainContainer}>
-            <FlatList
-              data={posts}
-              style={styles.fillContianer}
-              keyExtractor={(item, index) => item._id + index}
-              renderItem={({ item, index }) => (
-                <PostCard key={index} {...post} />
-              )}
-              ListEmptyComponent={
-                !isLoading ? (
-                  <View style={[styles.fillContianer, styles.center]}>
-                    <Typography>No posts</Typography>
-                  </View>
-                ) : null
-              }
-              onEndReached={() => {
-                if (hasNextPage) fetchNextPage();
-              }}
-              onEndReachedThreshold={0.5}
-            />
-          </View>
+          {/* <View style={styles.mainContainer}> */}
+          <FlatList
+            data={posts}
+            style={
+              posts.length === 0 ? styles.fillContianer : styles.mainContainer
+            }
+            scrollEnabled
+            keyExtractor={(item, index) => item._id + index}
+            renderItem={({ item, index }) => <PostCard key={index} {...item} />}
+            ListEmptyComponent={
+              !isLoading ? (
+                <View style={[styles.fillContianer, styles.center]}>
+                  <Typography>No posts</Typography>
+                </View>
+              ) : null
+            }
+            onEndReached={() => {
+              if (hasNextPage) fetchNextPage();
+            }}
+            onEndReachedThreshold={0.5}
+          />
+          {/* </View> */}
         </LineraBgContainer>
       </Container>
       <View style={styles.fabWrapper}>
@@ -100,7 +100,6 @@ export default function Home({ navigation }) {
             { backgroundColor: fabOpen ? theme.primary : theme.secondary },
           ]}
           onPress={() => navigation.navigate("EditorScreen")}
-          // onPress={toggleFab}
         >
           <Ionicons name={fabOpen ? "close" : "add"} size={24} color="#fff" />
         </TouchableOpacity>

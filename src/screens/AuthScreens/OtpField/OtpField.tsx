@@ -48,6 +48,8 @@ export default function OtpField({ navigation, route }) {
         if (response.status) {
           const user = response.output.userDetails;
           const token = response.output.accessToken;
+          console.log("OTP FIELD", { user, token });
+
           dispatch(setUserInfo(user));
           dispatch(setuserToken(token));
           dispatch(logIn());

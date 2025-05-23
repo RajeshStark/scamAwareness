@@ -1,14 +1,29 @@
-import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
-import Icon from "react-native-vector-icons/Feather";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import Video from "react-native-video";
+
+const screenWidth = Dimensions.get("window").width;
+
+const DEFAULT_AVATAR =
+  "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
 
 type PostCardProps = {
-  avatar: string;
-  username: string;
-  handle: string;
-  caption: string;
-  imageUrl: string;
+  userDetails: {
+    firstName?: string;
+    lastName?: string;
+    profilePicture?: string;
+  };
+  description: string;
+  image?: string;
+  video?: string;
   comments: number;
   likes: number;
   shares: number;
@@ -16,32 +31,73 @@ type PostCardProps = {
 };
 
 const PostCard: React.FC<PostCardProps> = ({
-  avatar,
-  username,
-  handle,
-  caption,
-  imageUrl,
+  userDetails,
+  description,
+  image,
+  video,
   comments,
   likes,
   shares,
   noShadow,
 }) => {
+  const avatar = userDetails?.profilePicture || DEFAULT_AVATAR;
+  const username =
+    (userDetails?.firstName || "") + " " + (userDetails?.lastName || "");
+  const displayName = username.trim() || "Unknown";
+
+  const [paused, setPaused] = useState(true);
+  const [muted, setMuted] = useState(true);
+
+  const togglePlayPause = () => setPaused(!paused);
+  const toggleMute = () => setMuted(!muted);
+
   return (
     <View style={[styles.card, { elevation: noShadow ? 0 : 3 }]}>
       <View style={styles.header}>
-        <View style={styles.header}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image source={{ uri: avatar }} style={styles.avatar} />
-
-          <Text style={styles.username}>{username}</Text>
-          <Text style={styles.handle}>@{handle}</Text>
+          <View>
+            <Text style={styles.username}>{displayName}</Text>
+            {/* Optional: add handle logic here */}
+          </View>
         </View>
         <Ionicons name="ellipsis-vertical" size={20} />
       </View>
 
       <View style={styles.contentContainer}>
-        <Text style={styles.caption}>{caption}</Text>
+        <Text style={styles.caption}>{description}</Text>
 
-        <Image source={{ uri: imageUrl }} style={styles.postImage} />
+        {image ? (
+          <Image source={{ uri: image }} style={styles.media} />
+        ) : video ? (
+          <View>
+            <TouchableOpacity onPress={togglePlayPause}>
+              <Video
+                source={{ uri: video }}
+                style={styles.media}
+                resizeMode="cover"
+                paused={paused}
+                muted={muted}
+                repeat
+              />
+              <View style={styles.overlayButtons}>
+                <Ionicons
+                  name={paused ? "play" : "pause"}
+                  size={32}
+                  color="#fff"
+                  style={{ marginRight: 20 }}
+                />
+                <TouchableOpacity onPress={toggleMute}>
+                  <Ionicons
+                    name={muted ? "volume-mute" : "volume-high"}
+                    size={28}
+                    color="#fff"
+                  />
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
+          </View>
+        ) : null}
 
         <View style={styles.footer}>
           <View style={styles.iconRow}>
@@ -56,9 +112,7 @@ const PostCard: React.FC<PostCardProps> = ({
             <Ionicons name="repeat" size={16} color="#555" />
             <Text style={styles.iconText}>{shares}</Text>
           </View>
-          <View style={styles.iconRow}>
-            <Ionicons name="bookmark-outline" size={16} color="#555" />
-          </View>
+          <Ionicons name="bookmark-outline" size={16} color="#555" />
         </View>
       </View>
     </View>
@@ -72,14 +126,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 12,
   },
-  contentContainer: {
-    marginLeft: 45,
-  },
   header: {
     flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 8,
-    justifyContent: "space-between",
   },
   avatar: {
     width: 40,
@@ -91,20 +142,29 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
   },
-  handle: {
-    fontSize: 12,
-    color: "#666",
-    marginLeft: 5,
+  contentContainer: {
+    marginTop: 5,
   },
   caption: {
     fontSize: 14,
     marginBottom: 8,
   },
-  postImage: {
-    width: "96%",
+  media: {
+    width: screenWidth - 40,
     height: 200,
     borderRadius: 10,
     marginBottom: 10,
+    backgroundColor: "#000",
+  },
+  overlayButtons: {
+    position: "absolute",
+    top: "40%",
+    left: "40%",
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.3)",
+    borderRadius: 20,
+    padding: 10,
   },
   footer: {
     flexDirection: "row",

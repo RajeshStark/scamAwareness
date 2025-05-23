@@ -25,8 +25,9 @@ import Video from "react-native-video";
 import Typography from "../../components/Typography/Typography";
 import MediaView from "./MediaView/MediaView";
 
-export default function EditorScreen() {
+export default function EditorScreen({ navigation }) {
   const [text, setText] = useState("");
+  const [title, setTitle] = useState("");
   const [localFiles, setLocalFiles] = useState([]);
   const [media, setMedia] = useState([]);
 
@@ -58,35 +59,35 @@ export default function EditorScreen() {
         (status) => status === PermissionsAndroid.RESULTS.GRANTED
       );
 
-      if (!allGranted) {
-        const permanentlyDenied = Object.values(statuses).some(
-          (status) => status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN
-        );
+      // if (!allGranted) {
+      //   const permanentlyDenied = Object.values(statuses).some(
+      //     (status) => status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN
+      //   );
 
-        if (permanentlyDenied) {
-          Alert.alert(
-            "Permissions Required",
-            "You have permanently denied some permissions. Please enable them from app settings.",
-            [
-              {
-                text: "Cancel",
-                style: "cancel",
-              },
-              {
-                text: "Open Settings",
-                onPress: () => Linking.openSettings(),
-              },
-            ]
-          );
-        } else {
-          Alert.alert(
-            "Permission Denied",
-            "Please grant all required permissions."
-          );
-        }
+      //   if (permanentlyDenied) {
+      //     Alert.alert(
+      //       "Permissions Required",
+      //       "You have permanently denied some permissions. Please enable them from app settings.",
+      //       [
+      //         {
+      //           text: "Cancel",
+      //           style: "cancel",
+      //         },
+      //         {
+      //           text: "Open Settings",
+      //           onPress: () => Linking.openSettings(),
+      //         },
+      //       ]
+      //     );
+      //   } else {
+      //     showToast(
+      //       "custom",
+      //       "Please grant all required permissions."
+      //     );
+      //   }
 
-        return false;
-      }
+      //   return false;
+      // }
 
       return true;
     } catch (err) {
@@ -187,12 +188,15 @@ export default function EditorScreen() {
       description: text,
       media,
     };
+    console.log("Post body ====> ", body);
     PostService.create(body)
       .then(() => {
         showToast("custom", "Post created!");
         setText("");
+        setTitle("");
         setMedia([]);
         setLocalFiles([]);
+        navigation.goBack();
       })
       .catch(() => showToast("custom", "Post failed"));
   };
@@ -200,7 +204,7 @@ export default function EditorScreen() {
   return (
     <ScrollView style={styles.container}>
       <CustomHeader canGoback />
-      <View style={styles.inputCard}>
+      <View>
         <View style={styles.header}>
           <Image
             source={{ uri: "https://randomuser.me/api/portraits/men/32.jpg" }}
@@ -212,29 +216,42 @@ export default function EditorScreen() {
           </View>
         </View>
 
-        <TextInput
-          multiline
-          placeholder="What’s Happening?"
-          value={text}
-          onChangeText={setText}
-          style={styles.textInput}
-        />
+        {/* <View style={styles.inputCard}></View> */}
 
-        <View style={styles.inputActions}>
-          <View style={{ flexDirection: "row", gap: 16 }}>
-            <Pressable onPress={handlePick}>
-              <Ionicons name="image-outline" size={24} style={styles.icon} />
-            </Pressable>
-            <Pressable onPress={handleCamera}>
-              <Ionicons name="camera-outline" size={24} style={styles.icon} />
-            </Pressable>
-            <Pressable onPress={handleVideoRecord}>
-              <Ionicons name="videocam-outline" size={24} style={styles.icon} />
-            </Pressable>
+        <View style={styles.inputCard}>
+          <TextInput
+            placeholder="Write subject...."
+            value={title}
+            onChangeText={setTitle}
+          />
+          <View style={{ height: 1, width: "100%", backgroundColor: "grey" }} />
+          <TextInput
+            placeholder="Whats happening..."
+            value={text}
+            onChangeText={setText}
+            style={styles.textInput}
+          />
+
+          <View style={styles.inputActions}>
+            <View style={{ flexDirection: "row", gap: 16 }}>
+              <Pressable onPress={handlePick}>
+                <Ionicons name="image-outline" size={24} style={styles.icon} />
+              </Pressable>
+              <Pressable onPress={handleCamera}>
+                <Ionicons name="camera-outline" size={24} style={styles.icon} />
+              </Pressable>
+              <Pressable onPress={handleVideoRecord}>
+                <Ionicons
+                  name="videocam-outline"
+                  size={24}
+                  style={styles.icon}
+                />
+              </Pressable>
+            </View>
+            <TouchableOpacity style={styles.postBtn} onPress={handlePost}>
+              <Text style={styles.postBtnText}>Post</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.postBtn} onPress={handlePost}>
-            <Text style={styles.postBtnText}>Post</Text>
-          </TouchableOpacity>
         </View>
       </View>
       <MediaView media={media} handleRemove={handleRemove} />

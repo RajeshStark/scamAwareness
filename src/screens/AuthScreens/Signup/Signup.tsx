@@ -57,15 +57,6 @@ export default function Signup({ navigation }) {
         console.log(response);
 
         if (response.status) {
-          // const user = response.output.userDetails;
-          // const token = response.accessToken;
-          // dispatch(setUserInfo(user));
-          // dispatch(setuserToken(token));
-          // dispatch(logIn());
-          // navigation.reset({
-          //   index: 0,
-          //   routes: [{ name: "BottomTabs" }],
-          // });
           navigation.navigate("OtpField", {
             email: values?.email,
           });

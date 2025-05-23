@@ -60,7 +60,7 @@ export default function SignIn({ navigation }) {
       onSuccess: (response) => {
         if (response.status) {
           const user = response.output.userDetails;
-          const token = response.accessToken;
+          const token = response.output.accessToken;
           dispatch(setUserInfo(user));
           dispatch(setuserToken(token));
           dispatch(logIn());
@@ -132,11 +132,17 @@ export default function SignIn({ navigation }) {
                   {strings.remember}
                 </Typography>
               </View>
-              <Typography style={styles.txtblue}>{strings.forgot}</Typography>
+              <Typography
+                onPress={() => navigation.navigate("ForgotPassword")}
+                style={styles.txtblue}
+              >
+                {strings.forgot}
+              </Typography>
             </View>
             <CustomButton
               isLinear
               title={strings.Login}
+              // isDisabled={!isValid}
               onPress={handleSubmit(loginToApp)}
             />
             <Typography style={styles.or}>{strings.or}</Typography>
