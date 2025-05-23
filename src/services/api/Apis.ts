@@ -3,6 +3,7 @@ export const Api = {
   SIGNUP: "api/user/signup",
   CHANGE_PASSWORD: "api/user/change-password",
   FORGOT_PASSWORD: "api/user/forgot-password",
+  GET_PROFILE: "api/user/get-profile",
   POST_LIST: "api/post/list",
   POST_CREATE: "api/post/create",
   POST_SHARE_COUNT: "api/post/share-count",

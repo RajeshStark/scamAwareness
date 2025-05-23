@@ -13,7 +13,7 @@ export const http = axios.create({
   baseURL: BaseURL,
   headers: {
     "Content-type": "application/json",
-    Authorization: `Basic ${encodedCredentials}`, // Always included
+    Authorization: `Basic ${encodedCredentials}`,
   },
 });
 
@@ -21,17 +21,14 @@ export const http = axios.create({
 http.interceptors.request.use(
   (config) => {
     const token = store?.getState()?.login?.userToken;
-    console.log("Token at API", token);
-
     if (token) {
-      config.headers["accessToken"] = token; // Add token as custom header
+      config.headers["accessToken"] = token;
     }
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// 🔁 Response interceptor for error handling
 http.interceptors.response.use(
   (response) => response,
   async (error) => {

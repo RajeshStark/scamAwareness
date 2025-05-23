@@ -34,6 +34,11 @@ export const loginUser = async (payload: LoginPayload) => {
   return response.data;
 };
 
+export const getProfile = async () => {
+  const response = await http.post<ApiResponse<any>>(Api.GET_PROFILE);
+  return response.data;
+};
+
 export const signupUser = async (payload: SignupPayload) => {
   const response = await http.post<ApiResponse<any>>(Api.SIGNUP, payload);
   return response.data;

@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import {
   forgotPassword,
+  getProfile,
   loginUser,
   signupUser,
   verifyOtp,
@@ -27,5 +28,11 @@ export const useVerify = () => {
 export const useForgotPassword = () => {
   return useMutation({
     mutationFn: forgotPassword,
+  });
+};
+
+export const useGetProfile = () => {
+  return useMutation({
+    mutationFn: getProfile,
   });
 };

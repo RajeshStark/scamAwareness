@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Animated as RNAnimated,
@@ -15,14 +15,13 @@ import { usePostList } from "../../services/hooks/usePost";
 import EmergencyTicker from "./Emergencyticker/EmergencyTicker";
 import { createStyles } from "./styles";
 import { useAppSelector } from "../../hooks/useAppselector";
+import { useGetProfile } from "../../services/hooks/useAuth";
 
 export default function Home({ navigation }) {
   const [fabOpen, setFabOpen] = useState(false);
   const fadeAnim = useState(new RNAnimated.Value(0))[0];
   const { theme } = useAppTheme();
   const styles = createStyles(theme);
-
-  const { userToken, usserInfo } = useAppSelector((state) => state.login);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     usePostList();
   const posts = data?.pages.flatMap((page) => page.output?.list || []) ?? [];

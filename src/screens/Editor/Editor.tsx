@@ -24,12 +24,16 @@ import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import Video from "react-native-video";
 import Typography from "../../components/Typography/Typography";
 import MediaView from "./MediaView/MediaView";
+import { useAppSelector } from "../../hooks/useAppselector";
+import useAppTheme from "../../hooks/useAppTheme";
 
 export default function EditorScreen({ navigation }) {
   const [text, setText] = useState("");
   const [title, setTitle] = useState("");
   const [localFiles, setLocalFiles] = useState([]);
   const [media, setMedia] = useState([]);
+  const { theme } = useAppTheme();
+  const { usserInfo } = useAppSelector((state) => state.login);
 
   const { mutate: uploadMedia, isLoading: uploading } = useUploadMedia();
 
@@ -207,16 +211,25 @@ export default function EditorScreen({ navigation }) {
       <View>
         <View style={styles.header}>
           <Image
-            source={{ uri: "https://randomuser.me/api/portraits/men/32.jpg" }}
+            source={{
+              uri:
+                usserInfo?.profilePicture.length !== 0
+                  ? usserInfo?.profilePicture
+                  : "https://randomuser.me/api/portraits/men/32.jpg",
+            }}
             style={styles.avatar}
           />
           <View>
-            <Text style={styles.username}>{"username"}</Text>
-            <Text style={styles.handle}>@{"handle"}</Text>
+            {usserInfo?.firstName.length !== 0 ? (
+              <Text style={styles.username}>
+                {usserInfo?.firstName} {usserInfo?.lastName}
+              </Text>
+            ) : (
+              <Text style={styles.username}>Unknown</Text>
+            )}
+            {/* <Text style={styles.handle}>@{"handle"}</Text> */}
           </View>
         </View>
-
-        {/* <View style={styles.inputCard}></View> */}
 
         <View style={styles.inputCard}>
           <TextInput
@@ -248,9 +261,15 @@ export default function EditorScreen({ navigation }) {
                 />
               </Pressable>
             </View>
-            <TouchableOpacity style={styles.postBtn} onPress={handlePost}>
-              <Text style={styles.postBtnText}>Post</Text>
-            </TouchableOpacity>
+            {text.length === 0 ? (
+              <View style={[styles.postBtn, { backgroundColor: theme.grey }]}>
+                <Text style={styles.postBtnText}>Post</Text>
+              </View>
+            ) : (
+              <TouchableOpacity style={styles.postBtn} onPress={handlePost}>
+                <Text style={styles.postBtnText}>Post</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </View>
