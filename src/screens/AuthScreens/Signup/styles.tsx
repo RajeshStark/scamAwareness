@@ -9,7 +9,7 @@ export const createStyles = (theme: Theme) =>
       alignItems: "center",
     },
     anotherContainer: {
-      marginTop: height * 0.06,
+      marginTop: height * 0.02,
     },
     cardcontainer: {
       width: "90%",

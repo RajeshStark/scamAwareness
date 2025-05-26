@@ -11,6 +11,7 @@ import {
   PermissionsAndroid,
   Platform,
   Linking,
+  SafeAreaView,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -26,6 +27,7 @@ import Typography from "../../components/Typography/Typography";
 import MediaView from "./MediaView/MediaView";
 import { useAppSelector } from "../../hooks/useAppselector";
 import useAppTheme from "../../hooks/useAppTheme";
+import { transformResponse } from "../../utils/Constants";
 
 export default function EditorScreen({ navigation }) {
   const [text, setText] = useState("");
@@ -103,15 +105,6 @@ export default function EditorScreen({ navigation }) {
   useEffect(() => {
     checkAndRequestPermissions();
   }, []);
-
-  const transformResponse = (res: any) => {
-    const raw = res?.data?.output?.imageUrl1;
-    if (!raw?.image?.length) return [];
-    return raw.image.map((url: string) => ({
-      type: raw.type,
-      image: url,
-    }));
-  };
 
   const handlePick = () => {
     launchImageLibrary({ mediaType: "mixed", selectionLimit: 5 }, (res) => {
@@ -206,74 +199,86 @@ export default function EditorScreen({ navigation }) {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <CustomHeader canGoback />
-      <View>
-        <View style={styles.header}>
-          <Image
-            source={{
-              uri:
-                usserInfo?.profilePicture.length !== 0
-                  ? usserInfo?.profilePicture
-                  : "https://randomuser.me/api/portraits/men/32.jpg",
-            }}
-            style={styles.avatar}
-          />
-          <View>
-            {usserInfo?.firstName.length !== 0 ? (
-              <Text style={styles.username}>
-                {usserInfo?.firstName} {usserInfo?.lastName}
-              </Text>
-            ) : (
-              <Text style={styles.username}>Unknown</Text>
-            )}
-            {/* <Text style={styles.handle}>@{"handle"}</Text> */}
-          </View>
-        </View>
-
-        <View style={styles.inputCard}>
-          <TextInput
-            placeholder="Write subject...."
-            value={title}
-            onChangeText={setTitle}
-          />
-          <View style={{ height: 1, width: "100%", backgroundColor: "grey" }} />
-          <TextInput
-            placeholder="Whats happening..."
-            value={text}
-            onChangeText={setText}
-            style={styles.textInput}
-          />
-
-          <View style={styles.inputActions}>
-            <View style={{ flexDirection: "row", gap: 16 }}>
-              <Pressable onPress={handlePick}>
-                <Ionicons name="image-outline" size={24} style={styles.icon} />
-              </Pressable>
-              <Pressable onPress={handleCamera}>
-                <Ionicons name="camera-outline" size={24} style={styles.icon} />
-              </Pressable>
-              <Pressable onPress={handleVideoRecord}>
-                <Ionicons
-                  name="videocam-outline"
-                  size={24}
-                  style={styles.icon}
-                />
-              </Pressable>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.white }}>
+      <ScrollView style={styles.container}>
+        <CustomHeader canGoback />
+        <View>
+          <View style={styles.header}>
+            <Image
+              source={{
+                uri:
+                  usserInfo?.profilePicture.length !== 0
+                    ? usserInfo?.profilePicture
+                    : "https://randomuser.me/api/portraits/men/32.jpg",
+              }}
+              style={styles.avatar}
+            />
+            <View>
+              {usserInfo?.firstName.length !== 0 ? (
+                <Text style={styles.username}>
+                  {usserInfo?.firstName} {usserInfo?.lastName}
+                </Text>
+              ) : (
+                <Text style={styles.username}>Unknown</Text>
+              )}
+              {/* <Text style={styles.handle}>@{"handle"}</Text> */}
             </View>
-            {text.length === 0 ? (
-              <View style={[styles.postBtn, { backgroundColor: theme.grey }]}>
-                <Text style={styles.postBtnText}>Post</Text>
+          </View>
+
+          <View style={styles.inputCard}>
+            <TextInput
+              placeholder="Write subject...."
+              value={title}
+              onChangeText={setTitle}
+            />
+            <View
+              style={{ height: 1, width: "100%", backgroundColor: "grey" }}
+            />
+            <TextInput
+              placeholder="Whats happening..."
+              value={text}
+              onChangeText={setText}
+              style={styles.textInput}
+            />
+
+            <View style={styles.inputActions}>
+              <View style={{ flexDirection: "row", gap: 16 }}>
+                <Pressable onPress={handlePick}>
+                  <Ionicons
+                    name="image-outline"
+                    size={24}
+                    style={styles.icon}
+                  />
+                </Pressable>
+                <Pressable onPress={handleCamera}>
+                  <Ionicons
+                    name="camera-outline"
+                    size={24}
+                    style={styles.icon}
+                  />
+                </Pressable>
+                <Pressable onPress={handleVideoRecord}>
+                  <Ionicons
+                    name="videocam-outline"
+                    size={24}
+                    style={styles.icon}
+                  />
+                </Pressable>
               </View>
-            ) : (
-              <TouchableOpacity style={styles.postBtn} onPress={handlePost}>
-                <Text style={styles.postBtnText}>Post</Text>
-              </TouchableOpacity>
-            )}
+              {text.length === 0 ? (
+                <View style={[styles.postBtn, { backgroundColor: theme.grey }]}>
+                  <Text style={styles.postBtnText}>Post</Text>
+                </View>
+              ) : (
+                <TouchableOpacity style={styles.postBtn} onPress={handlePost}>
+                  <Text style={styles.postBtnText}>Post</Text>
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
         </View>
-      </View>
-      <MediaView media={media} handleRemove={handleRemove} />
-    </ScrollView>
+        <MediaView media={media} handleRemove={handleRemove} />
+      </ScrollView>
+    </SafeAreaView>
   );
 }

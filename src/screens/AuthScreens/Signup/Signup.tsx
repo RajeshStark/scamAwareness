@@ -1,5 +1,5 @@
-import React from "react";
-import { Alert, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, Image, Pressable, View } from "react-native";
 import CustomButton from "../../../components/Button/CustomButton";
 import Container from "../../../components/Container/Container";
 import LineraBgContainer from "../../../components/Container/LineraBgContainer";
@@ -17,12 +17,17 @@ import { createStyles } from "./styles";
 import { useDispatch } from "react-redux";
 import { useSignup } from "../../../services/hooks/useAuth";
 import { showToast } from "../../../components/Toast";
+import { launchImageLibrary } from "react-native-image-picker";
+import { useUploadMedia } from "../../../services/hooks/usePost";
+import { transformResponse } from "../../../utils/Constants";
 
 export default function Signup({ navigation }) {
   const { theme, isDark } = useAppTheme();
   const styles = createStyles(theme);
+  const [profilepic, setProfilePic] = useState("");
   const dispatch = useDispatch();
   const { mutate: login, isPending } = useSignup();
+  const { mutate: uploadMedia } = useUploadMedia();
 
   const {
     control,
@@ -48,6 +53,7 @@ export default function Signup({ navigation }) {
   const onSignup = (values) => {
     const payload = {
       ...values,
+      profilePicture: profilepic,
       userType: 2,
     };
     console.log({ payload });
@@ -76,6 +82,28 @@ export default function Signup({ navigation }) {
     });
   };
 
+  const handlePick = () => {
+    launchImageLibrary({ mediaType: "photo", selectionLimit: 1 }, (res) => {
+      if (res.didCancel || !res.assets) return;
+
+      const files = res.assets.map((asset) => ({
+        uri: asset.uri,
+        name: asset.fileName,
+        type: asset.type,
+      }));
+
+      uploadMedia(files, {
+        onSuccess: (res) => {
+          const transformed = transformResponse(res);
+          setProfilePic(transformed[0]?.image);
+        },
+        onError: () => {
+          showToast("custom", "Upload failed");
+        },
+      });
+    });
+  };
+
   return (
     <LineraBgContainer reverse>
       <Container>
@@ -86,6 +114,30 @@ export default function Signup({ navigation }) {
             <Typography style={styles.txtgrey}>
               {strings.signandcontinue}
             </Typography>
+
+            <Pressable onPress={handlePick}>
+              {profilepic === "" ? (
+                <View
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: 100,
+                    backgroundColor: "grey",
+                    alignSelf: "center",
+                  }}
+                />
+              ) : (
+                <Image
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: 100,
+                    alignSelf: "center",
+                  }}
+                  source={{ uri: profilepic }}
+                />
+              )}
+            </Pressable>
 
             <CustomInput
               placeholder="First Name"

@@ -58,6 +58,8 @@ export default function SignIn({ navigation }) {
     };
     login(payload, {
       onSuccess: (response) => {
+        console.log({ response });
+
         if (response.status) {
           const user = response.output.userDetails;
           const token = response.output.accessToken;

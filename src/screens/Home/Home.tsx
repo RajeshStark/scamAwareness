@@ -14,8 +14,6 @@ import useAppTheme from "../../hooks/useAppTheme";
 import { usePostList } from "../../services/hooks/usePost";
 import EmergencyTicker from "./Emergencyticker/EmergencyTicker";
 import { createStyles } from "./styles";
-import { useAppSelector } from "../../hooks/useAppselector";
-import { useGetProfile } from "../../services/hooks/useAuth";
 
 export default function Home({ navigation }) {
   const [fabOpen, setFabOpen] = useState(false);

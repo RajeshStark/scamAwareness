@@ -8,6 +8,7 @@ import {
   Pressable,
   StyleSheet,
   Keyboard,
+  SafeAreaView,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import LineraBgContainer from "../../components/Container/LineraBgContainer";
@@ -71,67 +72,70 @@ export default function SearchScreen() {
 
   return (
     <LineraBgContainer>
-      <View style={styles.container}>
-        <View style={styles.searchContainer}>
-          <TextInput
-            placeholder="Search..."
-            value={searchText}
-            onChangeText={setSearchText}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-            style={styles.input}
-          />
-          <View
-            style={{ width: 1.5, height: 30, backgroundColor: theme.grey }}
-          />
-          <Ionicons
-            name="search"
-            size={20}
-            color={theme.txtblack}
-            style={{ marginLeft: 10 }}
-          />
-        </View>
-
-        {isFocused && (
-          <View style={styles.recentContainer}>
-            <Text style={styles.recentHeader}>Recent searches</Text>
-            {recentSearches.map((item) => (
-              <View key={item} style={styles.recentItem}>
-                <Ionicons name="search" size={16} color="#666" />
-                <Text style={styles.recentText}>{item}</Text>
-                <Pressable onPress={() => handleClearSearch(item)}>
-                  <Ionicons name="close" size={24} color={theme.txtblack} />
-                </Pressable>
-              </View>
-            ))}
+      <SafeAreaView style={styles.flex}>
+        <View style={styles.container}>
+          <View style={styles.searchContainer}>
+            <TextInput
+              placeholder="Search..."
+              value={searchText}
+              onChangeText={setSearchText}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              style={styles.input}
+            />
+            <View
+              style={{ width: 1.5, height: 30, backgroundColor: theme.grey }}
+            />
+            <Ionicons
+              name="search"
+              size={20}
+              color={theme.txtblack}
+              style={{ marginLeft: 10 }}
+            />
           </View>
-        )}
 
-        <View style={{ margin: 12 }}>
-          <View
-            style={{
-              width: width * 0.9,
-              backgroundColor: theme.white,
-              height: 2,
-            }}
-          />
-          <Text style={styles.recommendedText}>Recommended For You</Text>
-          <FlatList
-            data={recommendedImages}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderImage}
-            numColumns={3}
-            contentContainerStyle={styles.gridContainer}
-            keyboardShouldPersistTaps="handled"
-          />
+          {isFocused && (
+            <View style={styles.recentContainer}>
+              <Text style={styles.recentHeader}>Recent searches</Text>
+              {recentSearches.map((item) => (
+                <View key={item} style={styles.recentItem}>
+                  <Ionicons name="search" size={16} color="#666" />
+                  <Text style={styles.recentText}>{item}</Text>
+                  <Pressable onPress={() => handleClearSearch(item)}>
+                    <Ionicons name="close" size={24} color={theme.txtblack} />
+                  </Pressable>
+                </View>
+              ))}
+            </View>
+          )}
+
+          <View style={{ margin: 12 }}>
+            <View
+              style={{
+                width: width * 0.9,
+                backgroundColor: theme.white,
+                height: 2,
+              }}
+            />
+            <Text style={styles.recommendedText}>Recommended For You</Text>
+            <FlatList
+              data={recommendedImages}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={renderImage}
+              numColumns={3}
+              contentContainerStyle={styles.gridContainer}
+              keyboardShouldPersistTaps="handled"
+            />
+          </View>
         </View>
-      </View>
+      </SafeAreaView>
     </LineraBgContainer>
   );
 }
 
 const createStyles = (theme: Theme) =>
   StyleSheet.create({
+    flex: { flex: 1 },
     container: {
       flex: 1,
       paddingTop: 10,

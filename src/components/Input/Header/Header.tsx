@@ -9,8 +9,14 @@ type props = {
   canGoback?: boolean;
   title?: string;
   style?: any;
+  right?: React.ReactNode;
 };
-export default function CustomHeader({ canGoback, title, style }: props) {
+export default function CustomHeader({
+  canGoback,
+  title,
+  style,
+  right,
+}: props) {
   const { theme } = useAppTheme();
   const navigation = useNavigation();
   return (
@@ -27,6 +33,7 @@ export default function CustomHeader({ canGoback, title, style }: props) {
         )}
         {title && <Typography>{title}</Typography>}
       </View>
+      {right ?? right}
     </View>
   );
 }
