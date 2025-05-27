@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Video from "react-native-video";
+import Typography from "../Typography/Typography";
+import Fonts from "../../utils/Fonts";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -24,10 +26,11 @@ type PostCardProps = {
   description: string;
   image?: string;
   video?: string;
-  comments: number;
-  likes: number;
-  shares: number;
+  commentCount: number;
+  likeCount: number;
+  shareCount: number;
   noShadow?: boolean;
+  isLiked?: boolean;
 };
 
 const PostCard: React.FC<PostCardProps> = ({
@@ -35,10 +38,11 @@ const PostCard: React.FC<PostCardProps> = ({
   description,
   image,
   video,
-  comments,
-  likes,
-  shares,
+  commentCount,
+  likeCount,
+  shareCount,
   noShadow,
+  isLiked,
 }) => {
   const avatar = userDetails?.profilePicture || DEFAULT_AVATAR;
   const username =
@@ -57,15 +61,14 @@ const PostCard: React.FC<PostCardProps> = ({
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image source={{ uri: avatar }} style={styles.avatar} />
           <View>
-            <Text style={styles.username}>{displayName}</Text>
-            {/* Optional: add handle logic here */}
+            <Typography style={styles.username}>{displayName}</Typography>
           </View>
         </View>
-        <Ionicons name="ellipsis-vertical" size={20} />
       </View>
 
       <View style={styles.contentContainer}>
-        <Text style={styles.caption}>{description}</Text>
+        <Typography style={styles.title}>{description}</Typography>
+        <Typography style={styles.caption}>{description}</Typography>
 
         {image ? (
           <Image source={{ uri: image }} style={styles.media} />
@@ -102,15 +105,19 @@ const PostCard: React.FC<PostCardProps> = ({
         <View style={styles.footer}>
           <View style={styles.iconRow}>
             <Ionicons name="chatbubble-outline" size={16} color="#555" />
-            <Text style={styles.iconText}>{comments}</Text>
+            <Typography style={styles.iconText}>{commentCount}</Typography>
           </View>
           <View style={styles.iconRow}>
-            <Ionicons name="heart-outline" size={16} color="#555" />
-            <Text style={styles.iconText}>{likes}</Text>
+            <Ionicons
+              name={isLiked ? "heart" : "heart-outline"}
+              size={16}
+              color={isLiked ? "#f24822" : "#555"}
+            />
+            <Typography style={styles.iconText}>{likeCount}</Typography>
           </View>
           <View style={styles.iconRow}>
             <Ionicons name="repeat" size={16} color="#555" />
-            <Text style={styles.iconText}>{shares}</Text>
+            <Typography style={styles.iconText}>{shareCount}</Typography>
           </View>
           <Ionicons name="bookmark-outline" size={16} color="#555" />
         </View>
@@ -148,6 +155,11 @@ const styles = StyleSheet.create({
   caption: {
     fontSize: 14,
     marginBottom: 8,
+  },
+  title: {
+    fontSize: 18,
+    marginBottom: 8,
+    fontFamily: Fonts.Bold,
   },
   media: {
     width: screenWidth - 40,

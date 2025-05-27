@@ -30,16 +30,22 @@ export default function EditProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <CustomHeader
-        canGoback
-        style={{ backgroundColor: "#eee", width: "100%", padding: 10 }}
-        right={
-          <TouchableOpacity style={styles.changeCoverBtn}>
-            <Text style={styles.changeCoverText}>Change Cover</Text>
-            <Ionicons name="pencil" size={14} color="#333" />
-          </TouchableOpacity>
-        }
-      />
+      <View style={{ paddingTop: 20 }}>
+        <CustomHeader
+          canGoback
+          style={{
+            backgroundColor: "#eee",
+            width: "100%",
+            padding: 10,
+          }}
+          right={
+            <TouchableOpacity style={styles.changeCoverBtn}>
+              <Text style={styles.changeCoverText}>Change Cover</Text>
+              <Ionicons name="pencil" size={14} color="#333" />
+            </TouchableOpacity>
+          }
+        />
+      </View>
       <View style={styles.coverWrapper}>
         <View style={styles.profilePicWrapper}>
           <Image

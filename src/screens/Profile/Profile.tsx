@@ -63,11 +63,6 @@ export default function ProfileScreen({ navigation }) {
         <Text style={styles.name}>
           {usserInfo?.firstName} {usserInfo?.lastName}
         </Text>
-        <Text style={styles.bio}>Bio</Text>
-        <View style={styles.stats}>
-          <Text style={styles.statText}>0 Following</Text>
-          <Text style={styles.statText}>0 Followers</Text>
-        </View>
 
         <View style={styles.tabs}>
           <Text style={[styles.tabItem, styles.activeTab]}>Posts</Text>

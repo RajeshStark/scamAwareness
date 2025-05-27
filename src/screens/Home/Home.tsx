@@ -39,7 +39,6 @@ export default function Home({ navigation }) {
       <Container withScroll>
         <EmergencyTicker />
         <LineraBgContainer>
-          {/* <View style={styles.mainContainer}> */}
           <FlatList
             data={posts}
             style={
@@ -60,7 +59,6 @@ export default function Home({ navigation }) {
             }}
             onEndReachedThreshold={0.5}
           />
-          {/* </View> */}
         </LineraBgContainer>
       </Container>
       <View style={styles.fabWrapper}>
