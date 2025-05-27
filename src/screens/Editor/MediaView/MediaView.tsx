@@ -8,6 +8,7 @@ const itemSize = (screenWidth - 80) / 3;
 
 export default function MediaView({ media, handleRemove }) {
   const [playingIndex, setPlayingIndex] = useState(null); // null = none playing
+  console.log({ media });
 
   const togglePlayback = (index) => {
     setPlayingIndex((prevIndex) => (prevIndex === index ? null : index));

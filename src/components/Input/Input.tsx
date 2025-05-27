@@ -74,8 +74,9 @@ export default function CustomInput({
             <DateTimePicker
               value={fieldValue ? new Date(fieldValue) : new Date()}
               mode="date"
-              display={Platform.OS === "ios" ? "spinner" : "default"}
+              // display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={handleDateChange}
+              maximumDate={new Date()}
             />
           )}
         </Pressable>

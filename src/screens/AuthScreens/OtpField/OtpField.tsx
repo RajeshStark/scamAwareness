@@ -24,7 +24,7 @@ import {
   setUserInfo,
   setuserToken,
 } from "../../../redux/features/login/loginSlice";
-import { useVerify } from "../../../services/hooks/useAuth";
+import { useResendOtp, useVerify } from "../../../services/hooks/useAuth";
 import { showToast } from "../../../components/Toast";
 
 export default function OtpField({ navigation, route }) {
@@ -33,6 +33,7 @@ export default function OtpField({ navigation, route }) {
   const styles = createStyles(theme);
   const dispatch = useDispatch();
   const { mutate: verify, isPending } = useVerify();
+  const { mutate: resend } = useResendOtp();
 
   const [otp, setOtp] = useState("");
 
@@ -66,7 +67,35 @@ export default function OtpField({ navigation, route }) {
         }
       },
       onError: (error: any) => {
-        const message = error?.response?.data?.message || "Login failed";
+        const message = error?.response?.data?.message || "Sign up failed";
+        console.log(message);
+        Alert.alert("Error", message);
+      },
+    });
+  };
+
+  const resendOtp = () => {
+    const payload = {
+      email,
+      userType: 2,
+    };
+    console.log({ payload });
+
+    resend(payload, {
+      onSuccess: (response) => {
+        console.log(response);
+
+        if (response.status) {
+          showToast("custom", "Otp sent Successfully!");
+        } else {
+          Alert.alert(
+            "Resend failed",
+            response.message || "Something went wrong."
+          );
+        }
+      },
+      onError: (error: any) => {
+        const message = error?.response?.data?.message || "Resend failed";
         console.log(message);
         Alert.alert("Error", message);
       },
@@ -113,10 +142,7 @@ export default function OtpField({ navigation, route }) {
             <Typography style={[styles.txtgrey, { color: theme.white }]}>
               Didn’t recieve a code?
             </Typography>
-            <Typography
-              style={styles.txtorange}
-              onPress={() => navigation.navigate("Signin")}
-            >
+            <Typography style={styles.txtorange} onPress={() => resendOtp()}>
               Resend code
             </Typography>
           </View>

@@ -3,6 +3,7 @@ import {
   forgotPassword,
   getProfile,
   loginUser,
+  resendOtp,
   signupUser,
   verifyOtp,
 } from "../auth.service";
@@ -34,5 +35,11 @@ export const useForgotPassword = () => {
 export const useGetProfile = () => {
   return useMutation({
     mutationFn: getProfile,
+  });
+};
+
+export const useResendOtp = () => {
+  return useMutation({
+    mutationFn: resendOtp,
   });
 };

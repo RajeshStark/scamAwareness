@@ -115,12 +115,13 @@ export default function Signup({ navigation }) {
               {strings.signandcontinue}
             </Typography>
 
-            <Pressable onPress={handlePick} style={{ marginVertical: 10 }}>
+            <Pressable onPress={handlePick} style={styles.imgContainer}>
               {profilepic === "" ? (
                 <View style={styles.greyimg} />
               ) : (
                 <Image style={styles.img} source={{ uri: profilepic }} />
               )}
+              <Ionicons name="pencil" size={15} style={styles.pencil} />
             </Pressable>
 
             <CustomInput

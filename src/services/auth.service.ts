@@ -64,3 +64,8 @@ export const verifyOtp = async (payload: ForgotPasswordPayload) => {
   const response = await http.post<ApiResponse<any>>(Api.VERIFY_OTP, payload);
   return response.data;
 };
+
+export const resendOtp = async (payload: ForgotPasswordPayload) => {
+  const response = await http.post<ApiResponse<any>>(Api.RESEND_OTP, payload);
+  return response.data;
+};

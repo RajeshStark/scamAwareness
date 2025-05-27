@@ -57,13 +57,20 @@ export const createStyles = (theme: Theme) =>
       width: 100,
       height: 100,
       borderRadius: 100,
-      alignSelf: "center",
     },
     greyimg: {
       width: 100,
       height: 100,
       borderRadius: 100,
       backgroundColor: "grey",
-      alignSelf: "center",
+    },
+    imgContainer: { marginVertical: 10, alignSelf: "center" },
+    pencil: {
+      marginTop: -20,
+      alignSelf: "flex-end",
+      marginRight: 10,
+      backgroundColor: "white",
+      padding: 6,
+      borderRadius: 40,
     },
   });

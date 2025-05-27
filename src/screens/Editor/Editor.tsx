@@ -1,110 +1,40 @@
 import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  ScrollView,
-  Pressable,
-  TouchableOpacity,
-  TextInput,
   Image,
-  Alert,
   PermissionsAndroid,
   Platform,
-  Linking,
-  SafeAreaView,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import CustomButton from "../../components/Button/CustomButton";
-import CustomHeader from "../../components/Input/Header/Header";
-import { styles } from "./styles";
-import { PostService } from "../../services/post.service";
-import { showToast } from "../../components/Toast";
-import { useUploadMedia } from "../../services/hooks/usePost";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-import Video from "react-native-video";
-import Typography from "../../components/Typography/Typography";
-import MediaView from "./MediaView/MediaView";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import CustomHeader from "../../components/Input/Header/Header";
+import { showToast } from "../../components/Toast";
 import { useAppSelector } from "../../hooks/useAppselector";
 import useAppTheme from "../../hooks/useAppTheme";
+import { useUploadMedia } from "../../services/hooks/usePost";
+import { PostService } from "../../services/post.service";
 import { transformResponse } from "../../utils/Constants";
+import MediaView from "./MediaView/MediaView";
+import { styles } from "./styles";
+import { checkAndRequestPermissions } from "./Constants";
+import AudioRecorderPlayer from "react-native-audio-recorder-player";
 
 export default function EditorScreen({ navigation }) {
   const [text, setText] = useState("");
   const [title, setTitle] = useState("");
   const [localFiles, setLocalFiles] = useState([]);
   const [media, setMedia] = useState([]);
-  const [image, setImage] = useState(null);
-  const [video, setVideo] = useState(null);
-  const [audio, setAudio] = useState(null);
-
+  const [isRecording, setIsRecording] = useState(false); // ⚠️
+  const audioRecorderPlayer = new AudioRecorderPlayer(); // ⚠️
   const { theme } = useAppTheme();
   const { usserInfo } = useAppSelector((state) => state.login);
 
   const { mutate: uploadMedia } = useUploadMedia();
-
-  const checkAndRequestPermissions = async () => {
-    if (Platform.OS !== "android") return true;
-
-    try {
-      const permissions = [
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-      ];
-
-      // Handle Android 13+ storage permissions
-      const sdkInt =
-        Platform.constants?.Release || parseInt(Platform.Version, 10);
-      if (sdkInt >= 33) {
-        permissions.push(
-          PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
-          PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO
-        );
-      } else {
-        permissions.push(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
-      }
-
-      const statuses = await PermissionsAndroid.requestMultiple(permissions);
-      const allGranted = Object.values(statuses).every(
-        (status) => status === PermissionsAndroid.RESULTS.GRANTED
-      );
-
-      // if (!allGranted) {
-      //   const permanentlyDenied = Object.values(statuses).some(
-      //     (status) => status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN
-      //   );
-
-      //   if (permanentlyDenied) {
-      //     Alert.alert(
-      //       "Permissions Required",
-      //       "You have permanently denied some permissions. Please enable them from app settings.",
-      //       [
-      //         {
-      //           text: "Cancel",
-      //           style: "cancel",
-      //         },
-      //         {
-      //           text: "Open Settings",
-      //           onPress: () => Linking.openSettings(),
-      //         },
-      //       ]
-      //     );
-      //   } else {
-      //     showToast(
-      //       "custom",
-      //       "Please grant all required permissions."
-      //     );
-      //   }
-
-      //   return false;
-      // }
-
-      return true;
-    } catch (err) {
-      console.warn("Permission error:", err);
-      return false;
-    }
-  };
 
   useEffect(() => {
     checkAndRequestPermissions();
@@ -114,30 +44,16 @@ export default function EditorScreen({ navigation }) {
     launchImageLibrary({ mediaType: "mixed", selectionLimit: 1 }, (res) => {
       if (res.didCancel || !res.assets) return;
 
-      const asset = res.assets[0];
-
-      const file = {
+      const files = res.assets.map((asset) => ({
         uri: asset.uri,
         name: asset.fileName,
         type: asset.type,
-      };
+      }));
 
-      uploadMedia([file], {
+      uploadMedia(files, {
         onSuccess: (res) => {
-          // const transformed = transformResponse(res)[0];
-          // if (!transformed) return;
-          const mimeType = file.type || "";
-          console.log({ file });
-
-          if (mimeType.startsWith("image/")) {
-            setImage(file?.uri);
-          } else if (mimeType.startsWith("video/")) {
-            setVideo(file?.uri);
-          } else if (mimeType.startsWith("audio/")) {
-            setAudio(file?.uri);
-          } else {
-            showToast("custom", "Unsupported media type");
-          }
+          const transformed = transformResponse(res);
+          setMedia(transformed);
         },
         onError: () => {
           showToast("custom", "Upload failed");
@@ -160,13 +76,45 @@ export default function EditorScreen({ navigation }) {
       uploadMedia([file], {
         onSuccess: (res) => {
           const transformed = transformResponse(res);
-          setImage(transformed?.image);
+          setMedia(transformed);
         },
         onError: () => {
           showToast("custom", "Upload failed");
         },
       });
     });
+  };
+
+  const handleAudioRecord = async () => {
+    try {
+      if (isRecording) {
+        const result = await audioRecorderPlayer.stopRecorder();
+        audioRecorderPlayer.removeRecordBackListener();
+        setIsRecording(false);
+
+        const file = {
+          uri: result,
+          name: `audio_${Date.now()}.mp4`,
+          type: "audio/mp4",
+        };
+
+        uploadMedia([file], {
+          onSuccess: (res) => {
+            const transformed = transformResponse(res);
+            setMedia((prev) => [...prev, ...transformed]);
+          },
+          onError: () => {
+            showToast("custom", "Audio upload failed");
+          },
+        });
+      } else {
+        await audioRecorderPlayer.startRecorder();
+        setIsRecording(true);
+      }
+    } catch (err) {
+      console.log("Audio record error", err);
+      showToast("custom", "Audio record failed");
+    }
   };
 
   const handleVideoRecord = () => {
@@ -180,10 +128,10 @@ export default function EditorScreen({ navigation }) {
         type: asset.type,
       };
 
-      uploadMedia([file], {
+      console.log({ file });
+      uploadMedia(file, {
         onSuccess: (res) => {
-          const transformed = transformResponse(res);
-          setVideo(transformed?.image);
+          console.log("Response ===> ", res);
         },
         onError: () => {
           showToast("custom", "Upload failed");
@@ -201,19 +149,24 @@ export default function EditorScreen({ navigation }) {
     const body = {
       name: "Post title",
       description: text,
-      image,
-      video,
-      audio,
+      image: "",
+      video: "",
+      audio: "",
     };
+
+    media.forEach((item) => {
+      if (item.type === "image") body.image = item.image;
+      if (item.type === "video") body.video = item.video;
+      if (item.type === "audio") body.audio = item.audio;
+    });
     console.log("Post body ====> ", body);
+    return;
     PostService.create(body)
       .then(() => {
         showToast("custom", "Post created!");
         setText("");
         setTitle("");
-        setImage(null);
-        setVideo(null);
-        setAudio(null);
+        setMedia([]);
         setLocalFiles([]);
         navigation.goBack();
       })
@@ -221,86 +174,87 @@ export default function EditorScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.white }}>
-      <ScrollView style={styles.container}>
-        <CustomHeader canGoback />
-        <View>
-          <View style={styles.header}>
-            <Image
-              source={{
-                uri:
-                  usserInfo?.profilePicture.length !== 0
-                    ? usserInfo?.profilePicture
-                    : "https://randomuser.me/api/portraits/men/32.jpg",
-              }}
-              style={styles.avatar}
-            />
-            <View>
-              {usserInfo?.firstName.length !== 0 ? (
-                <Text style={styles.username}>
-                  {usserInfo?.firstName} {usserInfo?.lastName}
-                </Text>
-              ) : (
-                <Text style={styles.username}>Unknown</Text>
-              )}
-              {/* <Text style={styles.handle}>@{"handle"}</Text> */}
-            </View>
-          </View>
-
-          <View style={styles.inputCard}>
-            <TextInput
-              placeholder="Write subject...."
-              value={title}
-              onChangeText={setTitle}
-            />
-            <View
-              style={{ height: 1, width: "100%", backgroundColor: "grey" }}
-            />
-            <TextInput
-              placeholder="Whats happening..."
-              value={text}
-              onChangeText={setText}
-              style={styles.textInput}
-            />
-
-            <View style={styles.inputActions}>
-              <View style={{ flexDirection: "row", gap: 16 }}>
-                <Pressable onPress={handlePick}>
-                  <Ionicons
-                    name="image-outline"
-                    size={24}
-                    style={styles.icon}
-                  />
-                </Pressable>
-                <Pressable onPress={handleCamera}>
-                  <Ionicons
-                    name="camera-outline"
-                    size={24}
-                    style={styles.icon}
-                  />
-                </Pressable>
-                <Pressable onPress={handleVideoRecord}>
-                  <Ionicons
-                    name="videocam-outline"
-                    size={24}
-                    style={styles.icon}
-                  />
-                </Pressable>
-              </View>
-              {text.length === 0 ? (
-                <View style={[styles.postBtn, { backgroundColor: theme.grey }]}>
-                  <Text style={styles.postBtnText}>Post</Text>
-                </View>
-              ) : (
-                <TouchableOpacity style={styles.postBtn} onPress={handlePost}>
-                  <Text style={styles.postBtnText}>Post</Text>
-                </TouchableOpacity>
-              )}
-            </View>
+    <ScrollView style={styles.container}>
+      <CustomHeader canGoback />
+      <View>
+        <View style={styles.header}>
+          <Image
+            source={{
+              uri:
+                usserInfo?.profilePicture.length !== 0
+                  ? usserInfo?.profilePicture
+                  : "https://randomuser.me/api/portraits/men/32.jpg",
+            }}
+            style={styles.avatar}
+          />
+          <View>
+            {usserInfo?.firstName.length !== 0 ? (
+              <Text style={styles.username}>
+                {usserInfo?.firstName} {usserInfo?.lastName}
+              </Text>
+            ) : (
+              <Text style={styles.username}>Unknown</Text>
+            )}
+            {/* <Text style={styles.handle}>@{"handle"}</Text> */}
           </View>
         </View>
-        {/* <MediaView media={media} handleRemove={handleRemove} /> */}
-      </ScrollView>
-    </SafeAreaView>
+
+        <View style={styles.inputCard}>
+          <TextInput
+            placeholder="Write subject...."
+            value={title}
+            onChangeText={setTitle}
+          />
+          <View style={{ height: 1, width: "100%", backgroundColor: "grey" }} />
+          <TextInput
+            placeholder="Whats happening..."
+            value={text}
+            onChangeText={setText}
+            style={styles.textInput}
+          />
+
+          <View style={styles.inputActions}>
+            <View style={{ flexDirection: "row", gap: 16 }}>
+              <Pressable onPress={handlePick}>
+                <Ionicons name="image-outline" size={24} style={styles.icon} />
+              </Pressable>
+              <Pressable onPress={handleCamera}>
+                <Ionicons name="camera-outline" size={24} style={styles.icon} />
+              </Pressable>
+              <Pressable onPress={handleVideoRecord}>
+                <Ionicons
+                  name="videocam-outline"
+                  size={24}
+                  style={styles.icon}
+                />
+              </Pressable>
+              <Pressable onPress={handleAudioRecord}>
+                <Ionicons
+                  name={isRecording ? "stop-circle-outline" : "mic-outline"} // ⚠️ dynamic icon
+                  size={24}
+                  style={styles.icon}
+                />
+              </Pressable>
+              {/* <Pressable onPress={handlePickAudio}>
+                <Ionicons
+                  name="musical-notes-outline"
+                  size={24}
+                  style={styles.icon}
+                />{" "}
+              </Pressable> */}
+            </View>
+            {text.length === 0 ? (
+              <View style={[styles.postBtn, { backgroundColor: theme.grey }]}>
+                <Text style={styles.postBtnText}>Post</Text>
+              </View>
+            ) : (
+              <TouchableOpacity style={styles.postBtn} onPress={handlePost}>
+                <Text style={styles.postBtnText}>Post</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+      </View>
+    </ScrollView>
   );
 }

@@ -31,18 +31,29 @@ export const PostService = {
 
   uploadMedia: (files: { uri: string; type: string; name: string }[]) => {
     const formData = new FormData();
+
     console.log("Files at api", files);
 
     files.forEach((file) => {
-      formData.append("image", {
+      let mediaKey = "file"; // default key fallback
+
+      if (file.type.startsWith("image/")) {
+        mediaKey = "image";
+      } else if (file.type.startsWith("video/")) {
+        mediaKey = "video";
+      } else if (file.type.startsWith("audio/")) {
+        mediaKey = "audio";
+      }
+
+      formData.append(mediaKey, {
         uri: file.uri,
         name: file.name,
         type: file.type,
       } as any);
     });
 
-    formData.append("type", "image");
-
+    console.log("FormData built for upload:", formData);
+    // return;
     return http.post(Api.UPLOAD_MULTIPLE_IMAGES, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
