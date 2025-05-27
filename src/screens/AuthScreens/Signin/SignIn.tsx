@@ -78,7 +78,7 @@ export default function SignIn({ navigation }) {
         }
       },
       onError: (error: any) => {
-        const message = error?.response?.data?.message || "Login failed";
+        const message = error?.error?.message || "Login failed";
         console.log(message);
         Alert.alert("Error", message);
       },

@@ -34,10 +34,14 @@ export default function EditorScreen({ navigation }) {
   const [title, setTitle] = useState("");
   const [localFiles, setLocalFiles] = useState([]);
   const [media, setMedia] = useState([]);
+  const [image, setImage] = useState(null);
+  const [video, setVideo] = useState(null);
+  const [audio, setAudio] = useState(null);
+
   const { theme } = useAppTheme();
   const { usserInfo } = useAppSelector((state) => state.login);
 
-  const { mutate: uploadMedia, isLoading: uploading } = useUploadMedia();
+  const { mutate: uploadMedia } = useUploadMedia();
 
   const checkAndRequestPermissions = async () => {
     if (Platform.OS !== "android") return true;
@@ -107,19 +111,33 @@ export default function EditorScreen({ navigation }) {
   }, []);
 
   const handlePick = () => {
-    launchImageLibrary({ mediaType: "mixed", selectionLimit: 5 }, (res) => {
+    launchImageLibrary({ mediaType: "mixed", selectionLimit: 1 }, (res) => {
       if (res.didCancel || !res.assets) return;
 
-      const files = res.assets.map((asset) => ({
+      const asset = res.assets[0];
+
+      const file = {
         uri: asset.uri,
         name: asset.fileName,
         type: asset.type,
-      }));
+      };
 
-      uploadMedia(files, {
+      uploadMedia([file], {
         onSuccess: (res) => {
-          const transformed = transformResponse(res);
-          setMedia((prev) => [...prev, ...transformed]);
+          // const transformed = transformResponse(res)[0];
+          // if (!transformed) return;
+          const mimeType = file.type || "";
+          console.log({ file });
+
+          if (mimeType.startsWith("image/")) {
+            setImage(file?.uri);
+          } else if (mimeType.startsWith("video/")) {
+            setVideo(file?.uri);
+          } else if (mimeType.startsWith("audio/")) {
+            setAudio(file?.uri);
+          } else {
+            showToast("custom", "Unsupported media type");
+          }
         },
         onError: () => {
           showToast("custom", "Upload failed");
@@ -142,7 +160,7 @@ export default function EditorScreen({ navigation }) {
       uploadMedia([file], {
         onSuccess: (res) => {
           const transformed = transformResponse(res);
-          setMedia((prev) => [...prev, ...transformed]);
+          setImage(transformed?.image);
         },
         onError: () => {
           showToast("custom", "Upload failed");
@@ -165,7 +183,7 @@ export default function EditorScreen({ navigation }) {
       uploadMedia([file], {
         onSuccess: (res) => {
           const transformed = transformResponse(res);
-          setMedia((prev) => [...prev, ...transformed]);
+          setVideo(transformed?.image);
         },
         onError: () => {
           showToast("custom", "Upload failed");
@@ -183,7 +201,9 @@ export default function EditorScreen({ navigation }) {
     const body = {
       name: "Post title",
       description: text,
-      media,
+      image,
+      video,
+      audio,
     };
     console.log("Post body ====> ", body);
     PostService.create(body)
@@ -191,7 +211,9 @@ export default function EditorScreen({ navigation }) {
         showToast("custom", "Post created!");
         setText("");
         setTitle("");
-        setMedia([]);
+        setImage(null);
+        setVideo(null);
+        setAudio(null);
         setLocalFiles([]);
         navigation.goBack();
       })
@@ -277,7 +299,7 @@ export default function EditorScreen({ navigation }) {
             </View>
           </View>
         </View>
-        <MediaView media={media} handleRemove={handleRemove} />
+        {/* <MediaView media={media} handleRemove={handleRemove} /> */}
       </ScrollView>
     </SafeAreaView>
   );

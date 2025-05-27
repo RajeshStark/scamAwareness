@@ -53,4 +53,17 @@ export const createStyles = (theme: Theme) =>
     mr: {
       marginRight: 10,
     },
+    img: {
+      width: 100,
+      height: 100,
+      borderRadius: 100,
+      alignSelf: "center",
+    },
+    greyimg: {
+      width: 100,
+      height: 100,
+      borderRadius: 100,
+      backgroundColor: "grey",
+      alignSelf: "center",
+    },
   });

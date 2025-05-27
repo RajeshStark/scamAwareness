@@ -115,27 +115,11 @@ export default function Signup({ navigation }) {
               {strings.signandcontinue}
             </Typography>
 
-            <Pressable onPress={handlePick}>
+            <Pressable onPress={handlePick} style={{ marginVertical: 10 }}>
               {profilepic === "" ? (
-                <View
-                  style={{
-                    width: 100,
-                    height: 100,
-                    borderRadius: 100,
-                    backgroundColor: "grey",
-                    alignSelf: "center",
-                  }}
-                />
+                <View style={styles.greyimg} />
               ) : (
-                <Image
-                  style={{
-                    width: 100,
-                    height: 100,
-                    borderRadius: 100,
-                    alignSelf: "center",
-                  }}
-                  source={{ uri: profilepic }}
-                />
+                <Image style={styles.img} source={{ uri: profilepic }} />
               )}
             </Pressable>
 
