@@ -1,6 +1,7 @@
 import axios from "axios";
 import { encode as base64Encode } from "base-64";
 import { store } from "../../redux/store/store";
+import { showToast } from "../../components/Toast";
 
 export const BaseURL = "https://api.scamalertpro.in/";
 
@@ -36,6 +37,13 @@ http.interceptors.response.use(
     console.log("errorResponse ===", error?.response?.data, errorResponse);
     if (error?.response?.status === 401 || error?.response?.status === 403) {
       // Show toast or logout logic
+      showToast("custom", error?.response?.data.error?.message);
+      // store.getState()?.login.
+      // dispatch(logOut());
+      //     navigation.reset({
+      //       index: 0,
+      //       routes: [{ name: "LandingPage" }],
+      //     });
     }
     return Promise.reject(error);
   }

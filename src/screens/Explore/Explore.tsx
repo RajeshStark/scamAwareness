@@ -1,73 +1,116 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  TextInput,
   FlatList,
   Image,
   Pressable,
-  StyleSheet,
-  Keyboard,
   SafeAreaView,
+  Text,
+  TextInput,
+  View,
+  Keyboard,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import LineraBgContainer from "../../components/Container/LineraBgContainer";
 import useAppTheme from "../../hooks/useAppTheme";
 import { width } from "../../utils/Dimensions";
-import Fonts from "../../utils/Fonts";
+import { createStyles } from "./styles";
+import { useSearch } from "../../services/hooks/useSearch";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const recentSearches = ["Oregon Trail", "Slickrock Bike Trail", "Vermont"];
-const recommendedImages = [
-  {
-    id: 1,
-    uri: "https://www.cats.org.uk/media/13136/220325case013.jpg?width=500&height=333.49609375",
-  },
-  {
-    id: 2,
-    uri: "https://www.cats.org.uk/media/13136/220325case013.jpg?width=500&height=333.49609375",
-  },
-  {
-    id: 3,
-    uri: "https://www.cats.org.uk/media/13136/220325case013.jpg?width=500&height=333.49609375",
-  },
-  {
-    id: 4,
-    uri: "https://www.cats.org.uk/media/13136/220325case013.jpg?width=500&height=333.49609375",
-  },
-  {
-    id: 5,
-    uri: "https://www.cats.org.uk/media/13136/220325case013.jpg?width=500&height=333.49609375",
-  },
-  {
-    id: 6,
-    uri: "https://www.cats.org.uk/media/13136/220325case013.jpg?width=500&height=333.49609375",
-  },
-  {
-    id: 7,
-    uri: "https://www.cats.org.uk/media/13136/220325case013.jpg?width=500&height=333.49609375",
-  },
-  {
-    id: 8,
-    uri: "https://www.cats.org.uk/media/13136/220325case013.jpg?width=500&height=333.49609375",
-  },
-  {
-    id: 9,
-    uri: "https://www.cats.org.uk/media/13136/220325case013.jpg?width=500&height=333.49609375",
-  },
-];
+const RECENT_SEARCHES_KEY = "recent_searches";
 
 export default function SearchScreen() {
   const [searchText, setSearchText] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const [results, setResults] = useState([]);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const { theme } = useAppTheme();
   const styles = createStyles(theme);
 
-  const handleClearSearch = (item: string) => {
-    console.log("Clear", item);
+  const { data, mutate: searchMutation } = useSearch();
+  console.log({ data });
+
+  const handleSearchSubmit = async () => {
+    const trimmed = searchText.trim();
+    if (!trimmed) return;
+
+    const updatedSearches = [
+      trimmed,
+      ...recentSearches.filter((item) => item !== trimmed),
+    ];
+    const limited = updatedSearches.slice(0, 4);
+
+    setRecentSearches(limited);
+
+    try {
+      await AsyncStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(limited));
+    } catch (error) {
+      console.error("Failed to save search:", error);
+    }
+
+    searchMutation({ search: trimmed });
   };
 
-  const renderImage = ({ item }: any) => (
-    <Image source={{ uri: item.uri }} style={styles.imageTile} />
+  useEffect(() => {
+    const loadSearches = async () => {
+      try {
+        const stored = await AsyncStorage.getItem(RECENT_SEARCHES_KEY);
+        if (stored) {
+          setRecentSearches(JSON.parse(stored));
+        }
+      } catch (error) {
+        console.error("Failed to load recent searches:", error);
+      }
+    };
+
+    loadSearches();
+  }, []);
+
+  const handleClearSearch = async (item: string) => {
+    const filtered = recentSearches.filter((search) => search !== item);
+    setRecentSearches(filtered);
+
+    try {
+      await AsyncStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(filtered));
+    } catch (error) {
+      console.error("Failed to update storage:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (data?.output?.length) {
+      const mediaItems = data.output
+        .map((item: any) => {
+          const firstMedia = item.media?.[0];
+          if (!firstMedia) return null;
+          return {
+            id: item._id,
+            ...firstMedia,
+          };
+        })
+        .filter(Boolean); // remove nulls
+
+      setResults(mediaItems);
+    }
+  }, [data]);
+
+  const renderMedia = ({ item }: any) => (
+    <View style={styles.mediaWrapper}>
+      <>{console.log(item)}</>
+      {item.type.startsWith("image") ? (
+        <Image source={{ uri: item.url }} style={styles.imageTile} />
+      ) : (
+        <View style={styles.videoWrapper}>
+          <Image
+            source={{
+              uri: "https://img.icons8.com/ios-filled/100/000000/video.png",
+            }}
+            style={styles.videoIcon}
+          />
+          <Image source={{ uri: item.url }} style={styles.imageTile} />
+        </View>
+      )}
+    </View>
   );
 
   return (
@@ -81,17 +124,21 @@ export default function SearchScreen() {
               onChangeText={setSearchText}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
+              onSubmitEditing={handleSearchSubmit}
               style={styles.input}
+              returnKeyType="search"
             />
             <View
               style={{ width: 1.5, height: 30, backgroundColor: theme.grey }}
             />
-            <Ionicons
-              name="search"
-              size={20}
-              color={theme.txtblack}
-              style={{ marginLeft: 10 }}
-            />
+            <Pressable onPress={handleSearchSubmit}>
+              <Ionicons
+                name="search"
+                size={20}
+                color={theme.txtblack}
+                style={{ marginLeft: 10 }}
+              />
+            </Pressable>
           </View>
 
           {isFocused && (
@@ -117,14 +164,21 @@ export default function SearchScreen() {
                 height: 2,
               }}
             />
-            <Text style={styles.recommendedText}>Recommended For You</Text>
+            <Text style={styles.recommendedText}>Search Results</Text>
             <FlatList
-              data={recommendedImages}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={renderImage}
+              data={results}
+              keyExtractor={(item) => item.id + item.url}
+              renderItem={renderMedia}
               numColumns={3}
               contentContainerStyle={styles.gridContainer}
               keyboardShouldPersistTaps="handled"
+              ListEmptyComponent={
+                searchMutation.isLoading ? (
+                  <Text style={styles.loadingText}>Searching...</Text>
+                ) : (
+                  <Text style={styles.emptyText}>No Results</Text>
+                )
+              }
             />
           </View>
         </View>
@@ -132,66 +186,3 @@ export default function SearchScreen() {
     </LineraBgContainer>
   );
 }
-
-const createStyles = (theme: Theme) =>
-  StyleSheet.create({
-    flex: { flex: 1 },
-    container: {
-      flex: 1,
-      paddingTop: 10,
-    },
-    searchContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      backgroundColor: theme.white,
-      borderRadius: 40,
-      paddingHorizontal: 15,
-      paddingVertical: 5,
-      marginBottom: 12,
-      marginHorizontal: 12,
-    },
-    input: {
-      marginLeft: 8,
-      flex: 1,
-      fontSize: 16,
-    },
-    recentContainer: {
-      marginBottom: 20,
-      backgroundColor: theme.white,
-      width: width,
-      padding: 12,
-    },
-    recentHeader: {
-      color: "#aaa",
-      fontWeight: "bold",
-      marginTop: 8,
-      marginBottom: 20,
-    },
-    recentItem: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginBottom: 12,
-      gap: 8,
-    },
-    recentText: {
-      flex: 1,
-      fontSize: 16,
-      color: theme.txtblack,
-      fontFamily: Fonts.Medium,
-    },
-    recommendedText: {
-      fontSize: 12,
-      color: theme.white,
-      marginVertical: 12,
-      fontFamily: Fonts.Medium,
-    },
-    gridContainer: {
-      gap: 6,
-    },
-    imageTile: {
-      width: "32%",
-      aspectRatio: 1,
-      margin: 3,
-      borderRadius: 8,
-    },
-  });

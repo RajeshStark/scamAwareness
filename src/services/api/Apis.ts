@@ -14,4 +14,7 @@ export const Api = {
   UPLOAD_MULTIPLE_IMAGES: "/api/user/upload-multipleimages",
   VERIFY_OTP: "api/user/verify-otp",
   RESEND_OTP: "api/user/resend-otp",
+
+  // Explore
+  SEARCH: "api/post/search",
 };
