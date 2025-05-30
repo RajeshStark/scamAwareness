@@ -56,6 +56,8 @@ export default function SignIn({ navigation }) {
       userType: 2,
       fcmToken: "",
     };
+    console.log({ payload });
+
     login(payload, {
       onSuccess: (response) => {
         console.log({ response });

@@ -42,13 +42,11 @@ export const createStyles = (theme: Theme) =>
     },
     mainContainer: {
       paddingBottom: 100,
+      height: height,
+      width: width,
     },
     center: {
       justifyContent: "center",
       alignItems: "center",
-    },
-    fillContianer: {
-      height: height,
-      width: width,
     },
   });

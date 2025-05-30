@@ -37,19 +37,17 @@ export default function Home({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <Container withScroll>
-        <EmergencyTicker />
         <LineraBgContainer>
+          <EmergencyTicker />
           <FlatList
             data={posts}
-            style={
-              posts.length === 0 ? styles.fillContianer : styles.mainContainer
-            }
+            style={styles.mainContainer}
             scrollEnabled
             keyExtractor={(item, index) => item._id + index}
             renderItem={({ item, index }) => <PostCard key={index} {...item} />}
             ListEmptyComponent={
               !isLoading ? (
-                <View style={[styles.fillContianer, styles.center]}>
+                <View style={[styles.mainContainer, styles.center]}>
                   <Typography>No posts</Typography>
                 </View>
               ) : null

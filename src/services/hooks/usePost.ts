@@ -19,3 +19,13 @@ export const useUploadMedia = () =>
   useMutation({
     mutationFn: PostService.uploadMedia,
   });
+
+export const useLike = () =>
+  useMutation({
+    mutationFn: PostService.like,
+  });
+
+export const useDislike = () =>
+  useMutation({
+    mutationFn: PostService.dislike,
+  });

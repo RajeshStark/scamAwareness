@@ -54,6 +54,7 @@ const EmergencyTicker = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: TICKER_HEIGHT,
   },
   tickerContainer: {
     height: TICKER_HEIGHT,

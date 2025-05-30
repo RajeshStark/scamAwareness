@@ -1,59 +1,120 @@
 import React, { useState } from "react";
 import {
-  View,
-  Text,
+  Alert,
+  FlatList,
   Image,
-  StyleSheet,
+  Pressable,
   TouchableOpacity,
-  Dimensions,
+  View,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Video from "react-native-video";
+import { useLike } from "../../services/hooks/usePost";
 import Typography from "../Typography/Typography";
-import Fonts from "../../utils/Fonts";
-
-const screenWidth = Dimensions.get("window").width;
+import { useQueryClient } from "@tanstack/react-query";
+import { styles } from "./styles";
 
 const DEFAULT_AVATAR =
   "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
+
+type MediaItem = {
+  type: string;
+  url: string;
+};
 
 type PostCardProps = {
   userDetails: {
     firstName?: string;
     lastName?: string;
     profilePicture?: string;
-  };
+  }[];
   description: string;
-  image?: string;
-  video?: string;
+  media: MediaItem[];
   commentCount: number;
   likeCount: number;
   shareCount: number;
   noShadow?: boolean;
   isLiked?: boolean;
+  isInterested?: boolean;
+  _id: string;
 };
 
 const PostCard: React.FC<PostCardProps> = ({
   userDetails,
   description,
-  image,
-  video,
+  media = [],
   commentCount,
   likeCount,
   shareCount,
   noShadow,
   isLiked,
+  isInterested,
+  _id,
 }) => {
-  const avatar = userDetails?.profilePicture || DEFAULT_AVATAR;
+  const avatar = userDetails?.[0]?.profilePicture || DEFAULT_AVATAR;
   const username =
-    (userDetails?.firstName || "") + " " + (userDetails?.lastName || "");
-  const displayName = username.trim() || "Unknown";
+    (userDetails?.[0]?.firstName || "") +
+    " " +
+    (userDetails?.[0]?.lastName || "");
+  const displayName = username.trim() || "Admin";
 
-  const [paused, setPaused] = useState(true);
-  const [muted, setMuted] = useState(true);
+  const [pausedVideos, setPausedVideos] = useState<Record<number, boolean>>({});
+  const [mutedVideos, setMutedVideos] = useState<Record<number, boolean>>({});
+  const queryClient = useQueryClient();
+  const { mutate: like } = useLike();
 
-  const togglePlayPause = () => setPaused(!paused);
-  const toggleMute = () => setMuted(!muted);
+  const togglePlayPause = (index: number) => {
+    setPausedVideos((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
+  const toggleMute = (index: number) => {
+    setMutedVideos((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
+  const toggleLike = () => {
+    const payload = {
+      postId: _id,
+      type: 1,
+    };
+    console.log({ payload });
+    like(payload, {
+      onSuccess: (response) => {
+        if (response.status) {
+          queryClient.setQueryData(["posts"], (oldData: any) => {
+            if (!oldData) return oldData;
+            return {
+              ...oldData,
+              pages: oldData.pages.map((page) => ({
+                ...page,
+                output: {
+                  ...page.output,
+                  list: page.output.list.map((post) => {
+                    if (post._id === payload.postId) {
+                      const isLikedNow = !post.isLiked;
+                      return {
+                        ...post,
+                        isLiked: isLikedNow,
+                        likeCount: isLikedNow
+                          ? post.likeCount + 1
+                          : post.likeCount - 1,
+                      };
+                    }
+                    return post;
+                  }),
+                },
+              })),
+            };
+          });
+        }
+      },
+    });
+  };
 
   return (
     <View style={[styles.card, { elevation: noShadow ? 0 : 3 }]}>
@@ -70,127 +131,90 @@ const PostCard: React.FC<PostCardProps> = ({
         <Typography style={styles.title}>{description}</Typography>
         <Typography style={styles.caption}>{description}</Typography>
 
-        {image ? (
-          <Image source={{ uri: image }} style={styles.media} />
-        ) : video ? (
-          <View>
-            <TouchableOpacity onPress={togglePlayPause}>
-              <Video
-                source={{ uri: video }}
-                style={styles.media}
-                resizeMode="cover"
-                paused={paused}
-                muted={muted}
-                repeat
-              />
-              <View style={styles.overlayButtons}>
-                <Ionicons
-                  name={paused ? "play" : "pause"}
-                  size={32}
-                  color="#fff"
-                  style={{ marginRight: 20 }}
-                />
-                <TouchableOpacity onPress={toggleMute}>
-                  <Ionicons
-                    name={muted ? "volume-mute" : "volume-high"}
-                    size={28}
-                    color="#fff"
+        {media.length > 0 && (
+          <FlatList
+            data={media}
+            keyExtractor={(_, index) => index.toString()}
+            horizontal
+            pagingEnabled
+            snapToAlignment="center"
+            decelerationRate="fast"
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item, index }) => {
+              const isVideo = item.type.includes("video");
+              const paused = pausedVideos[index] ?? true;
+              const muted = mutedVideos[index] ?? true;
+
+              if (isVideo) {
+                return (
+                  <TouchableOpacity
+                    onPress={() => togglePlayPause(index)}
+                    style={styles.media}
+                  >
+                    <Video
+                      source={{ uri: item.url }}
+                      style={styles.media}
+                      resizeMode="cover"
+                      paused={paused}
+                      muted={muted}
+                      repeat
+                    />
+                    <View style={styles.overlayButtons}>
+                      <Ionicons
+                        name={paused ? "play" : "pause"}
+                        size={32}
+                        color="#fff"
+                        style={{ marginRight: 20 }}
+                      />
+                      <TouchableOpacity onPress={() => toggleMute(index)}>
+                        <Ionicons
+                          name={muted ? "volume-mute" : "volume-high"}
+                          size={28}
+                          color="#fff"
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </TouchableOpacity>
+                );
+              } else {
+                return (
+                  <Image
+                    source={{ uri: item.url }}
+                    style={styles.media}
+                    resizeMode="cover"
                   />
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          </View>
-        ) : null}
+                );
+              }
+            }}
+          />
+        )}
 
         <View style={styles.footer}>
           <View style={styles.iconRow}>
             <Ionicons name="chatbubble-outline" size={16} color="#555" />
             <Typography style={styles.iconText}>{commentCount}</Typography>
           </View>
-          <View style={styles.iconRow}>
+          <Pressable style={styles.iconRow} onPress={() => toggleLike()}>
             <Ionicons
               name={isLiked ? "heart" : "heart-outline"}
               size={16}
               color={isLiked ? "#f24822" : "#555"}
             />
             <Typography style={styles.iconText}>{likeCount}</Typography>
-          </View>
+          </Pressable>
           <View style={styles.iconRow}>
             <Ionicons name="repeat" size={16} color="#555" />
             <Typography style={styles.iconText}>{shareCount}</Typography>
           </View>
-          <Ionicons name="bookmark-outline" size={16} color="#555" />
+          <Ionicons
+            name={isInterested ? "bookmark" : "bookmark-outline"}
+            size={16}
+            color={isInterested ? "#8E1A7B" : "#555"}
+          />
         </View>
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  card: {
-    margin: 10,
-    padding: 12,
-    backgroundColor: "#fff",
-    borderRadius: 12,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
-  },
-  username: {
-    fontWeight: "bold",
-    fontSize: 14,
-  },
-  contentContainer: {
-    marginTop: 5,
-  },
-  caption: {
-    fontSize: 14,
-    marginBottom: 8,
-  },
-  title: {
-    fontSize: 18,
-    marginBottom: 8,
-    fontFamily: Fonts.Bold,
-  },
-  media: {
-    width: screenWidth - 40,
-    height: 200,
-    borderRadius: 10,
-    marginBottom: 10,
-    backgroundColor: "#000",
-  },
-  overlayButtons: {
-    position: "absolute",
-    top: "40%",
-    left: "40%",
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.3)",
-    borderRadius: 20,
-    padding: 10,
-  },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  iconRow: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  iconText: {
-    marginLeft: 4,
-    color: "#555",
-    fontSize: 13,
-  },
-});
 
 export default PostCard;
