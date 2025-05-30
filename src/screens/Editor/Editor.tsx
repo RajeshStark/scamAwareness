@@ -29,8 +29,8 @@ export default function EditorScreen({ navigation }) {
   const [title, setTitle] = useState("");
   const [localFiles, setLocalFiles] = useState([]);
   const [media, setMedia] = useState([]);
-  const [isRecording, setIsRecording] = useState(false); // ⚠️
-  const audioRecorderPlayer = new AudioRecorderPlayer(); // ⚠️
+  const [isRecording, setIsRecording] = useState(false);
+  const audioRecorderPlayer = new AudioRecorderPlayer();
   const { theme } = useAppTheme();
   const { usserInfo } = useAppSelector((state) => state.login);
 
@@ -41,7 +41,7 @@ export default function EditorScreen({ navigation }) {
   }, []);
 
   const handlePick = () => {
-    launchImageLibrary({ mediaType: "mixed", selectionLimit: 1 }, (res) => {
+    launchImageLibrary({ mediaType: "mixed", selectionLimit: 3 }, (res) => {
       if (res.didCancel || !res.assets) return;
 
       const files = res.assets.map((asset) => ({
@@ -52,7 +52,10 @@ export default function EditorScreen({ navigation }) {
 
       uploadMedia(files, {
         onSuccess: (res) => {
+          console.log({ res });
           const transformed = transformResponse(res);
+          console.log({ transformed });
+
           setMedia(transformed);
         },
         onError: () => {
@@ -149,16 +152,8 @@ export default function EditorScreen({ navigation }) {
     const body = {
       name: "Post title",
       description: text,
-      image: "",
-      video: "",
-      audio: "",
+      media,
     };
-
-    media.forEach((item) => {
-      if (item.type === "image") body.image = item.image;
-      if (item.type === "video") body.video = item.video;
-      if (item.type === "audio") body.audio = item.audio;
-    });
     console.log("Post body ====> ", body);
     return;
     PostService.create(body)
@@ -235,13 +230,6 @@ export default function EditorScreen({ navigation }) {
                   style={styles.icon}
                 />
               </Pressable>
-              {/* <Pressable onPress={handlePickAudio}>
-                <Ionicons
-                  name="musical-notes-outline"
-                  size={24}
-                  style={styles.icon}
-                />{" "}
-              </Pressable> */}
             </View>
             {text.length === 0 ? (
               <View style={[styles.postBtn, { backgroundColor: theme.grey }]}>
@@ -255,6 +243,7 @@ export default function EditorScreen({ navigation }) {
           </View>
         </View>
       </View>
+      <MediaView media={media} handleRemove={handleRemove} />
     </ScrollView>
   );
 }
