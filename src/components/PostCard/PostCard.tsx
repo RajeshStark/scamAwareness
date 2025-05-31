@@ -13,6 +13,7 @@ import { useLike } from "../../services/hooks/usePost";
 import Typography from "../Typography/Typography";
 import { useQueryClient } from "@tanstack/react-query";
 import { styles } from "./styles";
+import { useNavigation } from "@react-navigation/native";
 
 const DEFAULT_AVATAR =
   "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
@@ -57,7 +58,7 @@ const PostCard: React.FC<PostCardProps> = ({
     " " +
     (userDetails?.[0]?.lastName || "");
   const displayName = username.trim() || "Admin";
-
+  const navigation = useNavigation();
   const [pausedVideos, setPausedVideos] = useState<Record<number, boolean>>({});
   const [mutedVideos, setMutedVideos] = useState<Record<number, boolean>>({});
   const queryClient = useQueryClient();
@@ -116,7 +117,7 @@ const PostCard: React.FC<PostCardProps> = ({
     });
   };
 
-  return (
+  const content = (
     <View style={[styles.card, { elevation: noShadow ? 0 : 3 }]}>
       <View style={styles.header}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -194,7 +195,7 @@ const PostCard: React.FC<PostCardProps> = ({
             <Ionicons name="chatbubble-outline" size={16} color="#555" />
             <Typography style={styles.iconText}>{commentCount}</Typography>
           </View>
-          <Pressable style={styles.iconRow} onPress={() => toggleLike()}>
+          <Pressable style={styles.iconRow} onPress={toggleLike}>
             <Ionicons
               name={isLiked ? "heart" : "heart-outline"}
               size={16}
@@ -214,6 +215,20 @@ const PostCard: React.FC<PostCardProps> = ({
         </View>
       </View>
     </View>
+  );
+
+  return noShadow ? (
+    content
+  ) : (
+    <Pressable
+      onPress={() =>
+        navigation.navigate("PostDetailScreen", {
+          postId: _id,
+        })
+      }
+    >
+      {content}
+    </Pressable>
   );
 };
 

@@ -3,7 +3,7 @@ import { Api } from "./api/Apis";
 import { encodedCredentials, http } from "./api/http-client";
 
 export const PostService = {
-  list: (payload: { page: number; pageLimit: number; searchKey?: string }) =>
+  list: (payload: { page: number; pageLimit: number; postId?: string }) =>
     http.post(Api.POST_LIST, payload),
 
   create: (payload: any) => http.post(Api.POST_CREATE, payload),

@@ -4,6 +4,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import useAppTheme from "../../../hooks/useAppTheme";
 import Typography from "../../Typography/Typography";
 import { useNavigation } from "@react-navigation/native";
+import Fonts from "../../../utils/Fonts";
 
 type props = {
   canGoback?: boolean;
@@ -21,7 +22,7 @@ export default function CustomHeader({
   const navigation = useNavigation();
   return (
     <View style={[{ flexDirection: "row", alignSelf: "flex-start" }, style]}>
-      <View>
+      <View style={{ flexDirection: "row", alignSelf: "flex-start" }}>
         {canGoback && (
           <Ionicons
             name="arrow-back-outline"
@@ -31,7 +32,11 @@ export default function CustomHeader({
             onPress={() => navigation.goBack()}
           />
         )}
-        {title && <Typography>{title}</Typography>}
+        {title && (
+          <Typography style={{ marginLeft: 20, fontFamily: Fonts.Medium }}>
+            {title}
+          </Typography>
+        )}
       </View>
       {right ?? right}
     </View>

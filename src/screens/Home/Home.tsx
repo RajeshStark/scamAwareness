@@ -33,7 +33,6 @@ export default function Home({ navigation }) {
   } = usePostList();
 
   const posts = data?.pages.flatMap((page) => page.output?.list || []) ?? [];
-  console.log({ posts });
 
   const toggleFab = () => {
     setFabOpen(!fabOpen);
