@@ -35,7 +35,7 @@ export const PostService = {
     console.log("Files at api", files);
 
     files.forEach((file) => {
-      let mediaKey = "file"; // default key fallback
+      let mediaKey = "file";
 
       if (file.type.startsWith("image/")) {
         mediaKey = "image";

@@ -3,17 +3,21 @@ export const transformResponse = (res: any) => {
 
   if (!raw?.image?.length) return [];
 
-  return raw.image.map((url: string) => {
-    const type = raw.type;
+  const getTypeFromUrl = (
+    url: string
+  ): "image" | "video" | "audio" | "other" => {
+    const extension = url.split(".").pop()?.toLowerCase() || "";
 
-    if (type === "image") {
-      return { type, image: url };
-    } else if (type === "video") {
-      return { type, video: url };
-    } else if (type === "audio") {
-      return { type, audio: url };
-    } else {
-      return { type, url };
-    }
+    if (["jpg", "jpeg", "png", "gif", "webp"].includes(extension))
+      return "image";
+    if (["mp4", "mov", "avi", "mkv", "webm"].includes(extension))
+      return "video";
+    if (["mp3", "wav", "m4a", "aac"].includes(extension)) return "audio";
+    return "other";
+  };
+
+  return raw.image.map((url: string) => {
+    const type = getTypeFromUrl(url);
+    return { type, url };
   });
 };

@@ -92,10 +92,16 @@ export default function Signup({ navigation }) {
         type: asset.type,
       }));
 
+      console.log({ files });
+
       uploadMedia(files, {
         onSuccess: (res) => {
           const transformed = transformResponse(res);
-          setProfilePic(transformed[0]?.image);
+          console.log("res", res);
+          console.log({ transformed });
+          console.log("transformed[0]?.url", transformed[0]?.url);
+
+          setProfilePic(transformed[0]?.url);
         },
         onError: () => {
           showToast("custom", "Upload failed");

@@ -44,7 +44,7 @@ export default function MediaView({ media, handleRemove }) {
                   }}
                 >
                   <Video
-                    source={{ uri: item.image || item.url }}
+                    source={{ uri: item.url }}
                     style={{ width: "100%", height: "100%" }}
                     paused={!isPlaying}
                     muted
@@ -71,7 +71,7 @@ export default function MediaView({ media, handleRemove }) {
                 </View>
               ) : (
                 <Image
-                  source={{ uri: item.image }}
+                  source={{ uri: item.url }}
                   style={{
                     width: "100%",
                     height: "100%",

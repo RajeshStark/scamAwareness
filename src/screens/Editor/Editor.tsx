@@ -27,7 +27,6 @@ import AudioRecorderPlayer from "react-native-audio-recorder-player";
 export default function EditorScreen({ navigation }) {
   const [text, setText] = useState("");
   const [title, setTitle] = useState("");
-  const [localFiles, setLocalFiles] = useState([]);
   const [media, setMedia] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
   const audioRecorderPlayer = new AudioRecorderPlayer();
@@ -56,7 +55,7 @@ export default function EditorScreen({ navigation }) {
           const transformed = transformResponse(res);
           console.log({ transformed });
 
-          setMedia(transformed);
+          setMedia((prev) => [...prev, ...transformed]);
         },
         onError: () => {
           showToast("custom", "Upload failed");
@@ -79,7 +78,7 @@ export default function EditorScreen({ navigation }) {
       uploadMedia([file], {
         onSuccess: (res) => {
           const transformed = transformResponse(res);
-          setMedia(transformed);
+          setMedia((prev) => [...prev, ...transformed]);
         },
         onError: () => {
           showToast("custom", "Upload failed");
@@ -145,7 +144,6 @@ export default function EditorScreen({ navigation }) {
 
   const handleRemove = (indexToRemove) => {
     setMedia((prev) => prev.filter((_, i) => i !== indexToRemove));
-    setLocalFiles((prev) => prev.filter((_, i) => i !== indexToRemove));
   };
 
   const handlePost = () => {
@@ -155,14 +153,13 @@ export default function EditorScreen({ navigation }) {
       media,
     };
     console.log("Post body ====> ", body);
-    return;
+    // return;
     PostService.create(body)
       .then(() => {
         showToast("custom", "Post created!");
         setText("");
         setTitle("");
         setMedia([]);
-        setLocalFiles([]);
         navigation.goBack();
       })
       .catch(() => showToast("custom", "Post failed"));

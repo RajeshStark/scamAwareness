@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   FlatList,
   Animated as RNAnimated,
   TouchableOpacity,
@@ -14,14 +15,23 @@ import useAppTheme from "../../hooks/useAppTheme";
 import { usePostList } from "../../services/hooks/usePost";
 import EmergencyTicker from "./Emergencyticker/EmergencyTicker";
 import { createStyles } from "./styles";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Home({ navigation }) {
   const [fabOpen, setFabOpen] = useState(false);
   const fadeAnim = useState(new RNAnimated.Value(0))[0];
   const { theme } = useAppTheme();
   const styles = createStyles(theme);
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    usePostList();
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isRefetching,
+    refetch,
+  } = usePostList();
+
   const posts = data?.pages.flatMap((page) => page.output?.list || []) ?? [];
   console.log({ posts });
 
@@ -34,11 +44,23 @@ export default function Home({ navigation }) {
     }).start();
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch();
+    }, [])
+  );
+
   return (
     <View style={{ flex: 1 }}>
       <Container withScroll>
         <LineraBgContainer>
           <EmergencyTicker />
+          {isRefetching && (
+            <View>
+              <ActivityIndicator size="small" color={theme.primary} />
+            </View>
+          )}
+
           <FlatList
             data={posts}
             style={styles.mainContainer}
@@ -56,6 +78,8 @@ export default function Home({ navigation }) {
               if (hasNextPage) fetchNextPage();
             }}
             onEndReachedThreshold={0.5}
+            refreshing={isRefetching}
+            onRefresh={refetch}
           />
         </LineraBgContainer>
       </Container>
