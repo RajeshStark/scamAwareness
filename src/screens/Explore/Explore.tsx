@@ -19,7 +19,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const RECENT_SEARCHES_KEY = "recent_searches";
 
-export default function SearchScreen() {
+export default function SearchScreen({ navigation }) {
   const [searchText, setSearchText] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [results, setResults] = useState([]);
@@ -90,11 +90,20 @@ export default function SearchScreen() {
         .filter(Boolean); // remove nulls
 
       setResults(mediaItems);
+    } else {
+      setResults([]);
     }
   }, [data]);
 
   const renderMedia = ({ item }: any) => (
-    <View style={styles.mediaWrapper}>
+    <Pressable
+      style={styles.mediaWrapper}
+      onPress={() =>
+        navigation.navigate("PostDetailScreen", {
+          postId: item?.id,
+        })
+      }
+    >
       {item.type.startsWith("image") ? (
         <Image source={{ uri: item.url }} style={styles.imageTile} />
       ) : (
@@ -108,7 +117,7 @@ export default function SearchScreen() {
           <Image source={{ uri: item.url }} style={styles.imageTile} />
         </View>
       )}
-    </View>
+    </Pressable>
   );
 
   return (
