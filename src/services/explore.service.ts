@@ -6,8 +6,6 @@ type SearchPayload = {
 };
 
 export const search = async (payload: SearchPayload) => {
-  console.log("Search payload", payload);
-
   const response = await http.post<ApiResponse<any>>(Api.SEARCH, payload);
   return response.data;
 };

@@ -28,7 +28,6 @@ export default function SearchScreen() {
   const styles = createStyles(theme);
 
   const { data, mutate: searchMutation } = useSearch();
-  console.log({ data });
 
   const handleSearchSubmit = async () => {
     const trimmed = searchText.trim();
@@ -96,7 +95,6 @@ export default function SearchScreen() {
 
   const renderMedia = ({ item }: any) => (
     <View style={styles.mediaWrapper}>
-      <>{console.log(item)}</>
       {item.type.startsWith("image") ? (
         <Image source={{ uri: item.url }} style={styles.imageTile} />
       ) : (

@@ -4,6 +4,11 @@ export const Api = {
   CHANGE_PASSWORD: "api/user/change-password",
   FORGOT_PASSWORD: "api/user/forgot-password",
   GET_PROFILE: "api/user/get-profile",
+  UPLOAD_MULTIPLE_IMAGES: "/api/user/upload-multipleimages",
+  VERIFY_OTP: "api/user/verify-otp",
+  RESEND_OTP: "api/user/resend-otp",
+
+  // Post
   POST_LIST: "api/post/list",
   POST_CREATE: "api/post/create",
   POST_SHARE_COUNT: "api/post/share-count",
@@ -11,9 +16,7 @@ export const Api = {
   POST_DISLIKE: "api/post/disLike",
   POST_COMMENT: "api/post/create-comment",
   POST_REPLY: "api/post/create-replies",
-  UPLOAD_MULTIPLE_IMAGES: "/api/user/upload-multipleimages",
-  VERIFY_OTP: "api/user/verify-otp",
-  RESEND_OTP: "api/user/resend-otp",
+  GET_COMMENTS: "api/post/get-comment",
 
   // Explore
   SEARCH: "api/post/search",

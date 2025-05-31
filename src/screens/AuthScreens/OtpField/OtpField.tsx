@@ -44,13 +44,9 @@ export default function OtpField({ navigation, route }) {
 
     verify(payload, {
       onSuccess: (response) => {
-        console.log(response);
-
         if (response.status) {
           const user = response.output.userDetails;
           const token = response.output.accessToken;
-          console.log("OTP FIELD", { user, token });
-
           dispatch(setUserInfo(user));
           dispatch(setuserToken(token));
           dispatch(logIn());
@@ -68,7 +64,6 @@ export default function OtpField({ navigation, route }) {
       },
       onError: (error: any) => {
         const message = error?.response?.data?.message || "Sign up failed";
-        console.log(message);
         Alert.alert("Error", message);
       },
     });
@@ -79,12 +74,9 @@ export default function OtpField({ navigation, route }) {
       email,
       userType: 2,
     };
-    console.log({ payload });
 
     resend(payload, {
       onSuccess: (response) => {
-        console.log(response);
-
         if (response.status) {
           showToast("custom", "Otp sent Successfully!");
         } else {
@@ -96,7 +88,6 @@ export default function OtpField({ navigation, route }) {
       },
       onError: (error: any) => {
         const message = error?.response?.data?.message || "Resend failed";
-        console.log(message);
         Alert.alert("Error", message);
       },
     });

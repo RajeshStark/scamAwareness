@@ -22,6 +22,9 @@ export const PostService = {
   comment: (payload: { postId: string; comment: string }) =>
     http.post(Api.POST_COMMENT, payload),
 
+  getComment: (payload: { page: number; pageLimit: number; postId?: string }) =>
+    http.post(Api.GET_COMMENTS, payload),
+
   reply: (payload: {
     postId: string;
     reply: string;
@@ -31,8 +34,6 @@ export const PostService = {
 
   uploadMedia: (files: { uri: string; type: string; name: string }[]) => {
     const formData = new FormData();
-
-    console.log("Files at api", files);
 
     files.forEach((file) => {
       let mediaKey = "file";

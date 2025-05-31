@@ -56,12 +56,9 @@ export default function Signup({ navigation }) {
       profilePicture: profilepic,
       userType: 2,
     };
-    console.log({ payload });
 
     login(payload, {
       onSuccess: (response) => {
-        console.log(response);
-
         if (response.status) {
           navigation.navigate("OtpField", {
             email: values?.email,
@@ -76,7 +73,6 @@ export default function Signup({ navigation }) {
       },
       onError: (error: any) => {
         const message = error?.response?.data?.message || "Login failed";
-        console.log(message);
         Alert.alert("Error", message);
       },
     });
@@ -92,15 +88,9 @@ export default function Signup({ navigation }) {
         type: asset.type,
       }));
 
-      console.log({ files });
-
       uploadMedia(files, {
         onSuccess: (res) => {
           const transformed = transformResponse(res);
-          console.log("res", res);
-          console.log({ transformed });
-          console.log("transformed[0]?.url", transformed[0]?.url);
-
           setProfilePic(transformed[0]?.url);
         },
         onError: () => {
@@ -171,7 +161,6 @@ export default function Signup({ navigation }) {
               isPhoneNumber
               onChangeCountry={(code) => {
                 setValue("countryCode", code);
-                console.log({ code });
               }}
             />
 

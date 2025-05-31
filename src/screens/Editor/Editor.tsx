@@ -51,10 +51,7 @@ export default function EditorScreen({ navigation }) {
 
       uploadMedia(files, {
         onSuccess: (res) => {
-          console.log({ res });
           const transformed = transformResponse(res);
-          console.log({ transformed });
-
           setMedia((prev) => [...prev, ...transformed]);
         },
         onError: () => {
@@ -114,7 +111,6 @@ export default function EditorScreen({ navigation }) {
         setIsRecording(true);
       }
     } catch (err) {
-      console.log("Audio record error", err);
       showToast("custom", "Audio record failed");
     }
   };
@@ -129,12 +125,8 @@ export default function EditorScreen({ navigation }) {
         name: asset.fileName,
         type: asset.type,
       };
-
-      console.log({ file });
       uploadMedia(file, {
-        onSuccess: (res) => {
-          console.log("Response ===> ", res);
-        },
+        onSuccess: (res) => {},
         onError: () => {
           showToast("custom", "Upload failed");
         },
@@ -152,8 +144,7 @@ export default function EditorScreen({ navigation }) {
       description: text,
       media,
     };
-    console.log("Post body ====> ", body);
-    // return;
+
     PostService.create(body)
       .then(() => {
         showToast("custom", "Post created!");

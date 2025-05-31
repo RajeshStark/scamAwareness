@@ -11,8 +11,6 @@ export const usePostDetail = (postId: string) => {
         postId,
       });
 
-      console.log("RESPONSEEEEE", res?.data?.output);
-
       return res?.data?.output?.list[0];
     },
     enabled: !!postId,

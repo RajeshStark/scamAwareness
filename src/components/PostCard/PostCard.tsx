@@ -14,9 +14,7 @@ import Typography from "../Typography/Typography";
 import { useQueryClient } from "@tanstack/react-query";
 import { styles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
-
-const DEFAULT_AVATAR =
-  "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
+import { DEFAULT_AVATAR } from "../../utils/Constants";
 
 type MediaItem = {
   type: string;
@@ -83,7 +81,6 @@ const PostCard: React.FC<PostCardProps> = ({
       postId: _id,
       type: 1,
     };
-    console.log({ payload });
     like(payload, {
       onSuccess: (response) => {
         if (response.status) {

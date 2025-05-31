@@ -56,12 +56,9 @@ export default function SignIn({ navigation }) {
       userType: 2,
       fcmToken: "",
     };
-    console.log({ payload });
 
     login(payload, {
       onSuccess: (response) => {
-        console.log({ response });
-
         if (response.status) {
           const user = response.output.userDetails;
           const token = response.output.accessToken;
@@ -81,7 +78,6 @@ export default function SignIn({ navigation }) {
       },
       onError: (error: any) => {
         const message = error?.error?.message || "Login failed";
-        console.log(message);
         Alert.alert("Error", message);
       },
     });

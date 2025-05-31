@@ -84,9 +84,9 @@ export default function Home({ navigation }) {
       </Container>
       <View style={styles.fabWrapper}>
         {[
-          { icon: "folder-outline", onPress: () => console.log("Image") },
-          { icon: "pencil", onPress: () => console.log("Edit") },
-          { icon: "image-sharp", onPress: () => console.log("Add Folder") },
+          { icon: "folder-outline", onPress: () => {} },
+          { icon: "pencil", onPress: () => {} },
+          { icon: "image-sharp", onPress: () => {} },
         ].map((item, i) => (
           <RNAnimated.View
             key={item.icon}

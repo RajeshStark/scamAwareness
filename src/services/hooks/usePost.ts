@@ -29,3 +29,18 @@ export const useDislike = () =>
   useMutation({
     mutationFn: PostService.dislike,
   });
+
+export const useComment = () =>
+  useMutation({
+    mutationFn: PostService.comment,
+  });
+
+export const useGetComments = () =>
+  useMutation({
+    mutationFn: PostService.getComment,
+  });
+
+export const useReply = () =>
+  useMutation({
+    mutationFn: PostService.reply,
+  });
