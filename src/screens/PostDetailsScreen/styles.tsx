@@ -46,4 +46,71 @@ export const createStyles = (theme: Theme) =>
       flexDirection: "row",
       alignItems: "center",
     },
+    replyContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginTop: 8,
+      paddingHorizontal: 10,
+      backgroundColor: "#f5f5f5",
+      borderRadius: 8,
+    },
+    replyInput: {
+      flex: 1,
+      minHeight: 40,
+      paddingHorizontal: 10,
+      paddingVertical: 8,
+    },
+    sendReplyIcon: {
+      marginLeft: 8,
+    },
+    replyIcon: {
+      marginTop: 4,
+      alignSelf: "flex-end",
+    },
+    loadMoreText: {
+      fontSize: 16,
+    },
+    replyIconContainer: {
+      flexDirection: "row",
+      marginLeft: 10,
+      marginTop: -5,
+    },
+
+    repliesWrapper: {
+      marginTop: 10,
+      paddingLeft: 20,
+      borderLeftWidth: 1,
+      borderLeftColor: "#ccc",
+      width: "90%",
+      alignSelf: "flex-end",
+    },
+    replyItem: {
+      flexDirection: "row",
+      alignItems: "flex-start",
+      marginBottom: 8,
+    },
+    replyAvatar: {
+      width: 28,
+      height: 28,
+      borderRadius: 14,
+      marginRight: 8,
+    },
+    replyTextWrapper: {
+      flex: 1,
+    },
+    replyUserName: {
+      fontWeight: "bold",
+      fontSize: 14,
+      flexDirection: "row",
+      flexWrap: "wrap",
+    },
+    replyToText: {
+      fontWeight: "normal",
+      color: "#888",
+      fontSize: 13,
+    },
+    replyContent: {
+      fontSize: 14,
+      marginTop: 2,
+    },
   });

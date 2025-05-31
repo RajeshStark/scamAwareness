@@ -15,18 +15,21 @@ import useAppTheme from "../../hooks/useAppTheme";
 import { usePostDetail } from "../../hooks/usePoseDetails";
 import { createStyles } from "./styles";
 import { usePaginatedComments } from "../../hooks/useGetComments";
-import { useComment } from "../../services/hooks/usePost";
+import { useComment, useReply } from "../../services/hooks/usePost";
 import { queryClient } from "../../../App";
 import { DEFAULT_AVATAR } from "../../utils/Constants";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 export const PostDetailScreen = ({ route }) => {
   const postId = route?.params?.postId;
+  const [replyText, setReplyText] = React.useState("");
+  const [activeReplyId, setActiveReplyId] = React.useState(null);
+  const [commentText, setCommentText] = React.useState("");
   const { theme } = useAppTheme();
   const styles = createStyles(theme);
 
+  const replyMutation = useReply();
   const { data: post, isLoading } = usePostDetail(postId);
-
   const {
     data: commentsPages,
     fetchNextPage,
@@ -36,8 +39,6 @@ export const PostDetailScreen = ({ route }) => {
 
   const comments = commentsPages?.pages?.flat() || [];
   const commentsData = comments[0]?.output?.list;
-
-  const [commentText, setCommentText] = React.useState("");
   const commentMutation = useComment();
 
   const handleSendComment = () => {
@@ -53,9 +54,104 @@ export const PostDetailScreen = ({ route }) => {
     );
   };
 
+  const handleSendReply = (commentId, repliedToId) => {
+    if (!replyText.trim()) return;
+    replyMutation.mutate(
+      {
+        postId,
+        commentId,
+        reply: replyText,
+        repliedTo: repliedToId,
+      },
+      {
+        onSuccess: () => {
+          setReplyText("");
+          setActiveReplyId(null);
+          queryClient.invalidateQueries(["comments", postId]);
+        },
+      }
+    );
+  };
+
   if (isLoading) return <Text>Loading...</Text>;
   if (!post) return <Text>Post not found</Text>;
-  console.log({ commentsData });
+
+  const renderItem = ({ item }) => {
+    const user = item.commentedUserData?.[0];
+    const name = user ? `${user.firstName} ${user.lastName}` : "User";
+    const avatar = user?.profilePicture || DEFAULT_AVATAR;
+
+    return (
+      <View>
+        {/* Main Comment */}
+        <View style={styles.commentContainer}>
+          <View style={styles.imgrow}>
+            <Image source={{ uri: avatar }} style={styles.avatar} />
+            <Typography style={styles.cUsertxt}>{name}</Typography>
+          </View>
+
+          <Typography style={styles.commentTxt}>{item.comment}</Typography>
+        </View>
+        <View style={styles.replyIconContainer}>
+          <Typography>Reply</Typography>
+          <Ionicons
+            name="return-down-back"
+            size={20}
+            color="gray"
+            onPress={() =>
+              setActiveReplyId(activeReplyId === item._id ? null : item._id)
+            }
+            style={styles.replyIcon}
+          />
+        </View>
+
+        {activeReplyId === item._id && (
+          <View style={styles.replyContainer}>
+            <TextInput
+              placeholder="Write a reply..."
+              value={replyText}
+              onChangeText={setReplyText}
+              style={styles.replyInput}
+              multiline
+            />
+            <Ionicons
+              name="send"
+              color={replyText.length !== 0 ? "skyblue" : "#555"}
+              size={24}
+              onPress={() => handleSendReply(item._id, item.commentedBy)}
+              style={styles.sendReplyIcon}
+            />
+          </View>
+        )}
+
+        {Array.isArray(item.repliedData) && item.repliedData.length > 0 && (
+          <View style={styles.repliesWrapper}>
+            {item.repliedData.map((reply) => {
+              const replyBy = reply.repliedByUser?.[0];
+              const replyTo = reply.repliedToUser?.[0];
+
+              return (
+                <View key={reply._id} style={styles.replyItem}>
+                  <Image
+                    source={{ uri: replyBy?.profilePicture || DEFAULT_AVATAR }}
+                    style={styles.replyAvatar}
+                  />
+                  <View style={styles.replyTextWrapper}>
+                    <Typography style={styles.replyUserName}>
+                      {replyBy?.firstName} {replyBy?.lastName}
+                    </Typography>
+                    <Typography style={styles.replyContent}>
+                      {reply.reply}
+                    </Typography>
+                  </View>
+                </View>
+              );
+            })}
+          </View>
+        )}
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.safeAreview}>
@@ -85,25 +181,7 @@ export const PostDetailScreen = ({ route }) => {
         <FlatList
           data={commentsData}
           keyExtractor={(item, index) => item._id || index.toString()}
-          renderItem={({ item }) => {
-            const user = item.commentedUserData?.[0];
-            const name = user ? `${user.firstName} ${user.lastName}` : "User";
-            const avatar = user.profilePicture || DEFAULT_AVATAR;
-            return (
-              <View style={styles.commentContainer}>
-                <View style={styles.imgrow}>
-                  {user?.profilePicture && (
-                    <Image source={{ uri: avatar }} style={styles.avatar} />
-                  )}
-
-                  <Typography style={styles.cUsertxt}>{name}</Typography>
-                </View>
-                <Typography style={styles.commentTxt}>
-                  {item?.comment}
-                </Typography>
-              </View>
-            );
-          }}
+          renderItem={renderItem}
           ListFooterComponent={
             hasNextPage ? (
               <Typography onPress={fetchNextPage} style={styles.loadMoreText}>
