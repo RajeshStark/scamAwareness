@@ -73,8 +73,20 @@ export const PostDetailScreen = ({ route }) => {
     );
   };
 
-  if (isLoading) return <Text>Loading...</Text>;
-  if (!post) return <Text>Post not found</Text>;
+  if (isLoading)
+    return (
+      <SafeAreaView style={styles.safeAreview}>
+        <CustomHeader canGoback style={styles.pt} />
+        <Typography>Loading...</Typography>
+      </SafeAreaView>
+    );
+  if (!post)
+    return (
+      <SafeAreaView style={styles.safeAreview}>
+        <CustomHeader canGoback style={styles.pt} />
+        <Typography>Post not found</Typography>
+      </SafeAreaView>
+    );
 
   const renderItem = ({ item }) => {
     const user = item.commentedUserData?.[0];

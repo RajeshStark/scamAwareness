@@ -41,10 +41,10 @@ export const createStyles = (theme: Theme) =>
       marginBottom: 10,
     },
     mainContainer: {
-      paddingBottom: 100,
       height: height,
       width: width,
     },
+
     center: {
       justifyContent: "center",
       alignItems: "center",

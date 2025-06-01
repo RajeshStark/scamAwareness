@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   FlatList,
   Animated as RNAnimated,
+  SafeAreaView,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -50,20 +51,14 @@ export default function Home({ navigation }) {
   );
 
   return (
-    <View style={{ flex: 1 }}>
-      <Container withScroll>
-        <LineraBgContainer>
-          <EmergencyTicker />
-          {isRefetching && (
-            <View>
-              <ActivityIndicator size="small" color={theme.primary} />
-            </View>
-          )}
-
+    <SafeAreaView style={{ flex: 1, marginTop: 30 }}>
+      <LineraBgContainer>
+        <EmergencyTicker />
+        <View style={styles.mainContainer}>
           <FlatList
             data={posts}
-            style={styles.mainContainer}
             scrollEnabled
+            style={{ marginBottom: 90, marginTop: 30 }}
             keyExtractor={(item, index) => item._id + index}
             renderItem={({ item, index }) => <PostCard key={index} {...item} />}
             ListEmptyComponent={
@@ -80,8 +75,8 @@ export default function Home({ navigation }) {
             refreshing={isRefetching}
             onRefresh={refetch}
           />
-        </LineraBgContainer>
-      </Container>
+        </View>
+      </LineraBgContainer>
       <View style={styles.fabWrapper}>
         {[
           { icon: "folder-outline", onPress: () => {} },
@@ -121,6 +116,6 @@ export default function Home({ navigation }) {
           <Ionicons name={fabOpen ? "close" : "add"} size={24} color="#fff" />
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
