@@ -39,6 +39,13 @@ export default function EditorScreen({ navigation }) {
     checkAndRequestPermissions();
   }, []);
 
+  useEffect(() => {
+    return () => {
+      audioRecorderPlayer.stopRecorder();
+      audioRecorderPlayer.removeRecordBackListener();
+    };
+  }, []);
+
   const handlePick = () => {
     launchImageLibrary({ mediaType: "mixed", selectionLimit: 3 }, (res) => {
       if (res.didCancel || !res.assets) return;
@@ -89,12 +96,14 @@ export default function EditorScreen({ navigation }) {
       if (isRecording) {
         const result = await audioRecorderPlayer.stopRecorder();
         audioRecorderPlayer.removeRecordBackListener();
+        await new Promise((resolve) => setTimeout(resolve, 500)); // Give time to clean up
         setIsRecording(false);
+        console.log("AUDIO RESULT", result);
 
         const file = {
           uri: result,
-          name: `audio_${Date.now()}.mp4`,
-          type: "audio/mp4",
+          name: `audio_${Date.now()}.mp3`,
+          type: "audio/mp3",
         };
 
         uploadMedia([file], {
@@ -107,10 +116,12 @@ export default function EditorScreen({ navigation }) {
           },
         });
       } else {
-        await audioRecorderPlayer.startRecorder();
+        const uri = await audioRecorderPlayer.startRecorder();
+        console.log("Recording started at:", uri);
         setIsRecording(true);
       }
     } catch (err) {
+      console.error("Audio record error:", err);
       showToast("custom", "Audio record failed");
     }
   };
@@ -216,13 +227,13 @@ export default function EditorScreen({ navigation }) {
                   style={styles.icon}
                 />
               </Pressable>
-              <Pressable onPress={handleAudioRecord}>
+              {/* <Pressable onPress={handleAudioRecord}>
                 <Ionicons
                   name={isRecording ? "stop-circle-outline" : "mic-outline"} // ⚠️ dynamic icon
                   size={24}
                   style={styles.icon}
                 />
-              </Pressable>
+              </Pressable> */}
             </View>
             {text.length === 0 ? (
               <View style={[styles.postBtn, { backgroundColor: theme.grey }]}>

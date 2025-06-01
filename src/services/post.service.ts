@@ -32,22 +32,15 @@ export const PostService = {
     const formData = new FormData();
 
     files.forEach((file) => {
-      // let mediaKey = "file";
-
-      // if (file.type.startsWith("image/")) {
-      //   mediaKey = "image";
-      // } else if (file.type.startsWith("video/")) {
-      //   mediaKey = "video";
-      // } else if (file.type.startsWith("audio/")) {
-      //   mediaKey = "audio";
-      // }
-
       formData.append("image", {
         uri: file.uri,
         name: file.name,
         type: file.type,
       } as any);
     });
+
+    console.log("Files at api", files);
+
     return http.post(Api.UPLOAD_MULTIPLE_IMAGES, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
