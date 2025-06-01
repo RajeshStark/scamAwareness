@@ -110,7 +110,7 @@ export default function ProfileScreen({ navigation }) {
           renderItem={({ item, index }) => <PostCard key={index} {...item} />}
           keyExtractor={(item, index) => index.toString()}
           ListEmptyComponent={
-            <View>
+            <View style={[styles.center]}>
               <Typography>No posts</Typography>
             </View>
           }

@@ -14,6 +14,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForgotPassword } from "../../../services/hooks/useAuth";
 import { createStyles } from "./styles";
+import { showToast } from "../../../components/Toast";
+import CustomHeader from "../../../components/Input/Header/Header";
 
 const schema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -44,18 +46,14 @@ export default function ForgotPassword({ navigation }) {
     forgotPassword(payload, {
       onSuccess: (res) => {
         if (res.status) {
-          Alert.alert(
-            "Success",
-            res.message || "Check your email for reset instructions."
-          );
+          showToast("custom", "Check your email for reset instructions.");
           navigation.goBack();
-        } else {
-          Alert.alert("Failed", res.message || "Something went wrong.");
         }
       },
-      onError: (err) => {
-        const msg = err?.response?.data?.message || "Request failed";
-        Alert.alert("Error", msg);
+      onError: (error) => {
+        const message =
+          error?.response?.data?.error?.message || "Forgot password failed";
+        showToast("custom", message);
       },
     });
   };
@@ -63,6 +61,9 @@ export default function ForgotPassword({ navigation }) {
   return (
     <LineraBgContainer>
       <Container>
+        <View style={{ margin: 10 }}>
+          <CustomHeader canGoback />
+        </View>
         <Image
           source={Images.darkLogo}
           style={styles.logo}

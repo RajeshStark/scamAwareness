@@ -20,6 +20,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signinSchema } from "../../../utils/ValidationScemas";
 import { useLogin } from "../../../services/hooks/useAuth";
+import { showToast } from "../../../components/Toast";
 
 export default function SignIn({ navigation }) {
   const { theme, isDark } = useAppTheme();
@@ -69,16 +70,11 @@ export default function SignIn({ navigation }) {
             index: 0,
             routes: [{ name: "BottomTabs" }],
           });
-        } else {
-          Alert.alert(
-            "Login failed",
-            response.message || "Something went wrong."
-          );
         }
       },
       onError: (error: any) => {
-        const message = error?.error?.message || "Login failed";
-        Alert.alert("Error", message);
+        const message = error?.response?.data?.error?.message || "Login failed";
+        showToast("custom", message);
       },
     });
   };
@@ -126,12 +122,13 @@ export default function SignIn({ navigation }) {
               }
             />
             <View style={styles.remmain}>
-              <View style={styles.rememberContainer}>
+              {/* <View style={styles.rememberContainer}>
                 <Ionicons name={"square-outline"} size={15} style={styles.mr} />
                 <Typography style={styles.txtgrey}>
                   {strings.remember}
                 </Typography>
-              </View>
+              </View> */}
+              <View />
               <Typography
                 onPress={() => navigation.navigate("ForgotPassword")}
                 style={styles.txtblue}

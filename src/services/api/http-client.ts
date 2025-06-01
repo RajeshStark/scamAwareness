@@ -22,6 +22,8 @@ export const http = axios.create({
 http.interceptors.request.use(
   (config) => {
     const token = store?.getState()?.login?.userToken;
+    console.log(token);
+
     if (token) {
       config.headers["accessToken"] = token;
     }

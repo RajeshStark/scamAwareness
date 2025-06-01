@@ -6,6 +6,7 @@ import Typography from "../Typography/Typography";
 import Fonts from "../../utils/Fonts";
 import useAppTheme from "../../hooks/useAppTheme";
 import { Controller, Control } from "react-hook-form";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 type CustomInputProps = {
   label?: string;
@@ -18,7 +19,7 @@ type CustomInputProps = {
   isDatePicker?: boolean;
   isPhoneNumber?: boolean;
   onChangeCountry?: (txt: string) => void;
-
+  isPassword?: boolean;
   name?: string;
   control?: Control<any>;
   error?: any;
@@ -38,11 +39,13 @@ export default function CustomInput({
   control,
   name,
   error,
+  isPassword,
 }: CustomInputProps) {
   const phoneInputRef = useRef<PhoneInput>(null);
   const { theme } = useAppTheme();
   const styles = createStyles(theme, isHalf, !!error);
   const [showPicker, setShowPicker] = useState(false);
+  const [secureEntry, setSecureEntry] = useState(true);
 
   const renderInput = (
     fieldValue: string,
@@ -133,22 +136,48 @@ export default function CustomInput({
     }
 
     return (
-      <TextInput
-        placeholder={placeholder}
-        value={fieldValue}
-        onChangeText={(text) =>
-          onChange(name === "email" ? text.toLowerCase() : text)
-        }
-        onBlur={onBlur}
-        style={[
-          styles.input,
-          {
-            width: size ? size : rightIcon ? "90%" : "100%",
-            color: theme.txtblack,
-          },
-        ]}
-        placeholderTextColor={theme.grey}
-      />
+      <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
+        <TextInput
+          placeholder={placeholder}
+          value={fieldValue}
+          secureTextEntry={isPassword && secureEntry}
+          onChangeText={(text) =>
+            onChange(name === "email" ? text.toLowerCase() : text)
+          }
+          onBlur={onBlur}
+          style={[
+            styles.input,
+            {
+              width: size ? size : rightIcon ? "90%" : "100%",
+              color: theme.txtblack,
+              flex: 1,
+            },
+          ]}
+          placeholderTextColor={theme.grey}
+        />
+        {isPassword && (
+          <Pressable
+            onPress={() => setSecureEntry(!secureEntry)}
+            style={{ paddingHorizontal: 10 }}
+          >
+            {secureEntry ? (
+              <Ionicons
+                name="eye-off-outline"
+                size={20}
+                color={theme.grey}
+                style={styles.mr}
+              />
+            ) : (
+              <Ionicons
+                name="eye-outline"
+                size={20}
+                color={theme.grey}
+                style={styles.mr}
+              />
+            )}
+          </Pressable>
+        )}
+      </View>
     );
   };
 
@@ -211,4 +240,5 @@ export const createStyles = (
       color: theme.error,
       fontFamily: Fonts.Regular,
     },
+    mr: { marginRight: 10 },
   });

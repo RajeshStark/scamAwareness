@@ -72,8 +72,9 @@ export default function Signup({ navigation }) {
         }
       },
       onError: (error: any) => {
-        const message = error?.response?.data?.message || "Login failed";
-        Alert.alert("Error", message);
+        const message =
+          error?.response?.data?.error?.message || "Signup failed";
+        showToast("custom", message);
       },
     });
   };
@@ -169,14 +170,7 @@ export default function Signup({ navigation }) {
               control={control}
               error={errors}
               name="password"
-              rightIcon={
-                <Ionicons
-                  name="eye-off-outline"
-                  size={20}
-                  color={theme.grey}
-                  style={styles.mr}
-                />
-              }
+              isPassword
             />
           </View>
 
