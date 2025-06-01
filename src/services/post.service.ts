@@ -10,12 +10,8 @@ export const PostService = {
 
   share: (payload: any) => http.post(Api.POST_SHARE_COUNT, payload),
 
-  like: (payload: {
-    postId: string;
-    type: number;
-    commentId?: string;
-    replyId?: string;
-  }) => http.post(Api.POST_LIKE, payload),
+  like: (payload: { postId: string; type: number }) =>
+    http.post(Api.POST_LIKE, payload),
 
   dislike: (payload: { id: string }) => http.post(Api.POST_DISLIKE, payload),
 
@@ -63,4 +59,13 @@ export const PostService = {
       },
     });
   },
+
+  addInterest: (payload: { postId: string; comment: string }) =>
+    http.post(Api.ADD_INTEREST_POST, payload),
+
+  removeInterest: (payload: { postId: string; comment: string }) =>
+    http.post(Api.REMOVE_INTEREST_POST, payload),
+
+  listInterest: (payload: { page: number; pageLimit: number }) =>
+    http.post(Api.GET_INTEREST_POST, payload),
 };

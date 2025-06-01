@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Video from "react-native-video";
-import { useLike } from "../../services/hooks/usePost";
+import { useLike, useDislike } from "../../services/hooks/usePost";
 import Typography from "../Typography/Typography";
 import { useQueryClient } from "@tanstack/react-query";
 import { styles } from "./styles";
@@ -61,6 +61,7 @@ const PostCard: React.FC<PostCardProps> = ({
   const [mutedVideos, setMutedVideos] = useState<Record<number, boolean>>({});
   const queryClient = useQueryClient();
   const { mutate: like } = useLike();
+  const { mutate: dislike } = useDislike();
 
   const togglePlayPause = (index: number) => {
     setPausedVideos((prev) => ({
@@ -77,40 +78,63 @@ const PostCard: React.FC<PostCardProps> = ({
   };
 
   const toggleLike = () => {
-    const payload = {
-      postId: _id,
-      type: 1,
-    };
-    like(payload, {
-      onSuccess: (response) => {
-        if (response.status) {
-          queryClient.setQueryData(["posts"], (oldData: any) => {
-            if (!oldData) return oldData;
-            return {
-              ...oldData,
-              pages: oldData.pages.map((page) => ({
-                ...page,
-                output: {
-                  ...page.output,
-                  list: page.output.list.map((post) => {
-                    if (post._id === payload.postId) {
-                      const isLikedNow = !post.isLiked;
-                      return {
-                        ...post,
-                        isLiked: isLikedNow,
-                        likeCount: isLikedNow
-                          ? post.likeCount + 1
-                          : post.likeCount - 1,
-                      };
-                    }
-                    return post;
-                  }),
-                },
-              })),
-            };
-          });
+    if (!isLiked) {
+      console.log("Inside like");
+
+      like(
+        { postId: _id, type: 1 },
+        {
+          onSuccess: (response) => {
+            if (response.status) {
+              console.log("INSIDE  like success");
+              updatePostLikeStatus(true);
+            } else {
+              console.log(response.data);
+            }
+          },
         }
-      },
+      );
+    } else {
+      console.log("Inside dislike");
+      dislike(
+        { id: _id },
+        {
+          onSuccess: (response) => {
+            if (response.status) {
+              console.log("INSIDE dislike success");
+
+              updatePostLikeStatus(false);
+            } else {
+              console.log(response.data);
+            }
+          },
+        }
+      );
+    }
+  };
+
+  const updatePostLikeStatus = (liked: boolean) => {
+    queryClient.setQueryData(["posts"], (oldData: any) => {
+      if (!oldData) return oldData;
+      return {
+        ...oldData,
+        pages: oldData.pages.map((page) => ({
+          ...page,
+          output: {
+            ...page.output,
+            list: page.output.list.map((post) => {
+              if (post._id === _id) {
+                return {
+                  ...post,
+                  isLiked: liked,
+                  likeCount: liked ? post.likeCount + 1 : post.likeCount - 1,
+                };
+              }
+              return post;
+            }),
+          },
+        })),
+      };
     });
   };
 

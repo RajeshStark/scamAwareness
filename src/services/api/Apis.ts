@@ -17,6 +17,9 @@ export const Api = {
   POST_COMMENT: "api/post/create-comment",
   POST_REPLY: "api/post/create-replies",
   GET_COMMENTS: "api/post/get-comment",
+  ADD_INTEREST_POST: "api/post/add-Interested-post",
+  REMOVE_INTEREST_POST: "api/post/remove-Interested-post",
+  GET_INTEREST_POST: "api/post/get-Interested-post",
 
   // Explore
   SEARCH: "api/post/search",

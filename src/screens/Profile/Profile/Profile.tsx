@@ -1,25 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   ImageBackground,
-  ScrollView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import PostCard from "../../components/PostCard/PostCard";
-import { dummyPosts1 } from "../../dummydata/Dummydata";
-import useAppTheme from "../../hooks/useAppTheme";
-import Fonts from "../../utils/Fonts";
-import { useAppSelector } from "../../hooks/useAppselector";
+import PostCard from "../../../components/PostCard/PostCard";
+import Typography from "../../../components/Typography/Typography";
+import { useAppSelector } from "../../../hooks/useAppselector";
+import useAppTheme from "../../../hooks/useAppTheme";
+import { useGetInterest } from "../../../services/hooks/usePost";
+import { createStyles } from "./styles";
 
 export default function ProfileScreen({ navigation }) {
   const { theme } = useAppTheme();
   const styles = createStyles(theme);
   const usserInfo = useAppSelector((state) => state?.login?.usserInfo);
+  const [activeTab, setActiveTab] = useState(1);
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isRefetching,
+    refetch,
+  } = useGetInterest();
+  const Interestposts =
+    data?.pages.flatMap((page) => page.output?.list || []) ?? [];
+
+  console.log({ Interestposts });
 
   return (
     <View style={styles.container}>
@@ -49,179 +64,81 @@ export default function ProfileScreen({ navigation }) {
           style={styles.editButton}
           onPress={() => navigation.navigate("EditProfile")}
         >
-          <Text style={styles.editText}>Edit Profile</Text>
+          <Typography style={styles.editText}>Edit Profile</Typography>
           <Ionicons name="pencil" size={12} color="#fff" />
         </TouchableOpacity>
       </ImageBackground>
 
       <View style={styles.infoSection}>
-        <Text style={styles.name}>
+        <Typography style={styles.name}>
           {usserInfo?.firstName} {usserInfo?.lastName}
-        </Text>
+        </Typography>
 
         <View style={styles.tabs}>
-          <Text style={[styles.tabItem, styles.activeTab]}>Posts</Text>
-          <Text style={styles.tabItem}>Liked</Text>
-          <Text style={styles.tabItem}>Complaint Status</Text>
+          <Typography
+            onPress={() => setActiveTab(1)}
+            style={[styles.tabItem, activeTab === 1 && styles.activeTab]}
+          >
+            Posts
+          </Typography>
+          <Typography
+            onPress={() => setActiveTab(2)}
+            style={[styles.tabItem, activeTab === 2 && styles.activeTab]}
+          >
+            Liked
+          </Typography>
+          <Typography
+            onPress={() => setActiveTab(3)}
+            style={[styles.tabItem, activeTab === 3 && styles.activeTab]}
+          >
+            Complaint Status
+          </Typography>
         </View>
       </View>
 
-      <FlatList
-        data={usserInfo?.media}
-        renderItem={({ item, index }) => (
-          <PostCard key={index} {...item} noShadow />
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
+      {activeTab === 1 ? (
+        <FlatList
+          data={usserInfo?.media}
+          renderItem={({ item, index }) => (
+            <PostCard key={index} {...item} noShadow />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          ListEmptyComponent={
+            <View>
+              <Typography>No posts</Typography>
+            </View>
+          }
+        />
+      ) : activeTab === 2 ? (
+        <>
+          {isRefetching && (
+            <View>
+              <ActivityIndicator size="small" color={theme.primary} />
+            </View>
+          )}
+
+          <FlatList
+            data={Interestposts}
+            style={styles.mainContainer}
+            scrollEnabled
+            keyExtractor={(item, index) => item._id + index}
+            renderItem={({ item, index }) => <PostCard key={index} {...item} />}
+            ListEmptyComponent={
+              !isLoading ? (
+                <View style={[styles.center]}>
+                  <Typography>No posts</Typography>
+                </View>
+              ) : null
+            }
+            onEndReached={() => {
+              if (hasNextPage) fetchNextPage();
+            }}
+            onEndReachedThreshold={0.5}
+            refreshing={isRefetching}
+            onRefresh={refetch}
+          />
+        </>
+      ) : null}
     </View>
   );
 }
-
-const createStyles = (theme: Theme) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#fff",
-    },
-    headerBackground: {
-      height: 160,
-      justifyContent: "flex-end",
-      padding: 16,
-    },
-    settingsIcon: {
-      position: "absolute",
-      top: 40,
-      right: 16,
-      backgroundColor: "#183878",
-      borderRadius: 50,
-      padding: 6,
-    },
-    profileImageWrapper: {
-      position: "absolute",
-      bottom: -40,
-      left: 16,
-      borderRadius: 50,
-      borderWidth: 3,
-      borderColor: "#6e008b",
-    },
-    profileImage: {
-      width: 80,
-      height: 80,
-      borderRadius: 40,
-    },
-    editButton: {
-      position: "absolute",
-      bottom: -30,
-      right: 16,
-      backgroundColor: "#6e008b",
-      paddingHorizontal: 12,
-      paddingVertical: 6,
-      borderRadius: 12,
-      flexDirection: "row",
-      alignItems: "center",
-    },
-    editText: {
-      color: "#fff",
-      fontSize: 12,
-      marginRight: 4,
-    },
-    infoSection: {
-      marginTop: 50,
-      padding: 16,
-    },
-    name: {
-      fontWeight: "bold",
-      fontSize: 18,
-    },
-    bio: {
-      color: theme.txtblack,
-      marginVertical: 4,
-      fontFamily: Fonts.Medium,
-    },
-    stats: {
-      flexDirection: "row",
-      gap: 10,
-      marginVertical: 6,
-    },
-    statText: {
-      color: theme.txtblack,
-      marginVertical: 4,
-      fontFamily: Fonts.Medium,
-      fontSize: 12,
-    },
-    tabs: {
-      flexDirection: "row",
-      marginTop: 12,
-      borderBottomWidth: 1,
-      borderColor: "#ddd",
-    },
-    tabItem: {
-      paddingVertical: 8,
-      paddingHorizontal: 12,
-      fontSize: 14,
-      color: theme.txtblack,
-    },
-    activeTab: {
-      color: theme.txtblack,
-      borderBottomWidth: 2,
-      borderColor: "#eb9e3c",
-    },
-    postCard: {
-      padding: 16,
-      borderBottomWidth: 1,
-      borderColor: "#eee",
-    },
-    postHeader: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginBottom: 8,
-    },
-    avatar: {
-      width: 36,
-      height: 36,
-      borderRadius: 18,
-      marginRight: 8,
-    },
-    username: {
-      fontWeight: "bold",
-      fontSize: 14,
-    },
-    handle: {
-      fontSize: 12,
-      color: "#666",
-    },
-    moreIcon: {
-      marginLeft: "auto",
-      color: "#999",
-    },
-    postText: {
-      fontSize: 13,
-      marginVertical: 6,
-    },
-    postImage: {
-      width: "100%",
-      height: 180,
-      borderRadius: 8,
-      marginBottom: 8,
-    },
-    engagement: {
-      flexDirection: "row",
-      gap: 6,
-      alignItems: "center",
-    },
-    iconSpacing: {
-      marginLeft: 12,
-    },
-    fab: {
-      position: "absolute",
-      bottom: 80,
-      right: 20,
-      backgroundColor: "#6e008b",
-      width: 48,
-      height: 48,
-      borderRadius: 24,
-      justifyContent: "center",
-      alignItems: "center",
-      elevation: 5,
-    },
-  });

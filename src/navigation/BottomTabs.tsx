@@ -5,7 +5,7 @@ import LinearGradient from "react-native-linear-gradient";
 import Home from "../screens/Home/Home";
 import Explore from "../screens/Explore/Explore";
 import Notifications from "../screens/Notifications/Notifications";
-import Profile from "../screens/Profile/Profile";
+import Profile from "../screens/Profile/Profile/Profile";
 import Alerts from "../screens/Alerts/Alerts";
 
 const Tab = createBottomTabNavigator();

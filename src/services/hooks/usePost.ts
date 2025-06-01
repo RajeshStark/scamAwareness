@@ -44,3 +44,27 @@ export const useReply = () =>
   useMutation({
     mutationFn: PostService.reply,
   });
+
+export const useAddInterest = () =>
+  useMutation({
+    mutationFn: PostService.addInterest,
+  });
+
+export const useRemoveInterest = () =>
+  useMutation({
+    mutationFn: PostService.removeInterest,
+  });
+
+export const useGetInterest = () => {
+  return useInfiniteQuery({
+    queryKey: ["interestpost"],
+    queryFn: ({ pageParam = 1 }) =>
+      PostService.listInterest({ page: pageParam, pageLimit: 10 }).then(
+        (res) => res.data
+      ),
+    getNextPageParam: (lastPage, allPages) => {
+      const next = allPages.length + 1;
+      return lastPage?.length === 10 ? next : undefined;
+    },
+  });
+};

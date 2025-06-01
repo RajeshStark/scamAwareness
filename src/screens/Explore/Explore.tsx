@@ -87,7 +87,7 @@ export default function SearchScreen({ navigation }) {
             ...firstMedia,
           };
         })
-        .filter(Boolean); // remove nulls
+        .filter(Boolean);
 
       setResults(mediaItems);
     } else {
