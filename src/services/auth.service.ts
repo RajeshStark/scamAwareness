@@ -19,6 +19,23 @@ type SignupPayload = {
   userType: number;
 };
 
+type UpdateProfilePayload = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  dob: string;
+  countryCode: string;
+  phoneNumber: string;
+  password: string;
+  userType: number;
+  coverPicture?: string;
+  description?: string;
+  fcmToken?: string;
+  notificationStatus?: boolean;
+  profilePicture?: string;
+};
+
 type ChangePasswordPayload = {
   oldPassword: string;
   newPassword: string;
@@ -40,7 +57,7 @@ export const getProfile = async () => {
   return response.data;
 };
 
-export const updateProfile = async (payload: SignupPayload) => {
+export const updateProfile = async (payload: UpdateProfilePayload) => {
   const response = await http.post<ApiResponse<any>>(
     Api.UPDATE_PROFILE,
     payload

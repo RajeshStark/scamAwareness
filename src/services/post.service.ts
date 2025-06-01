@@ -32,17 +32,17 @@ export const PostService = {
     const formData = new FormData();
 
     files.forEach((file) => {
-      let mediaKey = "file";
+      // let mediaKey = "file";
 
-      if (file.type.startsWith("image/")) {
-        mediaKey = "image";
-      } else if (file.type.startsWith("video/")) {
-        mediaKey = "video";
-      } else if (file.type.startsWith("audio/")) {
-        mediaKey = "audio";
-      }
+      // if (file.type.startsWith("image/")) {
+      //   mediaKey = "image";
+      // } else if (file.type.startsWith("video/")) {
+      //   mediaKey = "video";
+      // } else if (file.type.startsWith("audio/")) {
+      //   mediaKey = "audio";
+      // }
 
-      formData.append(mediaKey, {
+      formData.append("image", {
         uri: file.uri,
         name: file.name,
         type: file.type,

@@ -1,10 +1,17 @@
 import { StyleSheet } from "react-native";
+import { width } from "../../../utils/Dimensions";
 
 export const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
   coverWrapper: {
     position: "relative",
     height: 160,
+    backgroundColor: "#eee",
+  },
+  coverWrapperimg: {
+    position: "relative",
+    height: 160,
+    width: width,
     backgroundColor: "#eee",
   },
   coverImage: {
@@ -125,5 +132,13 @@ export const styles = StyleSheet.create({
     justifyContent: "space-around",
     paddingVertical: 12,
     backgroundColor: "#6e008b",
+  },
+  pencil: {
+    marginTop: -20,
+    alignSelf: "flex-end",
+    marginRight: 10,
+    backgroundColor: "white",
+    padding: 6,
+    borderRadius: 40,
   },
 });

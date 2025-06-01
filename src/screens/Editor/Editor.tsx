@@ -125,9 +125,18 @@ export default function EditorScreen({ navigation }) {
         name: asset.fileName,
         type: asset.type,
       };
-      uploadMedia(file, {
-        onSuccess: (res) => {},
-        onError: () => {
+      console.log({ asset });
+      console.log({ file });
+
+      uploadMedia([file], {
+        onSuccess: (res) => {
+          console.log(res);
+          const transformed = transformResponse(res);
+          setMedia((prev) => [...prev, ...transformed]);
+        },
+        onError: (err) => {
+          console.log(err);
+
           showToast("custom", "Upload failed");
         },
       });
@@ -178,7 +187,6 @@ export default function EditorScreen({ navigation }) {
             ) : (
               <Text style={styles.username}>Unknown</Text>
             )}
-            {/* <Text style={styles.handle}>@{"handle"}</Text> */}
           </View>
         </View>
 

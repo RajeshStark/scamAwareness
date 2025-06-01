@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
   Image,
+  ImageBackground,
+  Pressable,
   SafeAreaView,
   Text,
   TextInput,
@@ -17,28 +19,43 @@ import {
   useGetProfile,
   useUpdateProfile,
 } from "../../../services/hooks/useAuth";
+import { launchImageLibrary } from "react-native-image-picker";
+import { transformResponse } from "../../../utils/Constants";
+import { showToast } from "../../../components/Toast";
+import { useUploadMedia } from "../../../services/hooks/usePost";
 
 export default function EditProfileScreen({ navigation }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-
+  const [profilepic, setProfilePic] = useState("");
+  const [coverPic, setCoverPic] = useState("");
+  const { mutate: uploadMedia } = useUploadMedia();
   const queryClient = useQueryClient();
   const { data: userProfile } = useGetProfile();
   const updateMutation = useUpdateProfile();
-  console.log(userProfile);
+  console.log({ userProfile });
 
   useEffect(() => {
     if (userProfile) {
       setFirstName(userProfile.firstName || "");
       setLastName(userProfile.lastName || "");
       setPhoneNumber(userProfile.phoneNumber || "");
+      setProfilePic(userProfile?.profilePicture || "");
+      setCoverPic(userProfile?.coverPicture || "");
     }
   }, [userProfile]);
 
   const handleUpdate = () => {
     updateMutation.mutate(
-      { firstName, lastName, phoneNumber },
+      {
+        id: userProfile?._id,
+        firstName,
+        lastName,
+        phoneNumber,
+        coverPicture: coverPic,
+        profilePicture: profilepic,
+      },
       {
         onSuccess: (res) => {
           console.log("Updated:", res);
@@ -52,6 +69,32 @@ export default function EditProfileScreen({ navigation }) {
     );
   };
 
+  const handlePick = (type = "pic") => {
+    launchImageLibrary({ mediaType: "photo", selectionLimit: 1 }, (res) => {
+      if (res.didCancel || !res.assets) return;
+
+      const files = res.assets.map((asset) => ({
+        uri: asset.uri,
+        name: asset.fileName,
+        type: asset.type,
+      }));
+
+      uploadMedia(files, {
+        onSuccess: (res) => {
+          const transformed = transformResponse(res);
+          if (type === "cover") {
+            setCoverPic(transformed[0]?.url);
+          } else {
+            setProfilePic(transformed[0]?.url);
+          }
+        },
+        onError: () => {
+          showToast("custom", "Upload failed");
+        },
+      });
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ paddingTop: 20 }}>
@@ -63,23 +106,43 @@ export default function EditProfileScreen({ navigation }) {
             padding: 10,
           }}
           right={
-            <TouchableOpacity style={styles.changeCoverBtn}>
+            <TouchableOpacity
+              style={styles.changeCoverBtn}
+              onPress={() => handlePick("cover")}
+            >
               <Text style={styles.changeCoverText}>Change Cover</Text>
               <Ionicons name="pencil" size={14} color="#333" />
             </TouchableOpacity>
           }
         />
       </View>
-      <View style={styles.coverWrapper}>
-        <View style={styles.profilePicWrapper}>
-          <Image
-            source={{
-              uri: userProfile?.profilePicture,
-            }}
-            style={styles.profilePic}
-          />
+      {coverPic !== "" ? (
+        <ImageBackground
+          style={styles.coverWrapperimg}
+          source={{ uri: coverPic }}
+        >
+          <View style={styles.profilePicWrapper}>
+            <Image
+              source={{
+                uri: profilepic,
+              }}
+              style={styles.profilePic}
+            />
+          </View>
+        </ImageBackground>
+      ) : (
+        <View style={styles.coverWrapper}>
+          <Pressable style={styles.profilePicWrapper} onPress={handlePick}>
+            <Image
+              source={{
+                uri: profilepic,
+              }}
+              style={styles.profilePic}
+            />
+            <Ionicons name="pencil" size={15} style={styles.pencil} />
+          </Pressable>
         </View>
-      </View>
+      )}
 
       <Text style={styles.changePhotoText}>Change Profile Photo</Text>
 
