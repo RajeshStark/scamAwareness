@@ -12,7 +12,11 @@ import { logOut } from "../../../redux/features/login/loginSlice";
 
 export default function SettingsScreen({ navigation }: any) {
   const settingsOptions = [
-    { label: "Account", icon: "person-outline", onPress: () => {} },
+    {
+      label: "Account",
+      icon: "person-outline",
+      onPress: () => navigation.navigate("EditProfile"),
+    },
     { label: "Help & Support", icon: "help-circle-outline", onPress: () => {} },
     {
       label: "About App",
