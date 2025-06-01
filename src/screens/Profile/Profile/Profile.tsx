@@ -34,7 +34,7 @@ export default function ProfileScreen({ navigation }) {
   const Interestposts =
     data?.pages.flatMap((page) => page.output?.list || []) ?? [];
 
-  console.log({ Interestposts });
+  const postsTorender = Interestposts[0]?.postData;
 
   return (
     <View style={styles.container}>
@@ -118,7 +118,7 @@ export default function ProfileScreen({ navigation }) {
           )}
 
           <FlatList
-            data={Interestposts}
+            data={postsTorender}
             style={styles.mainContainer}
             scrollEnabled
             keyExtractor={(item, index) => item._id + index}

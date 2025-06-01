@@ -4,6 +4,7 @@ export const Api = {
   CHANGE_PASSWORD: "api/user/change-password",
   FORGOT_PASSWORD: "api/user/forgot-password",
   GET_PROFILE: "api/user/get-profile",
+  UPDATE_PROFILE: "api/user/update-user",
   UPLOAD_MULTIPLE_IMAGES: "/api/user/upload-multipleimages",
   VERIFY_OTP: "api/user/verify-otp",
   RESEND_OTP: "api/user/resend-otp",

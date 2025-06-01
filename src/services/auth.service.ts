@@ -35,7 +35,16 @@ export const loginUser = async (payload: LoginPayload) => {
 };
 
 export const getProfile = async () => {
-  const response = await http.post<ApiResponse<any>>(Api.GET_PROFILE);
+  const response = await http.get<ApiResponse<any>>(Api.GET_PROFILE);
+
+  return response.data;
+};
+
+export const updateProfile = async (payload: SignupPayload) => {
+  const response = await http.post<ApiResponse<any>>(
+    Api.UPDATE_PROFILE,
+    payload
+  );
   return response.data;
 };
 

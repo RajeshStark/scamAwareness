@@ -60,10 +60,10 @@ export const PostService = {
     });
   },
 
-  addInterest: (payload: { postId: string; comment: string }) =>
+  addInterest: (payload: { postId: string }) =>
     http.post(Api.ADD_INTEREST_POST, payload),
 
-  removeInterest: (payload: { postId: string; comment: string }) =>
+  removeInterest: (payload: { postId: string }) =>
     http.post(Api.REMOVE_INTEREST_POST, payload),
 
   listInterest: (payload: { page: number; pageLimit: number }) =>

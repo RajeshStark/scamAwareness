@@ -9,7 +9,13 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Video from "react-native-video";
-import { useLike, useDislike } from "../../services/hooks/usePost";
+import {
+  useLike,
+  useDislike,
+  useAddInterest,
+  useRemoveInterest,
+} from "../../services/hooks/usePost";
+
 import Typography from "../Typography/Typography";
 import { useQueryClient } from "@tanstack/react-query";
 import { styles } from "./styles";
@@ -62,6 +68,9 @@ const PostCard: React.FC<PostCardProps> = ({
   const queryClient = useQueryClient();
   const { mutate: like } = useLike();
   const { mutate: dislike } = useDislike();
+
+  const { mutate: addInterest } = useAddInterest();
+  const { mutate: removeInterest } = useRemoveInterest();
 
   const togglePlayPause = (index: number) => {
     setPausedVideos((prev) => ({
@@ -128,6 +137,56 @@ const PostCard: React.FC<PostCardProps> = ({
                   ...post,
                   isLiked: liked,
                   likeCount: liked ? post.likeCount + 1 : post.likeCount - 1,
+                };
+              }
+              return post;
+            }),
+          },
+        })),
+      };
+    });
+  };
+
+  const toggleInterest = () => {
+    if (!isInterested) {
+      addInterest(
+        { postId: _id },
+        {
+          onSuccess: (response) => {
+            if (response.status) {
+              updatePostInterestStatus(true);
+            }
+          },
+        }
+      );
+    } else {
+      removeInterest(
+        { postId: _id },
+        {
+          onSuccess: (response) => {
+            if (response.status) {
+              updatePostInterestStatus(false);
+            }
+          },
+        }
+      );
+    }
+  };
+
+  const updatePostInterestStatus = (interested: boolean) => {
+    queryClient.setQueryData(["posts"], (oldData: any) => {
+      if (!oldData) return oldData;
+      return {
+        ...oldData,
+        pages: oldData.pages.map((page) => ({
+          ...page,
+          output: {
+            ...page.output,
+            list: page.output.list.map((post) => {
+              if (post._id === _id) {
+                return {
+                  ...post,
+                  isInterested: interested,
                 };
               }
               return post;
@@ -228,11 +287,13 @@ const PostCard: React.FC<PostCardProps> = ({
             <Ionicons name="repeat" size={16} color="#555" />
             <Typography style={styles.iconText}>{shareCount}</Typography>
           </View>
-          <Ionicons
-            name={isInterested ? "bookmark" : "bookmark-outline"}
-            size={16}
-            color={isInterested ? "#8E1A7B" : "#555"}
-          />
+          <Pressable style={styles.iconRow} onPress={toggleInterest}>
+            <Ionicons
+              name={isInterested ? "bookmark" : "bookmark-outline"}
+              size={16}
+              color={isInterested ? "#8E1A7B" : "#555"}
+            />
+          </Pressable>
         </View>
       </View>
     </View>

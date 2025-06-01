@@ -1,10 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   forgotPassword,
   getProfile,
   loginUser,
   resendOtp,
   signupUser,
+  updateProfile,
   verifyOtp,
 } from "../auth.service";
 
@@ -17,6 +18,12 @@ export const useLogin = () => {
 export const useSignup = () => {
   return useMutation({
     mutationFn: signupUser,
+  });
+};
+
+export const useUpdateProfile = () => {
+  return useMutation({
+    mutationFn: updateProfile,
   });
 };
 
@@ -33,8 +40,10 @@ export const useForgotPassword = () => {
 };
 
 export const useGetProfile = () => {
-  return useMutation({
-    mutationFn: getProfile,
+  return useQuery({
+    queryKey: ["profile"],
+    queryFn: getProfile,
+    select: (data) => data.output?.[0],
   });
 };
 
