@@ -18,7 +18,7 @@ export const createStyles = (theme: Theme) =>
       alignItems: "center",
       justifyContent: "center",
       backgroundColor: theme.white,
-      paddingBottom: 40,
+      paddingVertical: 50,
     },
 
     cardBackground: {

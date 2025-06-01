@@ -20,3 +20,26 @@ export const signinSchema = yup.object().shape({
     .min(6, "Password must be at least 6 characters")
     .required("Password is required"),
 });
+
+export const changePasswordSchema = yup.object().shape({
+  oldPassword: yup
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Old password is required"),
+  newPassword: yup
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .required("New password is required")
+    .test(
+      "not-same-as-old",
+      "New password must be different from old password",
+      function (value) {
+        const { oldPassword } = this.parent;
+        return value !== oldPassword;
+      }
+    ),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("newPassword"), null], "Passwords must match")
+    .required("Confirm password is required"),
+});

@@ -24,6 +24,7 @@ export default function ProfileScreen({ navigation }) {
   const usserInfo = useAppSelector((state) => state?.login?.usserInfo);
   const [activeTab, setActiveTab] = useState(1);
   const { data: userProfile } = useGetProfile();
+  console.log({ userProfile });
 
   const {
     data,

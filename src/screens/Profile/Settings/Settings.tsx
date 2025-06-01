@@ -24,12 +24,20 @@ export default function SettingsScreen({ navigation }: any) {
       onPress: () => {},
     },
     {
+      label: "Change Password",
+      icon: "log-out-outline",
+      onPress: () => {
+        navigation.navigate("ChangePassword");
+      },
+    },
+    {
       label: "Logout",
       icon: "log-out-outline",
       onPress: () => {
         logingOut();
       },
     },
+    ,
   ];
 
   const dispatch = useDispatch();
