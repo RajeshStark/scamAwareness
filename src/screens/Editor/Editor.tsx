@@ -125,12 +125,9 @@ export default function EditorScreen({ navigation }) {
         name: asset.fileName,
         type: asset.type,
       };
-      console.log({ asset });
-      console.log({ file });
 
       uploadMedia([file], {
         onSuccess: (res) => {
-          console.log(res);
           const transformed = transformResponse(res);
           setMedia((prev) => [...prev, ...transformed]);
         },

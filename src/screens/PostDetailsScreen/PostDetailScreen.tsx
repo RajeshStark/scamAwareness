@@ -3,6 +3,7 @@ import {
   Button,
   FlatList,
   Image,
+  Pressable,
   SafeAreaView,
   Text,
   TextInput,
@@ -19,6 +20,7 @@ import { useComment, useReply } from "../../services/hooks/usePost";
 import { queryClient } from "../../../App";
 import { DEFAULT_AVATAR } from "../../utils/Constants";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { ScrollView } from "react-native";
 
 export const PostDetailScreen = ({ route }) => {
   const postId = route?.params?.postId;
@@ -95,7 +97,6 @@ export const PostDetailScreen = ({ route }) => {
 
     return (
       <View>
-        {/* Main Comment */}
         <View style={styles.commentContainer}>
           <View style={styles.imgrow}>
             <Image source={{ uri: avatar }} style={styles.avatar} />
@@ -104,18 +105,20 @@ export const PostDetailScreen = ({ route }) => {
 
           <Typography style={styles.commentTxt}>{item.comment}</Typography>
         </View>
-        <View style={styles.replyIconContainer}>
+        <Pressable
+          style={styles.replyIconContainer}
+          onPress={() =>
+            setActiveReplyId(activeReplyId === item._id ? null : item._id)
+          }
+        >
           <Typography>Reply</Typography>
           <Ionicons
             name="return-down-back"
             size={20}
             color="gray"
-            onPress={() =>
-              setActiveReplyId(activeReplyId === item._id ? null : item._id)
-            }
             style={styles.replyIcon}
           />
-        </View>
+        </Pressable>
 
         {activeReplyId === item._id && (
           <View style={styles.replyContainer}>
@@ -167,49 +170,53 @@ export const PostDetailScreen = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.safeAreview}>
-      <CustomHeader canGoback style={styles.pt} />
-      <PostCard key={1} {...post} noShadow />
-      <View style={{ padding: 10 }}>
-        <View style={styles.commentDes}>
-          <TextInput
-            placeholder="Add a comment..."
-            value={commentText}
-            onChangeText={setCommentText}
-            style={styles.commentinput}
-            multiline
-          />
-          <Ionicons
-            name="send"
-            color={commentText.length !== 0 ? "skyblue" : "#555"}
-            size={30}
-            style={{ alignSelf: "flex-end" }}
-            onPress={() => {
-              if (commentText.length !== 0) {
-                handleSendComment();
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <CustomHeader canGoback style={styles.pt} />
+        <PostCard key={1} {...post} noShadow />
+        <View style={{ padding: 10, paddingBottom: 30 }}>
+          <View style={styles.commentDes}>
+            <TextInput
+              placeholder="Add a comment..."
+              value={commentText}
+              onChangeText={setCommentText}
+              style={styles.commentinput}
+              multiline
+            />
+            <Ionicons
+              name="send"
+              color={commentText.length !== 0 ? "skyblue" : "#555"}
+              size={30}
+              style={{ alignSelf: "flex-end" }}
+              onPress={() => {
+                if (commentText.length !== 0) {
+                  handleSendComment();
+                }
+              }}
+            />
+          </View>
+          <FlatList
+            data={commentsData}
+            // nestedScrollEnabled
+            scrollEnabled={false}
+            keyExtractor={(item, index) => item._id || index.toString()}
+            renderItem={renderItem}
+            ListFooterComponent={
+              hasNextPage ? (
+                <Typography onPress={fetchNextPage} style={styles.loadMoreText}>
+                  {isFetchingNextPage ? "Loading..." : "Load More"}
+                </Typography>
+              ) : null
+            }
+            ListEmptyComponent={<Typography>No comments yet</Typography>}
+            onEndReached={() => {
+              if (hasNextPage && !isFetchingNextPage) {
+                fetchNextPage();
               }
             }}
+            onEndReachedThreshold={0.5}
           />
         </View>
-        <FlatList
-          data={commentsData}
-          keyExtractor={(item, index) => item._id || index.toString()}
-          renderItem={renderItem}
-          ListFooterComponent={
-            hasNextPage ? (
-              <Typography onPress={fetchNextPage} style={styles.loadMoreText}>
-                {isFetchingNextPage ? "Loading..." : "Load More"}
-              </Typography>
-            ) : null
-          }
-          ListEmptyComponent={<Typography>No comments yet</Typography>}
-          onEndReached={() => {
-            if (hasNextPage && !isFetchingNextPage) {
-              fetchNextPage();
-            }
-          }}
-          onEndReachedThreshold={0.5}
-        />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

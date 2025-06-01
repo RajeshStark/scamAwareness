@@ -34,7 +34,6 @@ export default function EditProfileScreen({ navigation }) {
   const queryClient = useQueryClient();
   const { data: userProfile } = useGetProfile();
   const updateMutation = useUpdateProfile();
-  console.log({ userProfile });
 
   useEffect(() => {
     if (userProfile) {
@@ -58,7 +57,6 @@ export default function EditProfileScreen({ navigation }) {
       },
       {
         onSuccess: (res) => {
-          console.log("Updated:", res);
           queryClient.invalidateQueries(["profile"]);
           navigation.goBack();
         },

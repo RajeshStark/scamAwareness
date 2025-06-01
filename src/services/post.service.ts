@@ -48,9 +48,6 @@ export const PostService = {
         type: file.type,
       } as any);
     });
-
-    console.log("FormData built for upload:", formData);
-    // return;
     return http.post(Api.UPLOAD_MULTIPLE_IMAGES, formData, {
       headers: {
         "Content-Type": "multipart/form-data",

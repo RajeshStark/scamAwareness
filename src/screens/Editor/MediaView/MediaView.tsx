@@ -13,6 +13,8 @@ export default function MediaView({ media, handleRemove }) {
     setPlayingIndex((prevIndex) => (prevIndex === index ? null : index));
   };
 
+  console.log({ media });
+
   return (
     <View>
       <FlatList
@@ -21,7 +23,8 @@ export default function MediaView({ media, handleRemove }) {
         keyExtractor={(_, index) => index.toString()}
         contentContainerStyle={{ paddingVertical: 10, paddingHorizontal: 10 }}
         renderItem={({ item, index }) => {
-          const isVideo = item.image?.includes("mp4");
+          const isVideo =
+            item.image?.includes("mp4") || item?.url?.includes("mp4");
           const isPlaying = playingIndex === index;
 
           return (

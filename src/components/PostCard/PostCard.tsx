@@ -27,6 +27,15 @@ type MediaItem = {
   url: string;
 };
 
+type like = {
+  _id: string;
+  createdAt: string;
+  likedBy: string;
+  postId: string;
+  type: number;
+  updatedAt: string;
+}[];
+
 type PostCardProps = {
   userDetails: {
     firstName?: string;
@@ -42,6 +51,7 @@ type PostCardProps = {
   isLiked?: boolean;
   isInterested?: boolean;
   _id: string;
+  like: like;
 };
 
 const PostCard: React.FC<PostCardProps> = ({
@@ -55,6 +65,7 @@ const PostCard: React.FC<PostCardProps> = ({
   isLiked,
   isInterested,
   _id,
+  like,
 }) => {
   const avatar = userDetails?.[0]?.profilePicture || DEFAULT_AVATAR;
   const username =
@@ -66,7 +77,7 @@ const PostCard: React.FC<PostCardProps> = ({
   const [pausedVideos, setPausedVideos] = useState<Record<number, boolean>>({});
   const [mutedVideos, setMutedVideos] = useState<Record<number, boolean>>({});
   const queryClient = useQueryClient();
-  const { mutate: like } = useLike();
+  const { mutate: likeing } = useLike();
   const { mutate: dislike } = useDislike();
 
   const { mutate: addInterest } = useAddInterest();
@@ -88,33 +99,29 @@ const PostCard: React.FC<PostCardProps> = ({
 
   const toggleLike = () => {
     if (!isLiked) {
-      console.log("Inside like");
-
-      like(
+      likeing(
         { postId: _id, type: 1 },
         {
           onSuccess: (response) => {
             if (response.status) {
-              console.log("INSIDE  like success");
               updatePostLikeStatus(true);
-            } else {
-              console.log(response.data);
             }
           },
         }
       );
     } else {
-      console.log("Inside dislike");
+      const likeId = like?.[0]?._id;
+      if (!likeId) {
+        Alert.alert("Unable to dislike", "Like ID not found.");
+        return;
+      }
+
       dislike(
-        { id: _id },
+        { id: likeId },
         {
           onSuccess: (response) => {
             if (response.status) {
-              console.log("INSIDE dislike success");
-
               updatePostLikeStatus(false);
-            } else {
-              console.log(response.data);
             }
           },
         }
