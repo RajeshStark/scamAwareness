@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "365502604254",
+    "project_id": "scamalertpro1",
+    "storage_bucket": "scamalertpro1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:365502604254:android:51efae2681ec0f08f1f34f",
+        "android_client_info": {
+          "package_name": "com.scamawareness"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJ1ZCdlLU21R-dHzMLUlrPoVMuZpQ1TGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
