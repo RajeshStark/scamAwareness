@@ -112,14 +112,7 @@ export default function SignIn({ navigation }) {
               control={control}
               error={errors}
               name="password"
-              rightIcon={
-                <Ionicons
-                  name="eye-off-outline"
-                  size={20}
-                  color={theme.grey}
-                  style={styles.mr}
-                />
-              }
+              isPassword
             />
             <View style={styles.remmain}>
               {/* <View style={styles.rememberContainer}>
