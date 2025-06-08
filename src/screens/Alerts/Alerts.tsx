@@ -11,11 +11,31 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import CustomButton from "../../components/Button/CustomButton";
-import { width } from "../../utils/Dimensions";
+import { height, width } from "../../utils/Dimensions";
 import { Image } from "react-native";
+import Typography from "../../components/Typography/Typography";
+import Fonts from "../../utils/Fonts";
 
 export default function EmergencyScreen() {
   const [text, setText] = useState("");
+
+  if (true) {
+    return (
+      <ScrollView style={[styles.container, { height: height }]}>
+        <View
+          style={{
+            height: height * 0.9,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Typography style={{ fontFamily: Fonts.Bold }}>
+            Coming soon
+          </Typography>
+        </View>
+      </ScrollView>
+    );
+  }
 
   return (
     <ScrollView style={styles.container}>
