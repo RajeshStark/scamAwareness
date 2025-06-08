@@ -233,9 +233,9 @@ export const createStyles = (
     },
     input: {
       borderRadius: 10,
+      paddingLeft: 10,
     },
     errorText: {
-      // marginTop: 4,
       fontSize: 12,
       color: theme.error,
       fontFamily: Fonts.Regular,

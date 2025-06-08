@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Alert,
   FlatList,
   Image,
+  Modal,
   Pressable,
+  StyleSheet,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -43,6 +45,7 @@ type PostCardProps = {
     profilePicture?: string;
   }[];
   description: string;
+  name: string;
   media: MediaItem[];
   commentCount: number;
   likeCount: number;
@@ -66,6 +69,7 @@ const PostCard: React.FC<PostCardProps> = ({
   isInterested,
   _id,
   like,
+  name,
 }) => {
   const avatar = userDetails?.[0]?.profilePicture || DEFAULT_AVATAR;
   const username =
@@ -77,6 +81,28 @@ const PostCard: React.FC<PostCardProps> = ({
   const [pausedVideos, setPausedVideos] = useState<Record<number, boolean>>({});
   const [mutedVideos, setMutedVideos] = useState<Record<number, boolean>>({});
   const queryClient = useQueryClient();
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
+  const [expandedVideo, setExpandedVideo] = useState<{
+    url: string;
+    index: number;
+  } | null>(null);
+
+  const openVideoModal = (url: string, index: number) => {
+    setExpandedVideo({ url, index });
+  };
+
+  const closeVideoModal = () => {
+    setExpandedVideo(null);
+  };
+
+  const onViewRef = useRef(({ viewableItems }) => {
+    if (viewableItems.length > 0) {
+      setCurrentMediaIndex(viewableItems[0].index ?? 0);
+    }
+  });
+
+  const viewConfigRef = useRef({ viewAreaCoveragePercentThreshold: 50 });
+
   const { mutate: likeing } = useLike();
   const { mutate: dislike } = useDislike();
 
@@ -214,74 +240,115 @@ const PostCard: React.FC<PostCardProps> = ({
           </View>
         </View>
       </View>
-
       <View style={styles.contentContainer}>
-        <Typography style={styles.title}>{description}</Typography>
-        <Typography style={styles.caption}>{description}</Typography>
+        <Pressable
+          onPress={() =>
+            navigation.navigate("PostDetailScreen", {
+              postId: _id,
+            })
+          }
+        >
+          <Typography style={styles.title}>{name}</Typography>
+          <Typography style={styles.caption}>{description}</Typography>
+        </Pressable>
 
         {media.length > 0 && (
-          <FlatList
-            data={media}
-            keyExtractor={(_, index) => index.toString()}
-            horizontal
-            pagingEnabled
-            snapToAlignment="center"
-            decelerationRate="fast"
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item, index }) => {
-              const isVideo = item.type.includes("video");
-              const paused = pausedVideos[index] ?? true;
-              const muted = mutedVideos[index] ?? true;
+          <View style={[styles.media, { alignSelf: "flex-end" }]}>
+            <FlatList
+              data={media}
+              keyExtractor={(_, index) => index.toString()}
+              horizontal
+              pagingEnabled
+              snapToAlignment="center"
+              decelerationRate="fast"
+              showsHorizontalScrollIndicator={false}
+              onViewableItemsChanged={onViewRef.current}
+              viewabilityConfig={viewConfigRef.current}
+              renderItem={({ item, index }) => {
+                const isVideo = item.type.includes("video");
+                const paused = pausedVideos[index] ?? true;
+                const muted = mutedVideos[index] ?? true;
 
-              if (isVideo) {
-                return (
-                  <TouchableOpacity
-                    onPress={() => togglePlayPause(index)}
-                    style={styles.media}
-                  >
-                    <Video
-                      source={{ uri: item.url }}
-                      style={styles.media}
-                      resizeMode="cover"
-                      paused={paused}
-                      muted={muted}
-                      repeat
-                    />
-                    <View style={styles.overlayButtons}>
-                      <Ionicons
-                        name={paused ? "play" : "pause"}
-                        size={32}
-                        color="#fff"
-                        style={{ marginRight: 20 }}
-                      />
-                      <TouchableOpacity onPress={() => toggleMute(index)}>
-                        <Ionicons
-                          name={muted ? "volume-mute" : "volume-high"}
-                          size={28}
-                          color="#fff"
+                const mediaWrapperStyle = {
+                  ...styles.media,
+                  borderRadius: 12, // Apply same radius
+                  overflow: "hidden", // Ensure child respects it
+                };
+
+                if (isVideo) {
+                  return (
+                    <TouchableOpacity
+                      onPress={() => togglePlayPause(index)}
+                      style={mediaWrapperStyle}
+                    >
+                      <View style={mediaWrapperStyle}>
+                        <Video
+                          source={{ uri: item.url }}
+                          style={StyleSheet.absoluteFill}
+                          resizeMode="cover"
+                          paused={paused}
+                          muted={muted}
+                          repeat
                         />
+                        <View style={styles.overlayButtons}>
+                          <Ionicons
+                            name={paused ? "play" : "pause"}
+                            size={32}
+                            color="#fff"
+                            style={{ marginRight: 20 }}
+                          />
+                          <TouchableOpacity onPress={() => toggleMute(index)}>
+                            <Ionicons
+                              name={muted ? "volume-mute" : "volume-high"}
+                              size={28}
+                              color="#fff"
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                      <TouchableOpacity
+                        style={styles.expandIcon}
+                        onPress={() => openVideoModal(item.url, index)}
+                      >
+                        <Ionicons name="expand" size={24} color="#fff" />
                       </TouchableOpacity>
+                    </TouchableOpacity>
+                  );
+                } else {
+                  return (
+                    <View style={mediaWrapperStyle}>
+                      <Image
+                        source={{ uri: item.url }}
+                        style={StyleSheet.absoluteFill}
+                        resizeMode="cover"
+                      />
                     </View>
-                  </TouchableOpacity>
-                );
-              } else {
-                return (
-                  <Image
-                    source={{ uri: item.url }}
-                    style={styles.media}
-                    resizeMode="cover"
-                  />
-                );
-              }
-            }}
-          />
+                  );
+                }
+              }}
+            />
+            {media.length > 1 && (
+              <View style={styles.pagination}>
+                <Typography>
+                  {currentMediaIndex + 1}/{media.length}
+                </Typography>
+              </View>
+            )}
+          </View>
         )}
 
         <View style={styles.footer}>
-          <View style={styles.iconRow}>
+          <Pressable
+            onPress={() =>
+              navigation.navigate("PostDetailScreen", {
+                postId: _id,
+              })
+            }
+            style={styles.iconRow}
+          >
             <Ionicons name="chatbubble-outline" size={16} color="#555" />
             <Typography style={styles.iconText}>{commentCount}</Typography>
-          </View>
+          </Pressable>
           <Pressable style={styles.iconRow} onPress={toggleLike}>
             <Ionicons
               name={isLiked ? "heart" : "heart-outline"}
@@ -303,22 +370,43 @@ const PostCard: React.FC<PostCardProps> = ({
           </Pressable>
         </View>
       </View>
+
+      {expandedVideo && (
+        <Modal
+          visible={true}
+          transparent
+          animationType="slide"
+          onRequestClose={closeVideoModal}
+        >
+          <TouchableOpacity
+            style={styles.modalCloseIcon}
+            onPress={closeVideoModal}
+          >
+            <Ionicons name="close" size={28} color="#fff" />
+          </TouchableOpacity>
+          <View style={styles.modalContainer}>
+            <TouchableOpacity
+              style={styles.modalBackdrop}
+              onPress={closeVideoModal}
+            />
+            <View style={styles.modalContent}>
+              <Video
+                source={{ uri: expandedVideo.url }}
+                style={StyleSheet.absoluteFill}
+                controls
+                resizeMode="contain"
+                paused={false}
+                muted={false}
+                repeat
+              />
+            </View>
+          </View>
+        </Modal>
+      )}
     </View>
   );
 
-  return noShadow ? (
-    content
-  ) : (
-    <Pressable
-      onPress={() =>
-        navigation.navigate("PostDetailScreen", {
-          postId: _id,
-        })
-      }
-    >
-      {content}
-    </Pressable>
-  );
+  return noShadow ? content : <View>{content}</View>;
 };
 
 export default PostCard;

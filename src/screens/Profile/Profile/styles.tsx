@@ -36,7 +36,7 @@ export const createStyles = (theme: Theme) =>
     },
     editButton: {
       position: "absolute",
-      bottom: -30,
+      bottom: -40,
       right: 16,
       backgroundColor: "#6e008b",
       paddingHorizontal: 12,

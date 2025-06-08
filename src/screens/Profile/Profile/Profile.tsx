@@ -61,7 +61,10 @@ export default function ProfileScreen({ navigation }) {
         <View style={styles.profileImageWrapper}>
           <Image
             source={{
-              uri: usserInfo?.profilePicture,
+              uri:
+                usserInfo?.profilePicture.length !== 0
+                  ? usserInfo?.profilePicture
+                  : DEFAULT_AVATAR,
             }}
             style={styles.profileImage}
           />

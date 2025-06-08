@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
+  StatusBar,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useDispatch } from "react-redux";
@@ -52,7 +53,6 @@ export default function SettingsScreen({ navigation }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="#000" />
@@ -60,7 +60,6 @@ export default function SettingsScreen({ navigation }: any) {
         <Text style={styles.headerTitle}>Settings</Text>
       </View>
 
-      {/* Options */}
       <View style={styles.options}>
         {settingsOptions.map((item, index) => (
           <TouchableOpacity
@@ -78,7 +77,11 @@ export default function SettingsScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    marginTop: StatusBar.currentHeight,
+  },
   header: {
     flexDirection: "row",
     alignItems: "center",

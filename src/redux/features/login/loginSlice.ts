@@ -6,6 +6,7 @@ const loginSlice = createSlice({
     isLoggedIn: false,
     usserInfo: null,
     userToken: null,
+    fcmtoken: null,
   },
   reducers: {
     logIn: (state) => {
@@ -20,8 +21,12 @@ const loginSlice = createSlice({
     setuserToken: (state, action) => {
       state.userToken = action.payload;
     },
+    setFCMToken: (state, action) => {
+      state.fcmtoken = action.payload;
+    },
   },
 });
 
-export const { logIn, logOut, setUserInfo, setuserToken } = loginSlice.actions;
+export const { logIn, logOut, setUserInfo, setuserToken, setFCMToken } =
+  loginSlice.actions;
 export default loginSlice.reducer;

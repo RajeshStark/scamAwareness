@@ -21,12 +21,15 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { signinSchema } from "../../../utils/ValidationScemas";
 import { useLogin } from "../../../services/hooks/useAuth";
 import { showToast } from "../../../components/Toast";
+import { useAppSelector } from "../../../hooks/useAppselector";
 
 export default function SignIn({ navigation }) {
   const { theme, isDark } = useAppTheme();
   const styles = createStyles(theme);
   const dispatch = useDispatch();
+  const fcmToken = useAppSelector((state) => state?.login?.fcmtoken);
   const { mutate: login, isPending } = useLogin();
+
   const {
     control,
     watch,
@@ -55,7 +58,7 @@ export default function SignIn({ navigation }) {
     const payload = {
       ...values,
       userType: 2,
-      fcmToken: "",
+      fcmToken: fcmToken,
     };
 
     login(payload, {
@@ -81,7 +84,7 @@ export default function SignIn({ navigation }) {
 
   return (
     <LineraBgContainer>
-      <Container>
+      <Container withScroll>
         <Image
           source={Images.darkLogo}
           style={styles.logo}
@@ -115,12 +118,6 @@ export default function SignIn({ navigation }) {
               isPassword
             />
             <View style={styles.remmain}>
-              {/* <View style={styles.rememberContainer}>
-                <Ionicons name={"square-outline"} size={15} style={styles.mr} />
-                <Typography style={styles.txtgrey}>
-                  {strings.remember}
-                </Typography>
-              </View> */}
               <View />
               <Typography
                 onPress={() => navigation.navigate("ForgotPassword")}

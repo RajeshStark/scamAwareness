@@ -20,7 +20,7 @@ import {
   useUpdateProfile,
 } from "../../../services/hooks/useAuth";
 import { launchImageLibrary } from "react-native-image-picker";
-import { transformResponse } from "../../../utils/Constants";
+import { DEFAULT_AVATAR, transformResponse } from "../../../utils/Constants";
 import { showToast } from "../../../components/Toast";
 import { useUploadMedia } from "../../../services/hooks/usePost";
 
@@ -99,7 +99,7 @@ export default function EditProfileScreen({ navigation }) {
         <CustomHeader
           canGoback
           style={{
-            backgroundColor: "#eee",
+            backgroundColor: `rgba(0,0,0,0.4)`,
             width: "100%",
             padding: 10,
           }}
@@ -122,7 +122,7 @@ export default function EditProfileScreen({ navigation }) {
           <View style={styles.profilePicWrapper}>
             <Image
               source={{
-                uri: profilepic,
+                uri: profilepic !== "" ? profilepic : DEFAULT_AVATAR,
               }}
               style={styles.profilePic}
             />
@@ -133,7 +133,7 @@ export default function EditProfileScreen({ navigation }) {
           <Pressable style={styles.profilePicWrapper} onPress={handlePick}>
             <Image
               source={{
-                uri: profilepic,
+                uri: profilepic !== "" ? profilepic : DEFAULT_AVATAR,
               }}
               style={styles.profilePic}
             />

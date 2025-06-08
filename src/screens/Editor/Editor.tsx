@@ -18,11 +18,12 @@ import { useAppSelector } from "../../hooks/useAppselector";
 import useAppTheme from "../../hooks/useAppTheme";
 import { useUploadMedia } from "../../services/hooks/usePost";
 import { PostService } from "../../services/post.service";
-import { transformResponse } from "../../utils/Constants";
+import { DEFAULT_AVATAR, transformResponse } from "../../utils/Constants";
 import MediaView from "./MediaView/MediaView";
 import { styles } from "./styles";
 import { checkAndRequestPermissions } from "./Constants";
 import AudioRecorderPlayer from "react-native-audio-recorder-player";
+import LineraBgContainer from "../../components/Container/LineraBgContainer";
 
 export default function EditorScreen({ navigation }) {
   const [text, setText] = useState("");
@@ -174,80 +175,92 @@ export default function EditorScreen({ navigation }) {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <CustomHeader canGoback />
-      <View>
-        <View style={styles.header}>
-          <Image
-            source={{
-              uri:
-                usserInfo?.profilePicture.length !== 0
-                  ? usserInfo?.profilePicture
-                  : "https://randomuser.me/api/portraits/men/32.jpg",
-            }}
-            style={styles.avatar}
-          />
-          <View>
-            {usserInfo?.firstName.length !== 0 ? (
-              <Text style={styles.username}>
-                {usserInfo?.firstName} {usserInfo?.lastName}
-              </Text>
-            ) : (
-              <Text style={styles.username}>Unknown</Text>
-            )}
+    <LineraBgContainer>
+      <ScrollView style={styles.container}>
+        <CustomHeader canGoback />
+        <View>
+          <View style={styles.header}>
+            <Image
+              source={{
+                uri:
+                  usserInfo?.profilePicture.length !== 0
+                    ? usserInfo?.profilePicture
+                    : DEFAULT_AVATAR,
+              }}
+              style={styles.avatar}
+            />
+            <View>
+              {usserInfo?.firstName.length !== 0 ? (
+                <Text style={styles.username}>
+                  {usserInfo?.firstName} {usserInfo?.lastName}
+                </Text>
+              ) : (
+                <Text style={styles.username}>Unknown</Text>
+              )}
+            </View>
           </View>
-        </View>
 
-        <View style={styles.inputCard}>
-          <TextInput
-            placeholder="Write subject...."
-            value={title}
-            onChangeText={setTitle}
-          />
-          <View style={{ height: 1, width: "100%", backgroundColor: "grey" }} />
-          <TextInput
-            placeholder="Whats happening..."
-            value={text}
-            onChangeText={setText}
-            style={styles.textInput}
-          />
+          <View style={styles.inputCard}>
+            <TextInput
+              placeholder="Write subject...."
+              value={title}
+              onChangeText={setTitle}
+            />
+            <View
+              style={{ height: 1, width: "100%", backgroundColor: "grey" }}
+            />
+            <TextInput
+              placeholder="Whats happening..."
+              value={text}
+              onChangeText={setText}
+              style={styles.textInput}
+            />
 
-          <View style={styles.inputActions}>
-            <View style={{ flexDirection: "row", gap: 16 }}>
-              <Pressable onPress={handlePick}>
-                <Ionicons name="image-outline" size={24} style={styles.icon} />
-              </Pressable>
-              <Pressable onPress={handleCamera}>
-                <Ionicons name="camera-outline" size={24} style={styles.icon} />
-              </Pressable>
-              <Pressable onPress={handleVideoRecord}>
-                <Ionicons
-                  name="videocam-outline"
-                  size={24}
-                  style={styles.icon}
-                />
-              </Pressable>
-              {/* <Pressable onPress={handleAudioRecord}>
+            <View style={styles.inputActions}>
+              <View style={{ flexDirection: "row", gap: 16 }}>
+                <Pressable onPress={handlePick}>
+                  <Ionicons
+                    name="image-outline"
+                    size={24}
+                    style={styles.icon}
+                  />
+                </Pressable>
+                <Pressable onPress={handleCamera}>
+                  <Ionicons
+                    name="camera-outline"
+                    size={24}
+                    style={styles.icon}
+                  />
+                </Pressable>
+                <Pressable onPress={handleVideoRecord}>
+                  <Ionicons
+                    name="videocam-outline"
+                    size={24}
+                    style={styles.icon}
+                  />
+                </Pressable>
+                {/* <Pressable onPress={handleAudioRecord}>
                 <Ionicons
                   name={isRecording ? "stop-circle-outline" : "mic-outline"} // ⚠️ dynamic icon
                   size={24}
                   style={styles.icon}
                 />
               </Pressable> */}
-            </View>
-            {text.length === 0 ? (
-              <View style={[styles.postBtn, { backgroundColor: theme.grey }]}>
-                <Text style={styles.postBtnText}>Post</Text>
               </View>
-            ) : (
-              <TouchableOpacity style={styles.postBtn} onPress={handlePost}>
-                <Text style={styles.postBtnText}>Post</Text>
-              </TouchableOpacity>
-            )}
+              {text.length === 0 ? (
+                <View style={[styles.postBtn, { backgroundColor: theme.grey }]}>
+                  <Text style={styles.postBtnText}>Post</Text>
+                </View>
+              ) : (
+                <TouchableOpacity style={styles.postBtn} onPress={handlePost}>
+                  <Text style={styles.postBtnText}>Post</Text>
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
         </View>
-      </View>
-      <MediaView media={media} handleRemove={handleRemove} />
-    </ScrollView>
+        <MediaView media={media} handleRemove={handleRemove} />
+      </ScrollView>
+    </LineraBgContainer>
   );
 }

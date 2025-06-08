@@ -20,12 +20,14 @@ import { showToast } from "../../../components/Toast";
 import { launchImageLibrary } from "react-native-image-picker";
 import { useUploadMedia } from "../../../services/hooks/usePost";
 import { transformResponse } from "../../../utils/Constants";
+import { useAppSelector } from "../../../hooks/useAppselector";
 
 export default function Signup({ navigation }) {
   const { theme, isDark } = useAppTheme();
   const styles = createStyles(theme);
   const [profilepic, setProfilePic] = useState("");
   const dispatch = useDispatch();
+  const fcmToken = useAppSelector((state) => state?.login?.fcmtoken);
   const { mutate: login, isPending } = useSignup();
   const { mutate: uploadMedia } = useUploadMedia();
 
@@ -55,7 +57,10 @@ export default function Signup({ navigation }) {
       ...values,
       profilePicture: profilepic,
       userType: 2,
+      fcmToken: fcmToken,
     };
+
+    console.log({ payload });
 
     login(payload, {
       onSuccess: (response) => {

@@ -8,9 +8,7 @@ import { toastConfig } from "./src/components/Toast";
 import { useNetworkChange } from "./src/hooks/useNetworkChange.tsx";
 import AuthStack from "./src/navigation/AuthStack.tsx";
 import { persistor, store } from "./src/redux/store/store.ts";
-import messaging from "@react-native-firebase/messaging";
-import notifee, { AndroidImportance } from "@notifee/react-native";
-import { Alert } from "react-native";
+
 import { PermissionsAndroid, Platform } from "react-native";
 
 export const queryClient = new QueryClient();
@@ -35,49 +33,6 @@ export default function App() {
 
     requestPermission();
   }, []);
-
-  useEffect(() => {
-    async function setup() {
-      const authStatus = await messaging().requestPermission();
-      const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED;
-
-      if (enabled) {
-        const token = await messaging().getToken();
-        console.log("FCM Token:", token);
-      }
-
-      // Create a channel (Android)
-      await notifee.createChannel({
-        id: "default",
-        name: "Default Channel",
-        importance: AndroidImportance.HIGH,
-      });
-
-      // Foreground listener
-      messaging().onMessage(async (remoteMessage) => {
-        const { title, body } = remoteMessage.notification;
-        console.log({ title, body });
-
-        showLocalNotification(title, body);
-      });
-    }
-
-    setup();
-  }, []);
-
-  const showLocalNotification = async (title, body) => {
-    await notifee.displayNotification({
-      title,
-      body,
-      android: {
-        channelId: "default",
-        smallIcon: "ic_launcher", // Ensure this exists in `res/drawable`
-        pressAction: {
-          id: "default",
-        },
-      },
-    });
-  };
 
   return (
     <QueryClientProvider client={queryClient}>
