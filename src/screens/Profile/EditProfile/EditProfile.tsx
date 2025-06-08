@@ -119,14 +119,15 @@ export default function EditProfileScreen({ navigation }) {
           style={styles.coverWrapperimg}
           source={{ uri: coverPic }}
         >
-          <View style={styles.profilePicWrapper}>
+          <Pressable style={styles.profilePicWrapper} onPress={handlePick}>
             <Image
               source={{
                 uri: profilepic !== "" ? profilepic : DEFAULT_AVATAR,
               }}
               style={styles.profilePic}
             />
-          </View>
+            <Ionicons name="pencil" size={15} style={styles.pencil} />
+          </Pressable>
         </ImageBackground>
       ) : (
         <View style={styles.coverWrapper}>

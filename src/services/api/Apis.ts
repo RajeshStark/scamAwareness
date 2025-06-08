@@ -24,4 +24,7 @@ export const Api = {
 
   // Explore
   SEARCH: "api/post/search",
+
+  //Notification
+  GET_NOTIFICATION: "api/post/get-notifications",
 };

@@ -17,13 +17,14 @@ import { useGetInterest } from "../../../services/hooks/usePost";
 import { createStyles } from "./styles";
 import { useGetProfile } from "../../../services/hooks/useAuth";
 import { DEFAULT_AVATAR } from "../../../utils/Constants";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function ProfileScreen({ navigation }) {
   const { theme } = useAppTheme();
   const styles = createStyles(theme);
   const usserInfo = useAppSelector((state) => state?.login?.usserInfo);
   const [activeTab, setActiveTab] = useState(1);
-  const { data: userProfile } = useGetProfile();
+  const { data: userProfile, refetch: getprofile } = useGetProfile();
   console.log({ userProfile });
 
   const {
@@ -39,6 +40,15 @@ export default function ProfileScreen({ navigation }) {
     data?.pages.flatMap((page) => page.output?.list || []) ?? [];
 
   const postsTorender = Interestposts[0]?.postData;
+
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("INSIDE USEFOCUS");
+
+      getprofile();
+      return () => {};
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -62,8 +72,8 @@ export default function ProfileScreen({ navigation }) {
           <Image
             source={{
               uri:
-                usserInfo?.profilePicture.length !== 0
-                  ? usserInfo?.profilePicture
+                userProfile?.profilePicture.length !== 0
+                  ? userProfile?.profilePicture
                   : DEFAULT_AVATAR,
             }}
             style={styles.profileImage}
@@ -120,12 +130,6 @@ export default function ProfileScreen({ navigation }) {
         />
       ) : activeTab === 2 ? (
         <>
-          {isRefetching && (
-            <View>
-              <ActivityIndicator size="small" color={theme.primary} />
-            </View>
-          )}
-
           <FlatList
             data={postsTorender}
             style={styles.mainContainer}
@@ -143,7 +147,7 @@ export default function ProfileScreen({ navigation }) {
               if (hasNextPage) fetchNextPage();
             }}
             onEndReachedThreshold={0.5}
-            refreshing={isRefetching}
+            // refreshing={isRefetching}
             onRefresh={refetch}
           />
         </>
