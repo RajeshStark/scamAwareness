@@ -4,7 +4,7 @@ import Fonts from "../../utils/Fonts";
 
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
-    safeAreview: { paddingTop: 30 },
+    safeAreview: { paddingTop: 30, flex: 1 },
     pt: { padding: 10 },
     mv: { marginVertical: 12 },
     commentstitle: { fontWeight: "bold", marginBottom: 8 },

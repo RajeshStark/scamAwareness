@@ -7,6 +7,7 @@ export const checkAndRequestPermissions = async () => {
     const permissions = [
       PermissionsAndroid.PERMISSIONS.CAMERA,
       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
     ];
 
     const sdkInt =
@@ -15,7 +16,7 @@ export const checkAndRequestPermissions = async () => {
       permissions.push(
         PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
         PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
-        PermissionsAndroid.PERMISSIONS.READ_MEDIA_AUDIO // ⚠️ new
+        PermissionsAndroid.PERMISSIONS.READ_MEDIA_AUDIO
       );
     } else {
       permissions.push(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);

@@ -1,0 +1,96 @@
+Found 16 modules for target `scamAwareness`
+link_native_modules! {:ios_packages=>[{:configurations=>[], :name=>"@notifee/react-native", :root=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/@notifee/react-native", :path=>"../node_modules/@notifee/react-native", :podspec_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/@notifee/react-native/RNNotifee.podspec", :script_phases=>[]}, {:configurations=>[], :name=>"@react-native-async-storage/async-storage", :root=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/@react-native-async-storage/async-storage", :path=>"../node_modules/@react-native-async-storage/async-storage", :podspec_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/@react-native-async-storage/async-storage/RNCAsyncStorage.podspec", :script_phases=>[]}, {:configurations=>[], :name=>"@react-native-community/audio-toolkit", :root=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/@react-native-community/audio-toolkit", :path=>"../node_modules/@react-native-community/audio-toolkit", :podspec_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/@react-native-community/audio-toolkit/ReactNativeAudioToolkit.podspec", :script_phases=>[]}, {:configurations=>[], :name=>"@react-native-community/datetimepicker", :root=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/@react-native-community/datetimepicker", :path=>"../node_modules/@react-native-community/datetimepicker", :podspec_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/@react-native-community/datetimepicker/RNDateTimePicker.podspec", :script_phases=>[]}, {:configurations=>[], :name=>"@react-native-community/netinfo", :root=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/@react-native-community/netinfo", :path=>"../node_modules/@react-native-community/netinfo", :podspec_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/@react-native-community/netinfo/react-native-netinfo.podspec", :script_phases=>[]}, {:configurations=>[], :name=>"@react-native-firebase/app", :root=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/@react-native-firebase/app", :path=>"../node_modules/@react-native-firebase/app", :podspec_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/@react-native-firebase/app/RNFBApp.podspec", :script_phases=>[{"name"=>"[RNFB] Core Configuration", "path"=>"./ios_config.sh", "execution_position"=>"after_compile", "input_files"=>["$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)"]}]}, {:configurations=>[], :name=>"@react-native-firebase/messaging", :root=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/@react-native-firebase/messaging", :path=>"../node_modules/@react-native-firebase/messaging", :podspec_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/@react-native-firebase/messaging/RNFBMessaging.podspec", :script_phases=>[]}, {:configurations=>[], :name=>"react-native-audio-recorder-player", :root=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-audio-recorder-player", :path=>"../node_modules/react-native-audio-recorder-player", :podspec_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-audio-recorder-player/RNAudioRecorderPlayer.podspec", :script_phases=>[]}, {:configurations=>[], :name=>"react-native-image-picker", :root=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-image-picker", :path=>"../node_modules/react-native-image-picker", :podspec_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-image-picker/react-native-image-picker.podspec", :script_phases=>[]}, {:configurations=>[], :name=>"react-native-linear-gradient", :root=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-linear-gradient", :path=>"../node_modules/react-native-linear-gradient", :podspec_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-linear-gradient/BVLinearGradient.podspec", :script_phases=>[]}, {:configurations=>[], :name=>"react-native-permissions", :root=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-permissions", :path=>"../node_modules/react-native-permissions", :podspec_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-permissions/RNPermissions.podspec", :script_phases=>[]}, {:configurations=>[], :name=>"react-native-reanimated", :root=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-reanimated", :path=>"../node_modules/react-native-reanimated", :podspec_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-reanimated/RNReanimated.podspec", :script_phases=>[]}, {:configurations=>[], :name=>"react-native-safe-area-context", :root=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-safe-area-context", :path=>"../node_modules/react-native-safe-area-context", :podspec_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-safe-area-context/react-native-safe-area-context.podspec", :script_phases=>[]}, {:configurations=>[], :name=>"react-native-screens", :root=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-screens", :path=>"../node_modules/react-native-screens", :podspec_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-screens/RNScreens.podspec", :script_phases=>[]}, {:configurations=>[], :name=>"react-native-vector-icons", :root=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-vector-icons", :path=>"../node_modules/react-native-vector-icons", :podspec_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-vector-icons/RNVectorIcons.podspec", :script_phases=>[]}, {:configurations=>[], :name=>"react-native-video", :root=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-video", :path=>"../node_modules/react-native-video", :podspec_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/node_modules/react-native-video/react-native-video.podspec", :script_phases=>[]}], :ios_project_root_path=>"/Users/rajeshsangapogu/Desktop/scamAwareness/ios", :react_native_path=>"../node_modules/react-native"}
+Adding a custom script phase for Pod RNFBApp: [RNFB] Core Configuration
+Auto-linking React Native modules for target `scamAwareness`: BVLinearGradient, RNAudioRecorderPlayer, RNCAsyncStorage, RNDateTimePicker, RNFBApp, RNFBMessaging, RNNotifee, RNPermissions, RNReanimated, RNScreens, RNVectorIcons, ReactNativeAudioToolkit, react-native-image-picker, react-native-netinfo, react-native-safe-area-context, and react-native-video
+Framework build type is static library
+Configuring the target with the New Architecture
+[36m[1m[Codegen][0m Analyzing /Users/rajeshsangapogu/Desktop/scamAwareness/package.json[0m
+[36m[1m[Codegen][0m [33mSearching for codegen-enabled libraries in the app.[0m
+[36m[1m[Codegen][0m [33mThe "codegenConfig" field is not defined in package.json. Assuming there is nothing to generate at the app level.[0m
+[36m[1m[Codegen][0m [33mSearching for codegen-enabled libraries in the project dependencies.[0m
+[36m[1m[Codegen][0m Found @react-native-async-storage/async-storage[0m
+[36m[1m[Codegen][0m Found @react-native-community/datetimepicker[0m
+[36m[1m[Codegen][0m Found react-native[0m
+[36m[1m[Codegen][0m Found react-native-image-picker[0m
+[36m[1m[Codegen][0m Found react-native-permissions[0m
+[36m[1m[Codegen][0m Found react-native-reanimated[0m
+[36m[1m[Codegen][0m Found react-native-safe-area-context[0m
+[36m[1m[Codegen][0m Found react-native-screens[0m
+[36m[1m[Codegen][0m Found react-native-vector-icons[0m
+[36m[1m[Codegen][0m [33mSearching for codegen-enabled libraries in react-native.config.js[0m
+[36m[1m[Codegen][0m Processing rnasyncstorage[0m
+[36m[1m[Codegen][0m [33mSearching for podspec in the project dependencies.[0m
+[36m[1m[Codegen][0m Supported Apple platforms: ios, macos, tvos, visionos for rnasyncstorage[0m
+[36m[1m[Codegen][0m Processing RNDateTimePickerCGen[0m
+[36m[1m[Codegen][0m [33mSearching for podspec in the project dependencies.[0m
+[36m[1m[Codegen][0m Supported Apple platforms: ios, visionos for RNDateTimePickerCGen[0m
+[36m[1m[Codegen][0m Processing FBReactNativeSpec[0m
+[36m[1m[Codegen][0m [33mSearching for podspec in the project dependencies.[0m
+[36m[1m[Codegen][0m Processing rncore[0m
+[36m[1m[Codegen][0m [33mSearching for podspec in the project dependencies.[0m
+[36m[1m[Codegen][0m Processing RNImagePickerSpec[0m
+[36m[1m[Codegen][0m [33mSearching for podspec in the project dependencies.[0m
+[36m[1m[Codegen][0m Supported Apple platforms: ios for RNImagePickerSpec[0m
+[36m[1m[Codegen][0m Processing RNPermissionsSpec[0m
+[36m[1m[Codegen][0m [33mSearching for podspec in the project dependencies.[0m
+[36m[1m[Codegen][0m Supported Apple platforms: ios, tvos for RNPermissionsSpec[0m
+[36m[1m[Codegen][0m Processing rnreanimated[0m
+[36m[1m[Codegen][0m [33mSearching for podspec in the project dependencies.[0m
+[36m[1m[Codegen][0m Supported Apple platforms: ios, macos, tvos, visionos for rnreanimated[0m
+[36m[1m[Codegen][0m Processing safeareacontext[0m
+[36m[1m[Codegen][0m [33mSearching for podspec in the project dependencies.[0m
+[36m[1m[Codegen][0m Supported Apple platforms: ios, macos, tvos, visionos for safeareacontext[0m
+[36m[1m[Codegen][0m Processing rnscreens[0m
+[36m[1m[Codegen][0m [33mSearching for podspec in the project dependencies.[0m
+[36m[1m[Codegen][0m Supported Apple platforms: ios, tvos, visionos for rnscreens[0m
+[36m[1m[Codegen][0m Processing RNVectorIconsSpec[0m
+[36m[1m[Codegen][0m [33mSearching for podspec in the project dependencies.[0m
+[36m[1m[Codegen][0m Supported Apple platforms: ios, tvos, visionos for RNVectorIconsSpec[0m
+[36m[1m[Codegen][0m Generating Native Code for rnasyncstorage - ios[0m
+[36m[1m[Codegen][0m Generated artifacts: /Users/rajeshsangapogu/Desktop/scamAwareness/ios/build/generated/ios[0m
+[36m[1m[Codegen][0m Generating Native Code for RNDateTimePickerCGen - ios[0m
+[36m[1m[Codegen][0m Generated artifacts: /Users/rajeshsangapogu/Desktop/scamAwareness/ios/build/generated/ios[0m
+[36m[1m[Codegen][0m [33m[Codegen - FBReactNativeSpec] Skipping iOS code generation for FBReactNativeSpec as it has been generated already.[0m
+[36m[1m[Codegen][0m [33m[Codegen - rncore] Skipping iOS code generation for rncore as it has been generated already.[0m
+[36m[1m[Codegen][0m Generating Native Code for RNImagePickerSpec - ios[0m
+[36m[1m[Codegen][0m Generated artifacts: /Users/rajeshsangapogu/Desktop/scamAwareness/ios/build/generated/ios[0m
+[36m[1m[Codegen][0m Generating Native Code for RNPermissionsSpec - ios[0m
+[36m[1m[Codegen][0m Generated artifacts: /Users/rajeshsangapogu/Desktop/scamAwareness/ios/build/generated/ios[0m
+[36m[1m[Codegen][0m Generating Native Code for rnreanimated - ios[0m
+[36m[1m[Codegen][0m Generated artifacts: /Users/rajeshsangapogu/Desktop/scamAwareness/ios/build/generated/ios[0m
+[36m[1m[Codegen][0m Generating Native Code for safeareacontext - ios[0m
+[36m[1m[Codegen][0m Generated artifacts: /Users/rajeshsangapogu/Desktop/scamAwareness/ios/build/generated/ios[0m
+[36m[1m[Codegen][0m Generating Native Code for rnscreens - ios[0m
+[36m[1m[Codegen][0m Generated artifacts: /Users/rajeshsangapogu/Desktop/scamAwareness/ios/build/generated/ios[0m
+[36m[1m[Codegen][0m Generating Native Code for RNVectorIconsSpec - ios[0m
+[36m[1m[Codegen][0m Generated artifacts: /Users/rajeshsangapogu/Desktop/scamAwareness/ios/build/generated/ios[0m
+[36m[1m[Codegen][0m Generating RCTThirdPartyComponentsProvider.h[0m
+[36m[1m[Codegen][0m Generated artifact: /Users/rajeshsangapogu/Desktop/scamAwareness/ios/build/generated/ios/RCTThirdPartyComponentsProvider.h[0m
+[36m[1m[Codegen][0m Generating RCTThirdPartyComponentsProvider.mm[0m
+[36m[1m[Codegen][0m Crawling @react-native-community/datetimepicker library for components[0m
+[36m[1m[Codegen][0m Match found RNDateTimePicker -> RNDateTimePickerComponentView[0m
+[36m[1m[Codegen][0m [33m[DEPRECATED] @react-native-community/datetimepicker should add the 'ios.componentProvider' property in their codegenConfig[0m
+[36m[1m[Codegen][0m Generated artifact: /Users/rajeshsangapogu/Desktop/scamAwareness/ios/build/generated/ios/RCTThirdPartyComponentsProvider.mm[0m
+[36m[1m[Codegen][0m Generating RCTModulesProvider.h[0m
+[36m[1m[Codegen][0m Generated artifact: /Users/rajeshsangapogu/Desktop/scamAwareness/ios/build/generated/ios/RCTModuleProviders.h[0m
+[36m[1m[Codegen][0m Generating RCTModuleProviders.mm[0m
+[36m[1m[Codegen][0m Generated artifact: /Users/rajeshsangapogu/Desktop/scamAwareness/ios/build/generated/ios/RCTModuleProviders.mm[0m
+[36m[1m[Codegen][0m Generating RCTAppDependencyProvider[0m
+[36m[1m[Codegen][0m Generated artifact: /Users/rajeshsangapogu/Desktop/scamAwareness/ios/build/generated/ios/RCTAppDependencyProvider.h[0m
+[36m[1m[Codegen][0m Generated artifact: /Users/rajeshsangapogu/Desktop/scamAwareness/ios/build/generated/ios/RCTAppDependencyProvider.mm[0m
+[36m[1m[Codegen][0m Generated podspec: /Users/rajeshsangapogu/Desktop/scamAwareness/ios/build/generated/ios/ReactAppDependencyProvider.podspec[0m
+[36m[1m[Codegen][0m Generated podspec: /Users/rajeshsangapogu/Desktop/scamAwareness/ios/build/generated/ios/ReactCodegen.podspec[0m
+[36m[1m[Codegen][0m [33mDone.[0m
+Update all pods
+Updating local specs repositories
+Analyzing dependencies
+Fetching podspec for `DoubleConversion` from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`
+Fetching podspec for `RCT-Folly` from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`
+Fetching podspec for `boost` from `../node_modules/react-native/third-party-podspecs/boost.podspec`
+Fetching podspec for `fast_float` from `../node_modules/react-native/third-party-podspecs/fast_float.podspec`
+Fetching podspec for `fmt` from `../node_modules/react-native/third-party-podspecs/fmt.podspec`
+Fetching podspec for `glog` from `../node_modules/react-native/third-party-podspecs/glog.podspec`
+Fetching podspec for `hermes-engine` from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`
+[Hermes] Using release tarball from URL: https://repo1.maven.org/maven2/com/facebook/react/react-native-artifacts/0.79.1/react-native-artifacts-0.79.1-hermes-ios-debug.tar.gz
+Downloading dependencies
+Installing Firebase (11.12.0)

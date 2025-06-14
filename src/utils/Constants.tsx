@@ -10,9 +10,10 @@ export const transformResponse = (res: any) => {
 
     if (["jpg", "jpeg", "png", "gif", "webp"].includes(extension))
       return "image";
-    if (["mp4", "mov", "avi", "mkv", "webm"].includes(extension))
+    if (["video/mp4", "mov", "avi", "mkv", "webm"].includes(extension))
       return "video";
-    if (["mp3", "wav", "m4a", "aac"].includes(extension)) return "audio";
+    if (["mp3", "wav", "m4a", "aac", "audio/mp4"].includes(extension))
+      return "audio";
     return "other";
   };
 

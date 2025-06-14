@@ -21,6 +21,7 @@ import { queryClient } from "../../../App";
 import { DEFAULT_AVATAR } from "../../utils/Constants";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { ScrollView } from "react-native";
+import LineraBgContainer from "../../components/Container/LineraBgContainer";
 
 export const PostDetailScreen = ({ route }) => {
   const postId = route?.params?.postId;
@@ -170,53 +171,61 @@ export const PostDetailScreen = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.safeAreview}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <CustomHeader canGoback style={styles.pt} />
-        <PostCard key={1} {...post} noShadow />
-        <View style={{ padding: 10, paddingBottom: 30 }}>
-          <View style={styles.commentDes}>
-            <TextInput
-              placeholder="Add a comment..."
-              value={commentText}
-              onChangeText={setCommentText}
-              style={styles.commentinput}
-              multiline
-            />
-            <Ionicons
-              name="send"
-              color={commentText.length !== 0 ? "skyblue" : "#555"}
-              size={30}
-              style={{ alignSelf: "flex-end" }}
-              onPress={() => {
-                if (commentText.length !== 0) {
-                  handleSendComment();
+      <LineraBgContainer>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ flex: 1 }}
+        >
+          <CustomHeader canGoback style={styles.pt} />
+          <PostCard key={1} {...post} noShadow />
+          <View style={{ padding: 10, paddingBottom: 30 }}>
+            <View style={styles.commentDes}>
+              <TextInput
+                placeholder="Add a comment..."
+                value={commentText}
+                onChangeText={setCommentText}
+                style={styles.commentinput}
+                multiline
+              />
+              <Ionicons
+                name="send"
+                color={commentText.length !== 0 ? "skyblue" : "#555"}
+                size={30}
+                style={{ alignSelf: "flex-end" }}
+                onPress={() => {
+                  if (commentText.length !== 0) {
+                    handleSendComment();
+                  }
+                }}
+              />
+            </View>
+            <FlatList
+              data={commentsData}
+              // nestedScrollEnabled
+              scrollEnabled={false}
+              keyExtractor={(item, index) => item._id || index.toString()}
+              renderItem={renderItem}
+              ListFooterComponent={
+                hasNextPage ? (
+                  <Typography
+                    onPress={fetchNextPage}
+                    style={styles.loadMoreText}
+                  >
+                    {isFetchingNextPage ? "Loading..." : "Load More"}
+                  </Typography>
+                ) : null
+              }
+              ListEmptyComponent={<Typography>No comments yet</Typography>}
+              onEndReached={() => {
+                if (hasNextPage && !isFetchingNextPage) {
+                  fetchNextPage();
                 }
               }}
+              onEndReachedThreshold={0.5}
             />
           </View>
-          <FlatList
-            data={commentsData}
-            // nestedScrollEnabled
-            scrollEnabled={false}
-            keyExtractor={(item, index) => item._id || index.toString()}
-            renderItem={renderItem}
-            ListFooterComponent={
-              hasNextPage ? (
-                <Typography onPress={fetchNextPage} style={styles.loadMoreText}>
-                  {isFetchingNextPage ? "Loading..." : "Load More"}
-                </Typography>
-              ) : null
-            }
-            ListEmptyComponent={<Typography>No comments yet</Typography>}
-            onEndReached={() => {
-              if (hasNextPage && !isFetchingNextPage) {
-                fetchNextPage();
-              }
-            }}
-            onEndReachedThreshold={0.5}
-          />
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </LineraBgContainer>
     </SafeAreaView>
   );
 };

@@ -24,6 +24,7 @@ import { styles } from "./styles";
 import { checkAndRequestPermissions } from "./Constants";
 import AudioRecorderPlayer from "react-native-audio-recorder-player";
 import LineraBgContainer from "../../components/Container/LineraBgContainer";
+import { useGetProfile } from "../../services/hooks/useAuth";
 
 export default function EditorScreen({ navigation }) {
   const [text, setText] = useState("");
@@ -32,7 +33,8 @@ export default function EditorScreen({ navigation }) {
   const [isRecording, setIsRecording] = useState(false);
   const audioRecorderPlayer = new AudioRecorderPlayer();
   const { theme } = useAppTheme();
-  const { usserInfo } = useAppSelector((state) => state.login);
+  const { data: userProfile, refetch: getprofile } = useGetProfile();
+  console.log({ userProfile });
 
   const { mutate: uploadMedia } = useUploadMedia();
 
@@ -92,19 +94,25 @@ export default function EditorScreen({ navigation }) {
     });
   };
 
+  const [recordingUri, setRecordingUri] = useState<string | null>(null);
+
   const handleAudioRecord = async () => {
     try {
       if (isRecording) {
-        const result = await audioRecorderPlayer.stopRecorder();
+        await audioRecorderPlayer.stopRecorder();
         audioRecorderPlayer.removeRecordBackListener();
-        await new Promise((resolve) => setTimeout(resolve, 500)); // Give time to clean up
+        await new Promise((resolve) => setTimeout(resolve, 500)); // Allow cleanup time
         setIsRecording(false);
-        console.log("AUDIO RESULT", result);
+
+        if (!recordingUri) {
+          showToast("custom", "No audio file found");
+          return;
+        }
 
         const file = {
-          uri: result,
-          name: `audio_${Date.now()}.mp3`,
-          type: "audio/mp3",
+          uri: recordingUri,
+          name: `audio_${Date.now()}.mp4`,
+          type: "audio/mp4",
         };
 
         uploadMedia([file], {
@@ -112,13 +120,18 @@ export default function EditorScreen({ navigation }) {
             const transformed = transformResponse(res);
             setMedia((prev) => [...prev, ...transformed]);
           },
-          onError: () => {
+          onError: (err) => {
+            console.log("ERRORR AUDIO", err);
+
             showToast("custom", "Audio upload failed");
           },
         });
+
+        setRecordingUri(null); // Reset after upload
       } else {
         const uri = await audioRecorderPlayer.startRecorder();
         console.log("Recording started at:", uri);
+        setRecordingUri(uri); // Save uri to use on stop
         setIsRecording(true);
       }
     } catch (err) {
@@ -183,16 +196,16 @@ export default function EditorScreen({ navigation }) {
             <Image
               source={{
                 uri:
-                  usserInfo?.profilePicture.length !== 0
-                    ? usserInfo?.profilePicture
+                  userProfile?.profilePicture.length !== 0
+                    ? userProfile?.profilePicture
                     : DEFAULT_AVATAR,
               }}
               style={styles.avatar}
             />
             <View>
-              {usserInfo?.firstName.length !== 0 ? (
+              {userProfile?.firstName.length !== 0 ? (
                 <Text style={styles.username}>
-                  {usserInfo?.firstName} {usserInfo?.lastName}
+                  {userProfile?.firstName} {userProfile?.lastName}
                 </Text>
               ) : (
                 <Text style={styles.username}>Unknown</Text>
@@ -240,12 +253,12 @@ export default function EditorScreen({ navigation }) {
                   />
                 </Pressable>
                 {/* <Pressable onPress={handleAudioRecord}>
-                <Ionicons
-                  name={isRecording ? "stop-circle-outline" : "mic-outline"} // ⚠️ dynamic icon
-                  size={24}
-                  style={styles.icon}
-                />
-              </Pressable> */}
+                  <Ionicons
+                    name={isRecording ? "stop-circle-outline" : "mic-outline"} // ⚠️ dynamic icon
+                    size={24}
+                    style={styles.icon}
+                  />
+                </Pressable> */}
               </View>
               {text.length === 0 ? (
                 <View style={[styles.postBtn, { backgroundColor: theme.grey }]}>

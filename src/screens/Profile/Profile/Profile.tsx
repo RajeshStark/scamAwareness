@@ -22,7 +22,6 @@ import { useFocusEffect } from "@react-navigation/native";
 export default function ProfileScreen({ navigation }) {
   const { theme } = useAppTheme();
   const styles = createStyles(theme);
-  const usserInfo = useAppSelector((state) => state?.login?.usserInfo);
   const [activeTab, setActiveTab] = useState(1);
   const { data: userProfile, refetch: getprofile } = useGetProfile();
   console.log({ userProfile });
@@ -147,7 +146,7 @@ export default function ProfileScreen({ navigation }) {
               if (hasNextPage) fetchNextPage();
             }}
             onEndReachedThreshold={0.5}
-            // refreshing={isRefetching}
+            refreshing={isRefetching}
             onRefresh={refetch}
           />
         </>

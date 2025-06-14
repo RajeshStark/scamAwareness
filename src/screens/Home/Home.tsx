@@ -18,6 +18,7 @@ import { usePostList } from "../../services/hooks/usePost";
 import EmergencyTicker from "./Emergencyticker/EmergencyTicker";
 import { createStyles } from "./styles";
 import { useFocusEffect } from "@react-navigation/native";
+import { useGetProfile } from "../../services/hooks/useAuth";
 
 export default function Home({ navigation }) {
   const [fabOpen, setFabOpen] = useState(false);
@@ -33,6 +34,8 @@ export default function Home({ navigation }) {
     isRefetching,
     refetch,
   } = usePostList();
+  const { data: userProfile, refetch: getprofile } = useGetProfile();
+  console.log({ userProfile });
 
   const posts = data?.pages.flatMap((page) => page.output?.list || []) ?? [];
   console.log({ posts });

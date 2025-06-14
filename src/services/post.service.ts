@@ -40,6 +40,7 @@ export const PostService = {
     });
 
     console.log("Files at api", files);
+    console.log({ formData });
 
     return http.post(Api.UPLOAD_MULTIPLE_IMAGES, formData, {
       headers: {
