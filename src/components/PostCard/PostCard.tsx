@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -18,7 +18,7 @@ import {
   useRemoveInterest,
   useDelete,
 } from "../../services/hooks/usePost";
-
+import SoundPlayer from "react-native-sound-player";
 import Typography from "../Typography/Typography";
 import { useQueryClient } from "@tanstack/react-query";
 import { styles } from "./styles";
@@ -250,6 +250,40 @@ const PostCard: React.FC<PostCardProps> = ({
     ]);
   };
 
+  const [playingAudioIndex, setPlayingAudioIndex] = useState<number | null>(
+    null
+  );
+
+  const playOrPauseAudio = async (url: string, index: number) => {
+    try {
+      if (playingAudioIndex === index) {
+        SoundPlayer.pause();
+        setPlayingAudioIndex(null);
+      } else {
+        SoundPlayer.stop();
+        SoundPlayer.playUrl(url);
+        setPlayingAudioIndex(index);
+      }
+    } catch (e) {
+      console.log("Cannot play the sound file", e);
+    }
+  };
+
+  const stopAudio = () => {
+    try {
+      SoundPlayer.stop();
+      setPlayingAudioIndex(null);
+    } catch (e) {
+      console.log("Error stopping audio", e);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      stopAudio(); // Stop any playing audio on unmount
+    };
+  }, []);
+
   const content = (
     <View style={[styles.card, { elevation: noShadow ? 0 : 3 }]}>
       <View style={styles.header}>
@@ -296,6 +330,7 @@ const PostCard: React.FC<PostCardProps> = ({
               viewabilityConfig={viewConfigRef.current}
               renderItem={({ item, index }) => {
                 const isVideo = item.type.includes("video");
+                const isAudio = item.type.includes("audio");
                 const paused = pausedVideos[index] ?? true;
                 const muted = mutedVideos[index] ?? true;
 
@@ -342,6 +377,39 @@ const PostCard: React.FC<PostCardProps> = ({
                       >
                         <Ionicons name="expand" size={24} color="#fff" />
                       </TouchableOpacity>
+                    </TouchableOpacity>
+                  );
+                } else if (isAudio) {
+                  const isPlaying = playingAudioIndex === index;
+
+                  return (
+                    <TouchableOpacity
+                      style={[
+                        mediaWrapperStyle,
+                        {
+                          justifyContent: "center",
+                          alignItems: "center",
+                          backgroundColor: "#f0f0f0",
+                          padding: 20,
+                        },
+                      ]}
+                      onPress={() => playOrPauseAudio(item.url, index)}
+                    >
+                      <Ionicons
+                        name={isPlaying ? "pause" : "play"}
+                        size={32}
+                        color="#000"
+                        style={{ marginBottom: 10 }}
+                      />
+                      <Typography
+                        style={{
+                          fontSize: 10,
+                          textAlign: "center",
+                          paddingHorizontal: 5,
+                        }}
+                      >
+                        {item.url.split("/").pop()}
+                      </Typography>
                     </TouchableOpacity>
                   );
                 } else {

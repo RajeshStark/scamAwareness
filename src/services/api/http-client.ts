@@ -22,8 +22,6 @@ export const http = axios.create({
 http.interceptors.request.use(
   (config) => {
     const token = store?.getState()?.login?.userToken;
-    console.log(token);
-
     if (token) {
       config.headers["accessToken"] = token;
     }
@@ -36,7 +34,7 @@ http.interceptors.response.use(
   (response) => response,
   async (error) => {
     const errorResponse = error.message;
-    console.log("errorResponse ===", error?.response?.data, errorResponse);
+    // console.log("errorResponse ===", error?.response?.data, errorResponse);
     if (error?.response?.status === 401 || error?.response?.status === 403) {
       // Show toast or logout logic
       showToast("custom", error?.response?.data.error?.message);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Image,
   Pressable,
@@ -28,7 +28,9 @@ export default function EditorScreen({ navigation }) {
   const [title, setTitle] = useState("");
   const [media, setMedia] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
-  const audioRecorderPlayer = new AudioRecorderPlayer();
+  // const audioRecorderPlayer = new AudioRecorderPlayer();
+  const audioRecorderPlayer = useRef(new AudioRecorderPlayer()).current;
+  const [recordingUri, setRecordingUri] = useState<string | null>(null);
   const { theme } = useAppTheme();
   const { data: userProfile, refetch: getprofile } = useGetProfile();
 
@@ -90,22 +92,24 @@ export default function EditorScreen({ navigation }) {
     });
   };
 
-  const [recordingUri, setRecordingUri] = useState<string | null>(null);
-
   const handleAudioRecord = async () => {
-    try {
-      if (isRecording) {
-        const result = await audioRecorderPlayer.stopRecorder();
+    // const granted = await checkAndRequestPermissions();
+    // if (!granted) return showToast("custom", "Permissions not granted");
+
+    if (isRecording) {
+      try {
+        const result = await audioRecorderPlayer.stopRecorder(); // final URI
         audioRecorderPlayer.removeRecordBackListener();
         setIsRecording(false);
         setRecordingUri(result);
-        console.log("Recording saved at:", result);
+        console.log("Recording saved:", result);
 
         const file = {
           uri: result,
-          name: `audio_${Date.now()}.mp4`,
-          type: "audio/mp4",
+          name: `audio_${Date.now()}.m4a`, // adjust if needed
+          type: "audio/m4a", // confirm based on platform output
         };
+        console.log("file file", file);
 
         uploadMedia([file], {
           onSuccess: (res) => {
@@ -113,24 +117,29 @@ export default function EditorScreen({ navigation }) {
             setMedia((prev) => [...prev, ...transformed]);
           },
           onError: (err) => {
-            console.log("AUDIO UPLOAD ERROR", err);
-            showToast("custom", "Audio upload failed");
+            console.log("Upload error", err);
+            showToast("custom", "Upload failed");
           },
         });
 
         setRecordingUri(null);
-      } else {
+      } catch (e) {
+        console.error("Error stopping recorder:", e);
+      }
+    } else {
+      try {
         const uri = await audioRecorderPlayer.startRecorder();
         setIsRecording(true);
-        console.log("Recording started at:", uri);
+        console.log("Recording started at", uri);
 
         audioRecorderPlayer.addRecordBackListener((e) => {
+          // Optionally update UI with recording time
           return;
         });
+      } catch (e) {
+        console.error("Error starting recorder:", e);
+        showToast("custom", "Failed to start recording");
       }
-    } catch (err) {
-      console.error("Audio record error:", err);
-      showToast("custom", "Audio record failed");
     }
   };
 

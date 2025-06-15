@@ -22,6 +22,9 @@ export const usePostList = () => {
 export const useUploadMedia = () =>
   useMutation({
     mutationFn: PostService.uploadMedia,
+    onError: (err) => {
+      console.log("Error", err?.response);
+    },
   });
 
 export const useLike = () =>

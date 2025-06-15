@@ -8,19 +8,20 @@ export const checkAndRequestPermissions = async () => {
       PermissionsAndroid.PERMISSIONS.CAMERA,
       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
     ];
 
-    const sdkInt =
-      Platform.constants?.Release || parseInt(Platform.Version, 10);
-    if (sdkInt >= 33) {
-      permissions.push(
-        PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
-        PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
-        PermissionsAndroid.PERMISSIONS.READ_MEDIA_AUDIO
-      );
-    } else {
-      permissions.push(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
-    }
+    // const sdkInt =
+    //   Platform.constants?.Release || parseInt(Platform.Version, 10);
+    // if (sdkInt >= 33) {
+    //   permissions.push(
+    //     PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+    //     PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
+    //     PermissionsAndroid.PERMISSIONS.READ_MEDIA_AUDIO
+    //   );
+    // } else {
+    //   permissions.push(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+    // }
 
     const statuses = await PermissionsAndroid.requestMultiple(permissions);
     const allGranted = Object.values(statuses).every(
