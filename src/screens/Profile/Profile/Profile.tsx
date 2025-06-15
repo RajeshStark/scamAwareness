@@ -119,7 +119,9 @@ export default function ProfileScreen({ navigation }) {
         <FlatList
           data={userProfile?.posts}
           contentContainerStyle={{ paddingBottom: 100 }}
-          renderItem={({ item, index }) => <PostCard key={index} {...item} />}
+          renderItem={({ item, index }) => (
+            <PostCard key={index} {...item} from={"myProfile"} />
+          )}
           keyExtractor={(item, index) => index.toString()}
           ListEmptyComponent={
             <View style={[styles.center]}>

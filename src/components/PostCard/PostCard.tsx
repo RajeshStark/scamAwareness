@@ -16,6 +16,7 @@ import {
   useDislike,
   useAddInterest,
   useRemoveInterest,
+  useDelete,
 } from "../../services/hooks/usePost";
 
 import Typography from "../Typography/Typography";
@@ -55,6 +56,7 @@ type PostCardProps = {
   isInterested?: boolean;
   _id: string;
   like: like;
+  from: string;
 };
 
 const PostCard: React.FC<PostCardProps> = ({
@@ -70,6 +72,7 @@ const PostCard: React.FC<PostCardProps> = ({
   _id,
   like,
   name,
+  from,
 }) => {
   const avatar = userDetails?.[0]?.profilePicture || DEFAULT_AVATAR;
   const username =
@@ -105,7 +108,7 @@ const PostCard: React.FC<PostCardProps> = ({
 
   const { mutate: likeing } = useLike();
   const { mutate: dislike } = useDislike();
-
+  const { mutate: deletePost } = useDelete();
   const { mutate: addInterest } = useAddInterest();
   const { mutate: removeInterest } = useRemoveInterest();
 
@@ -230,6 +233,23 @@ const PostCard: React.FC<PostCardProps> = ({
     });
   };
 
+  const postDelete = (id: string) => {
+    Alert.alert("Delete", "Are you sure you want to delete?", [
+      {
+        text: "Cancel",
+        onPress: () => {},
+        style: "cancel",
+      },
+      {
+        text: "Ok",
+        onPress: () => {
+          deletePost({ id: id });
+        },
+        style: "cancel",
+      },
+    ]);
+  };
+
   const content = (
     <View style={[styles.card, { elevation: noShadow ? 0 : 3 }]}>
       <View style={styles.header}>
@@ -239,6 +259,16 @@ const PostCard: React.FC<PostCardProps> = ({
             <Typography style={styles.username}>{displayName}</Typography>
           </View>
         </View>
+        {from === "myProfile" && (
+          <Ionicons
+            name="trash-outline"
+            size={20}
+            color={"#f3718b"}
+            onPress={() => {
+              postDelete(_id);
+            }}
+          />
+        )}
       </View>
       <View style={styles.contentContainer}>
         <Pressable
@@ -271,8 +301,8 @@ const PostCard: React.FC<PostCardProps> = ({
 
                 const mediaWrapperStyle = {
                   ...styles.media,
-                  borderRadius: 12, // Apply same radius
-                  overflow: "hidden", // Ensure child respects it
+                  borderRadius: 12,
+                  overflow: "hidden",
                 };
 
                 if (isVideo) {

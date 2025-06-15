@@ -59,4 +59,6 @@ export const PostService = {
 
   listInterest: (payload: { page: number; pageLimit: number }) =>
     http.post(Api.GET_INTEREST_POST, payload),
+
+  delete: (payload: { id: string }) => http.post(Api.POST_DELETE, payload),
 };

@@ -21,6 +21,7 @@ export const Api = {
   ADD_INTEREST_POST: "api/post/add-Interested-post",
   REMOVE_INTEREST_POST: "api/post/remove-Interested-post",
   GET_INTEREST_POST: "api/post/get-Interested-post",
+  POST_DELETE: "api/post/delete",
 
   // Explore
   SEARCH: "api/post/search",

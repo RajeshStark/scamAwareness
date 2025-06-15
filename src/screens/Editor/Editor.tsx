@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   Image,
-  PermissionsAndroid,
-  Platform,
   Pressable,
   ScrollView,
   Text,
@@ -10,21 +8,20 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import AudioRecorderPlayer from "react-native-audio-recorder-player";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import LineraBgContainer from "../../components/Container/LineraBgContainer";
 import CustomHeader from "../../components/Input/Header/Header";
 import { showToast } from "../../components/Toast";
-import { useAppSelector } from "../../hooks/useAppselector";
 import useAppTheme from "../../hooks/useAppTheme";
+import { useGetProfile } from "../../services/hooks/useAuth";
 import { useUploadMedia } from "../../services/hooks/usePost";
 import { PostService } from "../../services/post.service";
 import { DEFAULT_AVATAR, transformResponse } from "../../utils/Constants";
+import { checkAndRequestPermissions } from "./Constants";
 import MediaView from "./MediaView/MediaView";
 import { styles } from "./styles";
-import { checkAndRequestPermissions } from "./Constants";
-import AudioRecorderPlayer from "react-native-audio-recorder-player";
-import LineraBgContainer from "../../components/Container/LineraBgContainer";
-import { useGetProfile } from "../../services/hooks/useAuth";
 
 export default function EditorScreen({ navigation }) {
   const [text, setText] = useState("");
@@ -34,7 +31,6 @@ export default function EditorScreen({ navigation }) {
   const audioRecorderPlayer = new AudioRecorderPlayer();
   const { theme } = useAppTheme();
   const { data: userProfile, refetch: getprofile } = useGetProfile();
-  console.log({ userProfile });
 
   const { mutate: uploadMedia } = useUploadMedia();
 
@@ -99,18 +95,14 @@ export default function EditorScreen({ navigation }) {
   const handleAudioRecord = async () => {
     try {
       if (isRecording) {
-        await audioRecorderPlayer.stopRecorder();
+        const result = await audioRecorderPlayer.stopRecorder();
         audioRecorderPlayer.removeRecordBackListener();
-        await new Promise((resolve) => setTimeout(resolve, 500)); // Allow cleanup time
         setIsRecording(false);
-
-        if (!recordingUri) {
-          showToast("custom", "No audio file found");
-          return;
-        }
+        setRecordingUri(result);
+        console.log("Recording saved at:", result);
 
         const file = {
-          uri: recordingUri,
+          uri: result,
           name: `audio_${Date.now()}.mp4`,
           type: "audio/mp4",
         };
@@ -121,18 +113,20 @@ export default function EditorScreen({ navigation }) {
             setMedia((prev) => [...prev, ...transformed]);
           },
           onError: (err) => {
-            console.log("ERRORR AUDIO", err);
-
+            console.log("AUDIO UPLOAD ERROR", err);
             showToast("custom", "Audio upload failed");
           },
         });
 
-        setRecordingUri(null); // Reset after upload
+        setRecordingUri(null);
       } else {
         const uri = await audioRecorderPlayer.startRecorder();
-        console.log("Recording started at:", uri);
-        setRecordingUri(uri); // Save uri to use on stop
         setIsRecording(true);
+        console.log("Recording started at:", uri);
+
+        audioRecorderPlayer.addRecordBackListener((e) => {
+          return;
+        });
       }
     } catch (err) {
       console.error("Audio record error:", err);
@@ -252,13 +246,13 @@ export default function EditorScreen({ navigation }) {
                     style={styles.icon}
                   />
                 </Pressable>
-                {/* <Pressable onPress={handleAudioRecord}>
+                <Pressable onPress={handleAudioRecord}>
                   <Ionicons
-                    name={isRecording ? "stop-circle-outline" : "mic-outline"} // ⚠️ dynamic icon
+                    name={isRecording ? "stop-circle-outline" : "mic-outline"}
                     size={24}
                     style={styles.icon}
                   />
-                </Pressable> */}
+                </Pressable>
               </View>
               {text.length === 0 ? (
                 <View style={[styles.postBtn, { backgroundColor: theme.grey }]}>

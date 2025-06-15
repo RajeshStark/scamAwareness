@@ -1,4 +1,8 @@
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { PostService } from "../post.service";
 
 export const usePostList = () => {
@@ -54,6 +58,17 @@ export const useRemoveInterest = () =>
   useMutation({
     mutationFn: PostService.removeInterest,
   });
+
+export const useDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: PostService.delete,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["interestpost"] });
+    },
+  });
+};
 
 export const useGetInterest = () => {
   return useInfiniteQuery({

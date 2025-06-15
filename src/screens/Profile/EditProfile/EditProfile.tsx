@@ -28,6 +28,7 @@ export default function EditProfileScreen({ navigation }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [profilepic, setProfilePic] = useState("");
   const [coverPic, setCoverPic] = useState("");
   const { mutate: uploadMedia } = useUploadMedia();
@@ -42,6 +43,7 @@ export default function EditProfileScreen({ navigation }) {
       setPhoneNumber(userProfile.phoneNumber || "");
       setProfilePic(userProfile?.profilePicture || "");
       setCoverPic(userProfile?.coverPicture || "");
+      setEmail(userProfile?.email);
     }
   }, [userProfile]);
 
@@ -163,6 +165,22 @@ export default function EditProfileScreen({ navigation }) {
               value={lastName}
               onChangeText={setLastName}
               style={styles.input}
+            />
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={[styles.inputBox, { borderColor: "grey" }]}>
+            <Ionicons
+              name="mail-outline"
+              size={16}
+              style={[styles.icon, { color: "grey" }]}
+            />
+            <TextInput
+              placeholder="Email"
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+              editable={false}
             />
           </View>
         </View>
