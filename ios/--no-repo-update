@@ -94,3 +94,172 @@ Fetching podspec for `hermes-engine` from `../node_modules/react-native/sdks/her
 [Hermes] Using release tarball from URL: https://repo1.maven.org/maven2/com/facebook/react/react-native-artifacts/0.79.1/react-native-artifacts-0.79.1-hermes-ios-debug.tar.gz
 Downloading dependencies
 Installing Firebase (11.12.0)
+Installing FirebaseCore (11.12.0)
+Installing FirebaseCoreExtension (11.12.0)
+Installing FirebaseCoreInternal (11.12.0)
+Installing FirebaseInstallations (11.12.0)
+Installing FirebaseMessaging (11.12.0)
+
+――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+
+### Command
+
+```
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/bin/pod update
+```
+
+### Report
+
+* What did you do?
+
+* What did you expect to happen?
+
+* What happened instead?
+
+
+### Stack
+
+```
+   CocoaPods : 1.16.2
+        Ruby : ruby 3.3.5 (2024-09-03 revision ef084cc8f4) [arm64-darwin23]
+    RubyGems : 3.5.18
+        Host : macOS 15.3.1 (24D70)
+       Xcode : 16.0 (16A242d)
+         Git : git version 2.39.5 (Apple Git-154)
+Ruby lib dir : /opt/homebrew/Cellar/ruby/3.3.5/lib
+Repositories : trunk - CDN - https://cdn.cocoapods.org/
+```
+
+### Plugins
+
+```
+cocoapods-deintegrate : 1.0.5
+cocoapods-plugins     : 1.0.0
+cocoapods-search      : 1.0.1
+cocoapods-trunk       : 1.6.0
+cocoapods-try         : 1.2.0
+```
+
+### Podfile
+
+```ruby
+# Resolve react_native_pods.rb with node to allow for hoisting
+require Pod::Executable.execute_command('node', ['-p',
+  'require.resolve(
+    "react-native/scripts/react_native_pods.rb",
+    {paths: [process.argv[1]]},
+  )', __dir__]).strip
+
+platform :ios, min_ios_version_supported
+prepare_react_native_project!
+
+linkage = ENV['USE_FRAMEWORKS']
+if linkage != nil
+  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+  use_frameworks! :linkage => linkage.to_sym
+end
+
+target 'scamAwareness' do
+  config = use_native_modules!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # An absolute path to your application root.
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
+
+  post_install do |installer|
+    # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
+    react_native_post_install(
+      installer,
+      config[:reactNativePath],
+      :mac_catalyst_enabled => false,
+      # :ccache_enabled => true
+    )
+  end
+end
+```
+
+### Error
+
+```
+SignalException - SIGHUP
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/executable.rb:180:in `initialize'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/executable.rb:180:in `initialize'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/executable.rb:180:in `exception'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/executable.rb:180:in `value'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/executable.rb:180:in `block in popen3'
+/opt/homebrew/Cellar/ruby/3.3.5/lib/ruby/3.3.0/open3.rb:540:in `popen_run'
+/opt/homebrew/Cellar/ruby/3.3.5/lib/ruby/3.3.0/open3.rb:235:in `popen3'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/executable.rb:175:in `popen3'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/executable.rb:67:in `execute_command'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/downloader.rb:142:in `execute_command'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-downloader-2.1/lib/cocoapods-downloader/base.rb:175:in `block in executable'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-downloader-2.1/lib/cocoapods-downloader/git.rb:107:in `block in clone'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/downloader.rb:175:in `block in ui_sub_action'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/user_interface.rb:64:in `section'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/downloader.rb:174:in `ui_sub_action'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-downloader-2.1/lib/cocoapods-downloader/git.rb:105:in `clone'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-downloader-2.1/lib/cocoapods-downloader/git.rb:73:in `download!'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-downloader-2.1/lib/cocoapods-downloader/base.rb:83:in `block in download'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/downloader.rb:159:in `block in ui_action'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/user_interface.rb:64:in `section'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/downloader.rb:158:in `ui_action'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-downloader-2.1/lib/cocoapods-downloader/base.rb:81:in `download'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/downloader.rb:110:in `download_source'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/downloader.rb:77:in `download_request'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/downloader/cache.rb:256:in `download'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/downloader/cache.rb:239:in `block in uncached_pod'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/downloader/cache.rb:266:in `in_tmpdir'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/downloader/cache.rb:238:in `uncached_pod'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/downloader/cache.rb:33:in `download_pod'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/downloader.rb:42:in `download'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/installer/pod_source_downloader.rb:69:in `download!'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/installer/pod_source_installer.rb:117:in `download_source'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/installer/pod_source_installer.rb:67:in `install!'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/installer.rb:621:in `install_source_of_pod'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/installer.rb:539:in `block (2 levels) in install_pod_sources'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/user_interface.rb:86:in `titled_section'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/installer.rb:538:in `block in install_pod_sources'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/installer.rb:535:in `each'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/installer.rb:535:in `install_pod_sources'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/installer.rb:258:in `block in download_dependencies'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/user_interface.rb:64:in `section'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/installer.rb:257:in `download_dependencies'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/installer.rb:163:in `install!'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/command/update.rb:63:in `run'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/claide-1.1.0/lib/claide/command.rb:334:in `run'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/lib/cocoapods/command.rb:52:in `run'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/gems/cocoapods-1.16.2/bin/pod:55:in `<top (required)>'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/bin/pod:25:in `load'
+/opt/homebrew/Cellar/cocoapods/1.16.2/libexec/bin/pod:25:in `<main>'
+```
+
+――― TEMPLATE END ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+
+[!] Oh no, an error occurred.
+
+Search for existing GitHub issues similar to yours:
+https://github.com/CocoaPods/CocoaPods/search?q=SIGHUP&type=Issues
+
+If none exists, create a ticket, with the template displayed above, on:
+https://github.com/CocoaPods/CocoaPods/issues/new
+
+Be sure to first read the contributing guide for details on how to properly submit a ticket:
+https://github.com/CocoaPods/CocoaPods/blob/master/CONTRIBUTING.md
+
+Don't forget to anonymize any private data!
+
+Looking for related issues on cocoapods/cocoapods...
+ - Command PhaseScriptExecution failed with a nonzero exit code -- rsync error: received SIGINT, SIGTERM, or SIGHUP (code 20)
+   https://github.com/CocoaPods/CocoaPods/issues/12060 [open] [9 comments]
+   10 Mar 2024
+
+ - ERROR | xcodebuild: Returned an unsuccessful exit code
+   https://github.com/CocoaPods/CocoaPods/issues/12308 [open] [2 comments]
+   30 May 2024
+
+ - PhaseScriptExecution Error: resources.sh: No such file or directory
+   https://github.com/CocoaPods/CocoaPods/issues/8677 [open] [13 comments]
+   22 Sep 2023
+

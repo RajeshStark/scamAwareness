@@ -71,7 +71,7 @@ const Container: React.FC<ContainerProps> = ({
       <KeyboardAvoidingView
         enabled={enableKeyboardAvoiding}
         style={styles.headingcontainer}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <TouchableWithoutFeedback onPress={dismissKeyboard}>
           {withScroll ? (
