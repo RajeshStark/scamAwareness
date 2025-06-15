@@ -172,10 +172,7 @@ export const PostDetailScreen = ({ route }) => {
   return (
     <SafeAreaView style={styles.safeAreview}>
       <LineraBgContainer>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flex: 1 }}
-        >
+        <ScrollView showsVerticalScrollIndicator={false}>
           <CustomHeader canGoback style={styles.pt} />
           <PostCard key={1} {...post} noShadow />
           <View style={{ padding: 10, paddingBottom: 30 }}>
@@ -201,7 +198,6 @@ export const PostDetailScreen = ({ route }) => {
             </View>
             <FlatList
               data={commentsData}
-              // nestedScrollEnabled
               scrollEnabled={false}
               keyExtractor={(item, index) => item._id || index.toString()}
               renderItem={renderItem}

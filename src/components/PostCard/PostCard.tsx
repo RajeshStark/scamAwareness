@@ -135,6 +135,7 @@ const PostCard: React.FC<PostCardProps> = ({
             if (response.status) {
               updatePostLikeStatus(true);
             }
+            queryClient.refetchQueries(["post", _id]);
           },
         }
       );
@@ -152,6 +153,7 @@ const PostCard: React.FC<PostCardProps> = ({
             if (response.status) {
               updatePostLikeStatus(false);
             }
+            queryClient.refetchQueries(["post", _id]);
           },
         }
       );
