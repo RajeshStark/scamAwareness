@@ -11,12 +11,14 @@ type props = {
   title?: string;
   style?: any;
   right?: React.ReactNode;
+  color?: string;
 };
 export default function CustomHeader({
   canGoback,
   title,
   style,
   right,
+  color,
 }: props) {
   const { theme } = useAppTheme();
   const navigation = useNavigation();
@@ -27,7 +29,7 @@ export default function CustomHeader({
           <Ionicons
             name="arrow-back-outline"
             size={20}
-            color={theme.txtblack}
+            color={color ? color : theme.txtblack}
             style={{ alignSelf: "flex-start" }}
             onPress={() => navigation.goBack()}
           />

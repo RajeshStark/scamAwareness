@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 import { width } from "../../../utils/Dimensions";
 
 export const styles = StyleSheet.create({
@@ -20,15 +20,16 @@ export const styles = StyleSheet.create({
   },
   changeCoverBtn: {
     position: "absolute",
-    top: 10,
+    top: StatusBar.currentHeight,
     right: 10,
-    // backgroundColor: "transparent",
+    backgroundColor: "#fff",
     borderRadius: 20,
     paddingHorizontal: 10,
     paddingVertical: 4,
     flexDirection: "row",
     alignItems: "center",
     width: "auto",
+    // paddingTop: StatusBar.currentHeight,
   },
   changeCoverText: {
     fontSize: 12,

@@ -4,6 +4,7 @@ import {
   ImageBackground,
   Pressable,
   SafeAreaView,
+  StatusBar,
   Text,
   TextInput,
   TouchableOpacity,
@@ -23,6 +24,8 @@ import { launchImageLibrary } from "react-native-image-picker";
 import { DEFAULT_AVATAR, transformResponse } from "../../../utils/Constants";
 import { showToast } from "../../../components/Toast";
 import { useUploadMedia } from "../../../services/hooks/usePost";
+import useAppTheme from "../../../hooks/useAppTheme";
+import { width } from "../../../utils/Dimensions";
 
 export default function EditProfileScreen({ navigation }) {
   const [firstName, setFirstName] = useState("");
@@ -35,6 +38,7 @@ export default function EditProfileScreen({ navigation }) {
   const queryClient = useQueryClient();
   const { data: userProfile } = useGetProfile();
   const updateMutation = useUpdateProfile();
+  const { theme } = useAppTheme();
 
   useEffect(() => {
     if (userProfile) {
@@ -97,30 +101,29 @@ export default function EditProfileScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ paddingTop: 20 }}>
-        <CustomHeader
-          canGoback
-          style={{
-            backgroundColor: `rgba(0,0,0,0.4)`,
-            width: "100%",
-            padding: 10,
-          }}
-          right={
-            <TouchableOpacity
-              style={styles.changeCoverBtn}
-              onPress={() => handlePick("cover")}
-            >
-              <Text style={styles.changeCoverText}>Change Cover</Text>
-              <Ionicons name="pencil" size={14} color="#333" />
-            </TouchableOpacity>
-          }
-        />
-      </View>
       {coverPic !== "" ? (
         <ImageBackground
           style={styles.coverWrapperimg}
           source={{ uri: coverPic }}
         >
+          <CustomHeader
+            canGoback
+            color={theme?.white}
+            style={{
+              width: width,
+              padding: 10,
+              paddingTop: StatusBar.currentHeight,
+            }}
+            right={
+              <TouchableOpacity
+                style={styles.changeCoverBtn}
+                onPress={() => handlePick("cover")}
+              >
+                <Text style={styles.changeCoverText}>Change Cover</Text>
+                <Ionicons name="pencil" size={14} color="#333" />
+              </TouchableOpacity>
+            }
+          />
           <Pressable style={styles.profilePicWrapper} onPress={handlePick}>
             <Image
               source={{
@@ -133,6 +136,22 @@ export default function EditProfileScreen({ navigation }) {
         </ImageBackground>
       ) : (
         <View style={styles.coverWrapper}>
+          <CustomHeader
+            canGoback
+            style={{
+              width: width,
+              padding: 10,
+            }}
+            right={
+              <TouchableOpacity
+                style={styles.changeCoverBtn}
+                onPress={() => handlePick("cover")}
+              >
+                <Text style={styles.changeCoverText}>Change Cover</Text>
+                <Ionicons name="pencil" size={14} color="#333" />
+              </TouchableOpacity>
+            }
+          />
           <Pressable style={styles.profilePicWrapper} onPress={handlePick}>
             <Image
               source={{
