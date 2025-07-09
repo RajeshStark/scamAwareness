@@ -15,9 +15,11 @@ import { height, width } from "../../utils/Dimensions";
 import { Image } from "react-native";
 import Typography from "../../components/Typography/Typography";
 import Fonts from "../../utils/Fonts";
+import useAppTheme from "../../hooks/useAppTheme";
 
 export default function EmergencyScreen() {
   const [text, setText] = useState("");
+  const { theme } = useAppTheme();
 
   if (true) {
     return (
@@ -29,7 +31,7 @@ export default function EmergencyScreen() {
             justifyContent: "center",
           }}
         >
-          <Typography style={{ fontFamily: Fonts.Bold }}>
+          <Typography style={{ fontFamily: Fonts.Bold, color: "#000" }}>
             Coming soon
           </Typography>
         </View>

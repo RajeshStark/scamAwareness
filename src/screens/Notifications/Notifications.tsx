@@ -7,9 +7,10 @@ import {
   FlatList,
   ActivityIndicator,
   SafeAreaView,
+  StatusBar,
 } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { styles } from "./styles";
+
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getNotifications } from "../../services/noitification.service";
 import dayjs from "dayjs";
@@ -17,6 +18,9 @@ import isToday from "dayjs/plugin/isToday";
 import isYesterday from "dayjs/plugin/isYesterday";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import { DEFAULT_AVATAR } from "../../utils/Constants";
+import useAppTheme from "../../hooks/useAppTheme";
+import { createStyles } from "./styles";
+import LineraBgContainer from "../../components/Container/LineraBgContainer";
 
 dayjs.extend(isToday);
 dayjs.extend(isYesterday);
@@ -29,6 +33,9 @@ export default function NotificationScreen() {
       queryFn: getNotifications,
       getNextPageParam: (lastPage) => lastPage.nextPage,
     });
+
+  const { theme, isDark } = useAppTheme();
+  const styles = createStyles(theme, isDark);
 
   const flatData = data?.pages.flatMap((page) => page.notifications) || [];
   const groupedNotifications = groupNotifications(flatData);
@@ -72,9 +79,17 @@ export default function NotificationScreen() {
     );
   };
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={[styles.content, { paddingHorizontal: 16 }]}>
+  const renderContent = () => {
+    return (
+      <View
+        style={[
+          styles.content,
+          {
+            paddingHorizontal: 16,
+            backgroundColor: isDark ? "transparent" : "#fff",
+          },
+        ]}
+      >
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Notifications</Text>
         </View>
@@ -98,6 +113,20 @@ export default function NotificationScreen() {
           />
         )}
       </View>
+    );
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar
+        backgroundColor={theme.white}
+        barStyle={isDark ? "light-content" : "dark-content"}
+      />
+      {isDark ? (
+        <LineraBgContainer>{renderContent()}</LineraBgContainer>
+      ) : (
+        <>{renderContent()}</>
+      )}
     </SafeAreaView>
   );
 }
