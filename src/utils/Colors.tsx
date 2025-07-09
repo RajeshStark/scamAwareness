@@ -10,6 +10,8 @@ export const LightColors = {
   info: "#4D81E7",
   disable: "#898989",
   error: "#f22c3d",
+  txt1: "#002060",
+  cardBg: "#fff",
 };
 
 export const DarkColors = {
@@ -22,4 +24,6 @@ export const DarkColors = {
   info: "#4D81E7",
   disable: "#898989",
   error: "#f22c3d",
+  txt1: "#FFF",
+  cardBg: "#35002d",
 };

@@ -11,8 +11,9 @@ import {
 import Typography from "../Typography/Typography";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Video from "react-native-video";
-import { styles } from "./styles";
 import AudioPostCard from "./AudioPostCard";
+import { createStyles } from "./styles";
+import useAppTheme from "../../hooks/useAppTheme";
 
 const PostContent = ({
   name,
@@ -26,6 +27,9 @@ const PostContent = ({
 }) => {
   const { pausedVideos, mutedVideos, playingAudioIndex, currentMediaIndex } =
     state;
+
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   const renderMedia = ({ item, index }) => {
     const isVideo = item.type.includes("video");

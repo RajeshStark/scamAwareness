@@ -15,12 +15,16 @@ import PostContent from "./PostContent";
 import PostFooter from "./PostFooter";
 import VideoModal from "./VideoModal";
 import { usePostCardLogic } from "./hooks";
-import { styles } from "./styles";
+
 import { PostCardProps } from "./types";
+import useAppTheme from "../../hooks/useAppTheme";
+import { createStyles } from "./styles";
 
 const PostCard: React.FC<PostCardProps> = (props) => {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   const { state, handlers, expandedVideo, setExpandedVideo, stopAudio } =
     usePostCardLogic(props, {

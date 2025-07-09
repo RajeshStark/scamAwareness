@@ -3,7 +3,8 @@ import React from "react";
 import { View, Pressable } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Typography from "../Typography/Typography";
-import { styles } from "./styles";
+import { createStyles } from "./styles";
+import useAppTheme from "../../hooks/useAppTheme";
 
 const PostFooter = ({
   isLiked,
@@ -15,6 +16,8 @@ const PostFooter = ({
   navigation,
   handlers,
 }) => {
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
   return (
     <View style={styles.footer}>
       <Pressable

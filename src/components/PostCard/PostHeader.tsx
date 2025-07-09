@@ -3,8 +3,10 @@ import React from "react";
 import { View, Image } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Typography from "../Typography/Typography";
-import { styles } from "./styles";
+
 import { DEFAULT_AVATAR } from "../../utils/Constants";
+import useAppTheme from "../../hooks/useAppTheme";
+import { createStyles } from "./styles";
 
 const PostHeader = ({ userDetails, from, _id, onDelete }) => {
   const avatar = userDetails?.[0]?.profilePicture || DEFAULT_AVATAR;
@@ -13,6 +15,8 @@ const PostHeader = ({ userDetails, from, _id, onDelete }) => {
     " " +
     (userDetails?.[0]?.lastName || "");
   const displayName = username.trim() || "Admin";
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   return (
     <View style={styles.header}>

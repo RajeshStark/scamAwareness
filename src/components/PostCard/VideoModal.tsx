@@ -3,9 +3,12 @@ import React from "react";
 import { Modal, TouchableOpacity, View, StyleSheet } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Video from "react-native-video";
-import { styles } from "./styles";
+import { createStyles } from "./styles";
+import useAppTheme from "../../hooks/useAppTheme";
 
 const VideoModal = ({ url, onClose }) => {
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
   return (
     <Modal visible transparent animationType="slide" onRequestClose={onClose}>
       <TouchableOpacity style={styles.modalCloseIcon} onPress={onClose}>

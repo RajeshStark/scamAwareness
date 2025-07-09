@@ -9,7 +9,8 @@ import {
 } from "react-native";
 import SoundPlayer from "react-native-sound-player";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { styles } from "./styles";
+import { createStyles } from "./styles";
+import useAppTheme from "../../hooks/useAppTheme";
 
 const AUDIO_URL =
   "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3";
@@ -22,6 +23,9 @@ const AudioPostCard = ({ post }) => {
     Array.from({ length: 20 }, () => new Animated.Value(1))
   ).current;
   const intervalRef = useRef(null);
+
+  const { theme } = useAppTheme();
+  const styles = createStyles(theme);
 
   useEffect(() => {
     const onFinishedLoading = (meta) => {
