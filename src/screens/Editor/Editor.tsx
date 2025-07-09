@@ -195,28 +195,27 @@ export default function EditorScreen({ navigation }) {
       <ScrollView style={styles.container}>
         <CustomHeader canGoback />
         <View>
-          <View style={styles.header}>
-            <Image
-              source={{
-                uri:
-                  userProfile?.profilePicture.length !== 0
-                    ? userProfile?.profilePicture
-                    : DEFAULT_AVATAR,
-              }}
-              style={styles.avatar}
-            />
-            <View>
-              {userProfile?.firstName.length !== 0 ? (
-                <Text style={styles.username}>
-                  {userProfile?.firstName} {userProfile?.lastName}
-                </Text>
-              ) : (
-                <Text style={styles.username}>Unknown</Text>
-              )}
-            </View>
-          </View>
-
           <View style={styles.inputCard}>
+            <View style={styles.header}>
+              <Image
+                source={{
+                  uri:
+                    userProfile?.profilePicture.length !== 0
+                      ? userProfile?.profilePicture
+                      : DEFAULT_AVATAR,
+                }}
+                style={styles.avatar}
+              />
+              <View>
+                {userProfile?.firstName.length !== 0 ? (
+                  <Text style={styles.username}>
+                    {userProfile?.firstName} {userProfile?.lastName}
+                  </Text>
+                ) : (
+                  <Text style={styles.username}>Unknown</Text>
+                )}
+              </View>
+            </View>
             <TextInput
               placeholder="Write subject...."
               value={title}
@@ -232,6 +231,9 @@ export default function EditorScreen({ navigation }) {
               style={styles.textInput}
             />
 
+            <View
+              style={{ height: 0.3, width: "100%", backgroundColor: "grey" }}
+            />
             <View style={styles.inputActions}>
               <View style={{ flexDirection: "row", gap: 16 }}>
                 <Pressable onPress={handlePick}>
@@ -263,6 +265,7 @@ export default function EditorScreen({ navigation }) {
                   />
                 </Pressable>
               </View>
+
               {text.length === 0 ? (
                 <View style={[styles.postBtn, { backgroundColor: theme.grey }]}>
                   <Text style={styles.postBtnText}>Post</Text>

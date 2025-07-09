@@ -64,6 +64,7 @@ export default function Home({ navigation }) {
             data={posts}
             scrollEnabled
             style={{ marginBottom: 90, marginTop: 30 }}
+            contentContainerStyle={{ paddingBottom: 15 }}
             keyExtractor={(item, index) => item._id + index}
             renderItem={({ item, index }) => <PostCard key={index} {...item} />}
             ListEmptyComponent={

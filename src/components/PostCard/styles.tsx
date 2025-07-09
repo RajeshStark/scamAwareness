@@ -64,7 +64,7 @@ export const createStyles = (theme: Theme) =>
     },
     iconText: {
       marginLeft: 4,
-      color: "#555",
+      color: theme.postIcons,
       fontSize: 13,
     },
     mediaWrapper: {

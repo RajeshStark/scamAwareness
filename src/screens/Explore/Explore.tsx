@@ -142,7 +142,7 @@ export default function SearchScreen({ navigation }) {
               <Ionicons
                 name="search"
                 size={20}
-                color={theme.txtblack}
+                color={"#111827"}
                 style={{ marginLeft: 10 }}
               />
             </Pressable>
@@ -153,7 +153,7 @@ export default function SearchScreen({ navigation }) {
               <Text style={styles.recentHeader}>Recent searches</Text>
               {recentSearches.map((item) => (
                 <View key={item} style={styles.recentItem}>
-                  <Ionicons name="search" size={16} color="#666" />
+                  <Ionicons name="search" size={16} color={theme.postIcons} />
                   <Text style={styles.recentText}>{item}</Text>
                   <Pressable onPress={() => handleClearSearch(item)}>
                     <Ionicons name="close" size={24} color={theme.txtblack} />

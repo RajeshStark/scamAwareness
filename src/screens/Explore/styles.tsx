@@ -28,12 +28,12 @@ export const createStyles = (theme: Theme) =>
     },
     recentContainer: {
       marginBottom: 20,
-      backgroundColor: theme.white,
+      backgroundColor: theme.cardBg,
       width: width,
       padding: 12,
     },
     recentHeader: {
-      color: "#aaa",
+      color: theme.postIcons,
       fontWeight: "bold",
       marginTop: 8,
       marginBottom: 20,
@@ -88,11 +88,11 @@ export const createStyles = (theme: Theme) =>
     loadingText: {
       textAlign: "center",
       padding: 20,
-      color: "#888",
+      color: theme.postIcons,
     },
     emptyText: {
       textAlign: "center",
       padding: 20,
-      color: "#888",
+      color: theme.postIcons,
     },
   });

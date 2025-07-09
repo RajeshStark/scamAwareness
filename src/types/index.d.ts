@@ -8,4 +8,7 @@ type Theme = {
   gradient2: string;
   grey: string;
   info: string;
+  txt1: string;
+  cardBg: string;
+  postIcons: string;
 };

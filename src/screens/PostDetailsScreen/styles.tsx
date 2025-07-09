@@ -12,6 +12,7 @@ export const createStyles = (theme: Theme) =>
     cUsertxt: {
       fontFamily: Fonts.Medium,
       marginLeft: 10,
+      color: "#000",
     },
     commentContainer: {
       padding: 10,
@@ -23,7 +24,7 @@ export const createStyles = (theme: Theme) =>
       flexDirection: "row",
       alignItems: "center",
       marginTop: 12,
-      borderColor: "#ccc",
+      borderColor: theme.postIcons,
       borderWidth: 1,
       borderRadius: 5,
       padding: 10,
@@ -33,9 +34,11 @@ export const createStyles = (theme: Theme) =>
       borderRadius: 8,
       paddingHorizontal: 12,
       maxHeight: 120,
+      color: theme.white,
     },
     commentTxt: {
       margin: 5,
+      color: "#000",
     },
     avatar: {
       width: 40,
@@ -66,9 +69,11 @@ export const createStyles = (theme: Theme) =>
     replyIcon: {
       marginTop: 4,
       alignSelf: "flex-end",
+      color: theme.postIcons,
     },
     loadMoreText: {
       fontSize: 16,
+      color: theme.white,
     },
     replyIconContainer: {
       flexDirection: "row",
@@ -80,7 +85,7 @@ export const createStyles = (theme: Theme) =>
       marginTop: 10,
       paddingLeft: 20,
       borderLeftWidth: 1,
-      borderLeftColor: "#ccc",
+      borderLeftColor: theme.postIcons,
       width: "90%",
       alignSelf: "flex-end",
     },
@@ -103,14 +108,16 @@ export const createStyles = (theme: Theme) =>
       fontSize: 14,
       flexDirection: "row",
       flexWrap: "wrap",
+      color: theme.white,
     },
     replyToText: {
       fontWeight: "normal",
-      color: "#888",
+      color: theme.postIcons,
       fontSize: 13,
     },
     replyContent: {
       fontSize: 14,
       marginTop: 2,
+      color: theme.white,
     },
   });

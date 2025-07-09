@@ -12,6 +12,7 @@ export const LightColors = {
   error: "#f22c3d",
   txt1: "#002060",
   cardBg: "#fff",
+  postIcons: "#555",
 };
 
 export const DarkColors = {
@@ -26,4 +27,5 @@ export const DarkColors = {
   error: "#f22c3d",
   txt1: "#FFF",
   cardBg: "#35002d",
+  postIcons: "#FFF",
 };
