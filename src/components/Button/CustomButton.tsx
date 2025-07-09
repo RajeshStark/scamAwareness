@@ -30,7 +30,6 @@ export default function CustomButton({
   isDisabled = false,
   isLoading = false,
   isHalf = false,
-  isText = false,
   isLinear = false,
   buttonStyle,
   width,

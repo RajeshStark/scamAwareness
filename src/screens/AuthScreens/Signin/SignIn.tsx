@@ -25,7 +25,7 @@ import { useAppSelector } from "../../../hooks/useAppselector";
 
 export default function SignIn({ navigation }) {
   const { theme, isDark } = useAppTheme();
-  const styles = createStyles(theme);
+  const styles = createStyles(theme, isDark);
   const dispatch = useDispatch();
   const fcmToken = useAppSelector((state) => state?.login?.fcmtoken);
   const { mutate: login, isPending } = useLogin();

@@ -27,7 +27,7 @@ import { showToast } from "../../components/Toast";
 
 export default function ChangePassword({ navigation }) {
   const { theme, isDark } = useAppTheme();
-  const styles = createStyles(theme);
+  const styles = createStyles(theme, isDark);
   const dispatch = useDispatch();
   const { mutate: changepassword, isPending } = useChangePassword();
   const {

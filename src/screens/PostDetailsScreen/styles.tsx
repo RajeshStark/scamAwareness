@@ -34,7 +34,7 @@ export const createStyles = (theme: Theme) =>
       borderRadius: 8,
       paddingHorizontal: 12,
       maxHeight: 120,
-      color: theme.white,
+      color: theme.black,
     },
     commentTxt: {
       margin: 5,
@@ -73,7 +73,7 @@ export const createStyles = (theme: Theme) =>
     },
     loadMoreText: {
       fontSize: 16,
-      color: theme.white,
+      color: theme.black,
     },
     replyIconContainer: {
       flexDirection: "row",
@@ -108,7 +108,7 @@ export const createStyles = (theme: Theme) =>
       fontSize: 14,
       flexDirection: "row",
       flexWrap: "wrap",
-      color: theme.white,
+      color: theme.black,
     },
     replyToText: {
       fontWeight: "normal",
@@ -118,6 +118,6 @@ export const createStyles = (theme: Theme) =>
     replyContent: {
       fontSize: 14,
       marginTop: 2,
-      color: theme.white,
+      color: theme.black,
     },
   });

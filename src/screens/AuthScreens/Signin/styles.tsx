@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import { height, width } from "../../../utils/Dimensions";
 import Fonts from "../../../utils/Fonts";
 
-export const createStyles = (theme: Theme) =>
+export const createStyles = (theme: Theme, isDark: boolean) =>
   StyleSheet.create({
     mainContainer: {
       alignItems: "center",
@@ -11,19 +11,18 @@ export const createStyles = (theme: Theme) =>
     },
     cardcontainer: {
       width: "90%",
-      // height: height * 0.65,
       borderRadius: 10,
       overflow: "hidden",
       position: "relative",
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: theme.white,
+      backgroundColor: isDark ? "#c7bac4" : theme.white,
       paddingVertical: 50,
     },
 
     cardBackground: {
       ...StyleSheet.absoluteFillObject,
-      backgroundColor: theme.white,
+      backgroundColor: isDark ? "#c7bac4" : theme.white,
       opacity: 0.5,
       zIndex: -1,
     },
@@ -89,5 +88,6 @@ export const createStyles = (theme: Theme) =>
       fontSize: 16,
       fontFamily: Fonts.Medium,
       marginLeft: 10,
+      color: "#000",
     },
   });

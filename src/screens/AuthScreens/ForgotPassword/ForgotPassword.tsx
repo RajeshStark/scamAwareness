@@ -22,8 +22,8 @@ const schema = yup.object().shape({
 });
 
 export default function ForgotPassword({ navigation }) {
-  const { theme } = useAppTheme();
-  const styles = createStyles(theme);
+  const { theme, isDark } = useAppTheme();
+  const styles = createStyles(theme, isDark);
   const { mutate: forgotPassword, isPending } = useForgotPassword();
 
   const {

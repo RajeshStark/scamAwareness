@@ -66,7 +66,7 @@ export default function SettingsScreen({ navigation }: any) {
       <>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color={theme.white} />
+            <Ionicons name="arrow-back" size={24} color={theme.black} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Settings</Text>
         </View>
@@ -124,6 +124,7 @@ export const createStyles = (theme: Theme, isDark) =>
       fontSize: 18,
       fontWeight: "600",
       marginLeft: 12,
+      color: theme.black,
     },
     options: {
       padding: 20,

@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import Fonts from "../../../utils/Fonts";
 
-export const createStyles = (theme: Theme) =>
+export const createStyles = (theme: Theme, isDark: boolean) =>
   StyleSheet.create({
     mainContainer: {
       alignItems: "center",
@@ -16,7 +16,7 @@ export const createStyles = (theme: Theme) =>
       position: "relative",
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: theme.white,
+      backgroundColor: isDark ? "#c7bac4" : theme.white,
       paddingBottom: 40,
     },
 

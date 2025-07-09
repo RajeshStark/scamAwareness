@@ -20,7 +20,7 @@ export const createStyles = (theme: Theme, isDark: boolean) =>
     headerTitle: {
       fontSize: 20,
       fontWeight: "bold",
-      color: theme.white,
+      color: theme.black,
     },
     sectionHeader: {
       fontWeight: "bold",

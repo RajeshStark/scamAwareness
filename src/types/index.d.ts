@@ -11,4 +11,5 @@ type Theme = {
   txt1: string;
   cardBg: string;
   postIcons: string;
+  black: string;
 };

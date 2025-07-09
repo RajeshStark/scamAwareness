@@ -149,7 +149,7 @@ export default function CustomInput({
             styles.input,
             {
               width: size ? size : rightIcon ? "90%" : "100%",
-              color: theme.txtblack,
+              color: "#000",
               flex: 1,
             },
           ]}

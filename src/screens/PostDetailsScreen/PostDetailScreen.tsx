@@ -179,7 +179,7 @@ export const PostDetailScreen = ({ route }) => {
             <View style={styles.commentDes}>
               <TextInput
                 placeholder="Add a comment..."
-                placeholderTextColor={theme.white}
+                placeholderTextColor={theme.black}
                 value={commentText}
                 onChangeText={setCommentText}
                 style={styles.commentinput}
