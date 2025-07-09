@@ -40,7 +40,6 @@ export const styles = StyleSheet.create({
   media: {
     width: width - 80,
     height: 200,
-    backgroundColor: "#000",
     borderRadius: 30,
   },
   overlayButtons: {
@@ -126,5 +125,41 @@ export const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.5)",
     padding: 6,
     borderRadius: 20,
+  },
+  audioContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "center",
+    backgroundColor: "#128C7E",
+    padding: 10,
+    borderRadius: 20,
+    marginHorizontal: 5,
+    width: width - 120,
+    height: 50,
+  },
+
+  audioPlayIcon: {
+    marginRight: 10,
+  },
+
+  audioWaveform: {
+    flexDirection: "row",
+    flex: 1,
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  audioLine: {
+    width: 2,
+    height: Math.random() * 15 + 5,
+    backgroundColor: "#fff",
+    borderRadius: 1,
+    marginHorizontal: 1,
+  },
+
+  audioDuration: {
+    color: "#fff",
+    fontSize: 12,
+    marginLeft: 10,
   },
 });

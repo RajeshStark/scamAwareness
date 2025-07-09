@@ -1,40 +1,32 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View, Text, Dimensions, StyleSheet } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withRepeat,
   withTiming,
-  runOnJS,
+  withRepeat,
 } from "react-native-reanimated";
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const TICKER_HEIGHT = 28;
-const SCROLL_DURATION = 6000;
+const SCROLL_DURATION = 5000;
 
 const EmergencyTicker = () => {
   const translateX = useSharedValue(0);
+  const [textWidth, setTextWidth] = useState(0);
 
   const baseMessage = "EMERGENCY /";
-  const repeatedMessage = Array(30).fill(baseMessage).join(" ");
+  const repeatedMessage = new Array(20).fill(baseMessage).join(" ");
+  const textRef = useRef(null);
 
   useEffect(() => {
-    const scrollWidth = SCREEN_WIDTH * 2; // message width
-    const animate = () => {
-      translateX.value = withTiming(
-        -SCREEN_WIDTH,
-        {
-          duration: SCROLL_DURATION,
-        },
-        () => {
-          // When done, reset and start again
-          translateX.value = 0;
-          runOnJS(animate)();
-        }
+    if (textWidth > 0) {
+      translateX.value = withRepeat(
+        withTiming(-textWidth, { duration: SCROLL_DURATION }),
+        -1,
+        false
       );
-    };
-    animate();
-  }, []);
+    }
+  }, [textWidth]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
@@ -44,7 +36,13 @@ const EmergencyTicker = () => {
     <View style={styles.container}>
       <View style={styles.tickerContainer}>
         <Animated.View style={[styles.row, animatedStyle]}>
-          <Text style={styles.text}>{repeatedMessage}</Text>
+          <Text
+            onLayout={(e) => setTextWidth(e.nativeEvent.layout.width)}
+            ref={textRef}
+            style={styles.text}
+          >
+            {repeatedMessage + " " + repeatedMessage + " " + repeatedMessage}
+          </Text>
         </Animated.View>
       </View>
     </View>
@@ -53,7 +51,6 @@ const EmergencyTicker = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     height: TICKER_HEIGHT,
   },
   tickerContainer: {
@@ -72,6 +69,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     letterSpacing: 2,
     lineHeight: 24,
+    fontStyle: "italic",
+    whiteSpace: "nowrap",
   },
 });
 

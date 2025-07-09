@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 import CustomHeader from "../../components/Input/Header/Header";
-import PostCard from "../../components/PostCard/PostCard";
+import PostCard from "../../components/PostCard";
 import Typography from "../../components/Typography/Typography";
 import useAppTheme from "../../hooks/useAppTheme";
 import { usePostDetail } from "../../hooks/usePoseDetails";

@@ -11,7 +11,7 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Container from "../../components/Container/Container";
 import LineraBgContainer from "../../components/Container/LineraBgContainer";
-import PostCard from "../../components/PostCard/PostCard";
+import PostCard from "../../components/PostCard";
 import Typography from "../../components/Typography/Typography";
 import useAppTheme from "../../hooks/useAppTheme";
 import { usePostList } from "../../services/hooks/usePost";

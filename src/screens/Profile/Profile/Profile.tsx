@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import PostCard from "../../../components/PostCard/PostCard";
+import PostCard from "../../../components/PostCard";
 import Typography from "../../../components/Typography/Typography";
 import { useAppSelector } from "../../../hooks/useAppselector";
 import useAppTheme from "../../../hooks/useAppTheme";
