@@ -27,7 +27,7 @@ export const createStyles = (theme: Theme) =>
       fontSize: 14,
     },
     contentContainer: {
-      marginTop: 5,
+      marginTop: -10,
     },
     caption: {
       fontSize: 14,
@@ -35,12 +35,10 @@ export const createStyles = (theme: Theme) =>
     },
     title: {
       fontSize: 18,
-      marginBottom: 8,
       fontFamily: Fonts.Bold,
     },
     media: {
-      width: width - 80,
-      height: 200,
+      width: width - 95,
       borderRadius: 30,
     },
     overlayButtons: {
@@ -57,6 +55,8 @@ export const createStyles = (theme: Theme) =>
       flexDirection: "row",
       justifyContent: "space-between",
       paddingTop: 15,
+      width: width - 95,
+      alignSelf: "flex-end",
     },
     iconRow: {
       flexDirection: "row",
@@ -135,8 +135,9 @@ export const createStyles = (theme: Theme) =>
       padding: 10,
       borderRadius: 20,
       marginHorizontal: 5,
-      width: width - 120,
+      width: width - 100,
       height: 50,
+      marginTop: 10,
     },
 
     audioPlayIcon: {

@@ -1,5 +1,4 @@
-// PostContent.tsx
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Pressable,
@@ -7,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Dimensions,
 } from "react-native";
 import Typography from "../Typography/Typography";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -14,6 +14,8 @@ import Video from "react-native-video";
 import AudioPostCard from "./AudioPostCard";
 import { createStyles } from "./styles";
 import useAppTheme from "../../hooks/useAppTheme";
+
+const { width } = Dimensions.get("window");
 
 const PostContent = ({
   name,
@@ -31,6 +33,26 @@ const PostContent = ({
   const { theme } = useAppTheme();
   const styles = createStyles(theme);
 
+  const [ratios, setRatios] = useState({}); // { [index]: aspectRatio }
+
+  const mediaWidth = width - 95;
+  const defaultAspectRatio = 1.2; // fallback if unknown
+
+  const onVideoLoad = (index, naturalSize) => {
+    const { height, width } = naturalSize;
+    if (width && height) {
+      const ratio = height / width;
+      setRatios((prev) => ({ ...prev, [index]: ratio }));
+    }
+  };
+
+  const onImageLoad = (index, w, h) => {
+    if (w && h) {
+      const ratio = h / w;
+      setRatios((prev) => ({ ...prev, [index]: ratio }));
+    }
+  };
+
   const renderMedia = ({ item, index }) => {
     const isVideo = item.type.includes("video");
     const isAudio = item.type.includes("audio");
@@ -38,8 +60,10 @@ const PostContent = ({
     const muted = mutedVideos[index] ?? true;
     const isPlaying = playingAudioIndex === index;
 
-    const wrapper = {
-      ...styles.media,
+    const aspectRatio = ratios[index] ?? defaultAspectRatio;
+    const mediaStyle = {
+      width: mediaWidth,
+      aspectRatio,
       borderRadius: 12,
       overflow: "hidden",
     };
@@ -48,32 +72,31 @@ const PostContent = ({
       return (
         <TouchableOpacity
           onPress={() => handlers.togglePlayPause(index)}
-          style={wrapper}
+          style={mediaStyle}
         >
-          <View style={wrapper}>
-            <Video
-              source={{ uri: item.url }}
-              style={StyleSheet.absoluteFill}
-              resizeMode="cover"
-              paused={paused}
-              muted={muted}
-              repeat
+          <Video
+            source={{ uri: item.url }}
+            resizeMode="cover"
+            style={StyleSheet.absoluteFill}
+            paused={paused}
+            muted={muted}
+            repeat
+            onLoad={({ naturalSize }) => onVideoLoad(index, naturalSize)}
+          />
+          <View style={styles.overlayButtons}>
+            <Ionicons
+              name={paused ? "play" : "pause"}
+              size={32}
+              color="#fff"
+              style={{ marginRight: 20 }}
             />
-            <View style={styles.overlayButtons}>
+            <TouchableOpacity onPress={() => handlers.toggleMute(index)}>
               <Ionicons
-                name={paused ? "play" : "pause"}
-                size={32}
+                name={muted ? "volume-mute" : "volume-high"}
+                size={28}
                 color="#fff"
-                style={{ marginRight: 20 }}
               />
-              <TouchableOpacity onPress={() => handlers.toggleMute(index)}>
-                <Ionicons
-                  name={muted ? "volume-mute" : "volume-high"}
-                  size={28}
-                  color="#fff"
-                />
-              </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
           </View>
           <TouchableOpacity
             style={styles.expandIcon}
@@ -83,40 +106,30 @@ const PostContent = ({
           </TouchableOpacity>
         </TouchableOpacity>
       );
-    } else if (isAudio) {
+    }
+
+    if (isAudio) {
       return (
-        // <TouchableOpacity
-        //   style={styles.audioContainer}
-        //   onPress={() => handlers.playOrPauseAudio(item.url, index)}
-        // >
-        //   <Ionicons
-        //     name={isPlaying ? "pause" : "play"}
-        //     size={24}
-        //     color="#fff"
-        //     style={styles.audioPlayIcon}
-        //   />
-        //   <View style={styles.audioWaveform}>
-        //     <View style={styles.audioLine} />
-        //     <View style={styles.audioLine} />
-        //     <View style={styles.audioLine} />
-        //     <View style={styles.audioLine} />
-        //     <View style={styles.audioLine} />
-        //   </View>
-        //   <Typography style={styles.audioDuration}>0:30</Typography>
-        // </TouchableOpacity>
-        <AudioPostCard post={item} />
-      );
-    } else {
-      return (
-        <View style={wrapper}>
-          <Image
-            source={{ uri: item.url }}
-            style={StyleSheet.absoluteFill}
-            resizeMode="cover"
-          />
+        <View style={{ width: mediaWidth, height: 80 }}>
+          <AudioPostCard post={item} />
         </View>
       );
     }
+
+    // Image
+    return (
+      <View style={mediaStyle}>
+        <Image
+          source={{ uri: item.url }}
+          style={StyleSheet.absoluteFill}
+          resizeMode="cover"
+          onLoad={(e) => {
+            const { width: w, height: h } = e.nativeEvent.source;
+            onImageLoad(index, w, h);
+          }}
+        />
+      </View>
+    );
   };
 
   return (

@@ -220,6 +220,7 @@ export default function EditorScreen({ navigation }) {
               placeholder="Write subject...."
               value={title}
               onChangeText={setTitle}
+              maxLength={120}
             />
             <View
               style={{ height: 1, width: "100%", backgroundColor: "grey" }}

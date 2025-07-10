@@ -8,6 +8,7 @@ import {
   TextInput,
   View,
   Keyboard,
+  StatusBar,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import LineraBgContainer from "../../components/Container/LineraBgContainer";
@@ -122,6 +123,7 @@ export default function SearchScreen({ navigation }) {
 
   return (
     <LineraBgContainer>
+      <StatusBar backgroundColor={"#fff"} barStyle={"dark-content"} />
       <SafeAreaView style={styles.flex}>
         <View style={styles.container}>
           <View style={styles.searchContainer}>

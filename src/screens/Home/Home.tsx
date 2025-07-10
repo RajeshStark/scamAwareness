@@ -57,6 +57,7 @@ export default function Home({ navigation }) {
 
   return (
     <SafeAreaView style={{ flex: 1, marginTop: StatusBar.currentHeight }}>
+      <StatusBar backgroundColor={"#fff"} barStyle={"dark-content"} />
       <LineraBgContainer>
         <EmergencyTicker />
         <View style={styles.mainContainer}>

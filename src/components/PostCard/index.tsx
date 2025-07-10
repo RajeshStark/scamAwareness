@@ -44,13 +44,15 @@ const PostCard: React.FC<PostCardProps> = (props) => {
   const content = (
     <View style={styles.card}>
       <PostHeader {...props} onDelete={handlers.postDelete} />
-      <PostContent
-        {...props}
-        state={state}
-        handlers={handlers}
-        navigation={navigation}
-        setExpandedVideo={setExpandedVideo}
-      />
+      <View style={{ marginLeft: 50 }}>
+        <PostContent
+          {...props}
+          state={state}
+          handlers={handlers}
+          navigation={navigation}
+          setExpandedVideo={setExpandedVideo}
+        />
+      </View>
       <PostFooter {...props} handlers={handlers} navigation={navigation} />
       {expandedVideo && (
         <VideoModal

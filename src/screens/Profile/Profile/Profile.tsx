@@ -160,10 +160,7 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        backgroundColor={theme.white}
-        barStyle={isDark ? "light-content" : "dark-content"}
-      />
+      <StatusBar backgroundColor={"#fff"} barStyle={"dark-content"} />
       {isDark ? (
         <LineraBgContainer>{renderContent()}</LineraBgContainer>
       ) : (

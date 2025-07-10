@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { View, Text, Dimensions, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,20 +8,21 @@ import Animated, {
 } from "react-native-reanimated";
 
 const TICKER_HEIGHT = 28;
-const SCROLL_DURATION = 5000;
+const SCROLL_DURATION = 10000;
 
 const EmergencyTicker = () => {
   const translateX = useSharedValue(0);
   const [textWidth, setTextWidth] = useState(0);
 
-  const baseMessage = "EMERGENCY /";
-  const repeatedMessage = new Array(20).fill(baseMessage).join(" ");
-  const textRef = useRef(null);
+  const message = "  🚨 EMERGENCY / This is an emergency message sample ";
+  const fullMessage = message + message;
 
   useEffect(() => {
     if (textWidth > 0) {
       translateX.value = withRepeat(
-        withTiming(-textWidth, { duration: SCROLL_DURATION }),
+        withTiming(-textWidth, {
+          duration: SCROLL_DURATION,
+        }),
         -1,
         false
       );
@@ -37,11 +38,10 @@ const EmergencyTicker = () => {
       <View style={styles.tickerContainer}>
         <Animated.View style={[styles.row, animatedStyle]}>
           <Text
-            onLayout={(e) => setTextWidth(e.nativeEvent.layout.width)}
-            ref={textRef}
             style={styles.text}
+            onLayout={(e) => setTextWidth(e.nativeEvent.layout.width)}
           >
-            {repeatedMessage + " " + repeatedMessage + " " + repeatedMessage}
+            {fullMessage}
           </Text>
         </Animated.View>
       </View>
@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFC001",
     overflow: "hidden",
     marginTop: -1,
+    justifyContent: "center",
   },
   row: {
     flexDirection: "row",
@@ -70,7 +71,6 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     lineHeight: 24,
     fontStyle: "italic",
-    whiteSpace: "nowrap",
   },
 });
 
