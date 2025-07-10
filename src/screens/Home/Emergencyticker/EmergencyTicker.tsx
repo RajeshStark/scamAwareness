@@ -14,7 +14,7 @@ const EmergencyTicker = () => {
   const translateX = useSharedValue(0);
   const [textWidth, setTextWidth] = useState(0);
 
-  const message = "  🚨 EMERGENCY / This is an emergency message sample ";
+  const message = "₹31 lakh Telegram job scam in Ahmedabad";
   const fullMessage = message + message;
 
   useEffect(() => {

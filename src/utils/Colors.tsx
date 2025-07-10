@@ -12,7 +12,7 @@ export const LightColors = {
   disable: "#898989",
   error: "#f22c3d",
   txt1: "#002060",
-  cardBg: "#fff",
+  cardBg: "rgba(255,255,255, 0.9)", //"#fff",
   postIcons: "#555",
 };
 
@@ -30,6 +30,6 @@ export const DarkColors = {
   disable: "#898989",
   error: "#f22c3d",
   txt1: "#FFF",
-  cardBg: "#35002d",
+  cardBg: "rgba(53, 0, 45, 0.4)",
   postIcons: "#FFF",
 };

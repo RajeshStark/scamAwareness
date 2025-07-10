@@ -119,8 +119,10 @@ export default function NotificationScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
-        backgroundColor={theme.white}
-        barStyle={isDark ? "light-content" : "dark-content"}
+        backgroundColor={"#fff"}
+        barStyle={"dark-content"}
+        // hidden={false}
+        translucent
       />
       {isDark ? (
         <LineraBgContainer>{renderContent()}</LineraBgContainer>

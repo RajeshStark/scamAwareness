@@ -123,7 +123,6 @@ export default function SearchScreen({ navigation }) {
 
   return (
     <LineraBgContainer>
-      <StatusBar backgroundColor={"#fff"} barStyle={"dark-content"} />
       <SafeAreaView style={styles.flex}>
         <View style={styles.container}>
           <View style={styles.searchContainer}>

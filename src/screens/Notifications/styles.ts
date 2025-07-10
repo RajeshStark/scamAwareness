@@ -60,11 +60,11 @@ export const createStyles = (theme: Theme, isDark: boolean) =>
     },
     title: {
       fontWeight: "bold",
-      color: "#0E3173",
+      color: isDark ? "#fff" : "#0E3173",
     },
     desc: {
       fontSize: 12,
-      color: "#0E3173",
+      color: isDark ? "#fff" : "#0E3173",
     },
     thumbnail: {
       width: 44,
@@ -83,7 +83,7 @@ export const createStyles = (theme: Theme, isDark: boolean) =>
       marginVertical: 20,
     },
     showMoreText: {
-      color: "#1b3b6f",
+      color: isDark ? "#EB9E3C" : "#0E3173",
       fontWeight: "bold",
     },
   });

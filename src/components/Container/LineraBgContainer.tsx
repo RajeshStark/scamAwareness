@@ -11,8 +11,6 @@ type Props = {
 export default function LineraBgContainer({ children, reverse }: Props) {
   const { isDark } = useAppTheme();
 
-  console.log("Checkkkkkkkkkkk", isDark ? "dark" : "light");
-
   return (
     <ImageBackground
       key={isDark ? "dark" : "light"} // 💡 force re-render on theme toggle
