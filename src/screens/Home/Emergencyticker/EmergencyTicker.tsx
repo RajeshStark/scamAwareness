@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Animated, {
   useSharedValue,
@@ -11,23 +11,21 @@ const TICKER_HEIGHT = 28;
 const SCROLL_DURATION = 10000;
 
 const EmergencyTicker = () => {
+  const message = "₹31 lakh Telegram job scam  | ";
+  const [messageWidth, setMessageWidth] = useState(0);
   const translateX = useSharedValue(0);
-  const [textWidth, setTextWidth] = useState(0);
-
-  const message = "₹31 lakh Telegram job scam in Ahmedabad";
-  const fullMessage = message + message;
 
   useEffect(() => {
-    if (textWidth > 0) {
+    if (messageWidth > 0) {
       translateX.value = withRepeat(
-        withTiming(-textWidth, {
+        withTiming(-messageWidth, {
           duration: SCROLL_DURATION,
         }),
         -1,
         false
       );
     }
-  }, [textWidth]);
+  }, [messageWidth]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
@@ -36,14 +34,21 @@ const EmergencyTicker = () => {
   return (
     <View style={styles.container}>
       <View style={styles.tickerContainer}>
+        {/* Actual scrolling ticker */}
         <Animated.View style={[styles.row, animatedStyle]}>
-          <Text
-            style={styles.text}
-            onLayout={(e) => setTextWidth(e.nativeEvent.layout.width * 1.5)}
-          >
-            {fullMessage}
-          </Text>
+          <Text style={styles.tickerText}>{message}</Text>
+          <Text style={styles.tickerText}>{message}</Text>
         </Animated.View>
+
+        {/* Hidden measurement view */}
+        <Text
+          style={[styles.tickerText, styles.measurementText]}
+          onLayout={(e) => {
+            setMessageWidth(e.nativeEvent.layout.width);
+          }}
+        >
+          {message}
+        </Text>
       </View>
     </View>
   );
@@ -57,20 +62,25 @@ const styles = StyleSheet.create({
     height: TICKER_HEIGHT,
     backgroundColor: "#FFC001",
     overflow: "hidden",
-    marginTop: -1,
     justifyContent: "center",
   },
   row: {
     flexDirection: "row",
+    alignItems: "center",
   },
-  text: {
+  tickerText: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#000",
-    paddingHorizontal: 20,
     letterSpacing: 2,
-    lineHeight: 24,
     fontStyle: "italic",
+    lineHeight: 24,
+    paddingHorizontal: 20,
+  },
+  measurementText: {
+    position: "absolute",
+    opacity: 0,
+    zIndex: -1,
   },
 });
 
