@@ -12,7 +12,7 @@ export const LightColors = {
   disable: "#898989",
   error: "#f22c3d",
   txt1: "#002060",
-  cardBg: "rgba(255,255,255, 0.9)", //"#fff",
+  cardBg: "rgba(255,255,255, 0.7)", //"#fff",
   postIcons: "#555",
 };
 

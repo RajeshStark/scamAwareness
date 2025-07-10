@@ -1,10 +1,10 @@
-import { StyleSheet } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 import { width } from "../../utils/Dimensions";
 import Fonts from "../../utils/Fonts";
 
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
-    flex: { flex: 1 },
+    flex: { flex: 1, marginTop: StatusBar.currentHeight },
     container: {
       flex: 1,
       paddingTop: 10,

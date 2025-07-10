@@ -122,8 +122,9 @@ export default function SearchScreen({ navigation }) {
   );
 
   return (
-    <LineraBgContainer>
-      <SafeAreaView style={styles.flex}>
+    <SafeAreaView style={styles.flex}>
+      <StatusBar backgroundColor={"#fff"} barStyle={"dark-content"} />
+      <LineraBgContainer>
         <View style={styles.container}>
           <View style={styles.searchContainer}>
             <TextInput
@@ -190,7 +191,7 @@ export default function SearchScreen({ navigation }) {
             />
           </View>
         </View>
-      </SafeAreaView>
-    </LineraBgContainer>
+      </LineraBgContainer>
+    </SafeAreaView>
   );
 }

@@ -144,5 +144,7 @@ export const createStyles = (theme: Theme, isDark) =>
       backgroundColor: "white",
       padding: 6,
       borderRadius: 40,
+      position: "absolute",
+      bottom: -4,
     },
   });

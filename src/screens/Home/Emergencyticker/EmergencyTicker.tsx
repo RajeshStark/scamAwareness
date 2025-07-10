@@ -39,7 +39,7 @@ const EmergencyTicker = () => {
         <Animated.View style={[styles.row, animatedStyle]}>
           <Text
             style={styles.text}
-            onLayout={(e) => setTextWidth(e.nativeEvent.layout.width)}
+            onLayout={(e) => setTextWidth(e.nativeEvent.layout.width * 1.5)}
           >
             {fullMessage}
           </Text>
