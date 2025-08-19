@@ -137,7 +137,7 @@ const PostContent = ({
       <Pressable
         onPress={() => navigation.navigate("PostDetailScreen", { postId: _id })}
       >
-        <Typography style={styles.title}>{name}</Typography>
+        {/* <Typography style={styles.title}>{name}</Typography> */}
         <Typography style={styles.caption}>{description}</Typography>
       </Pressable>
 

@@ -174,7 +174,7 @@ export default function EditorScreen({ navigation }) {
 
   const handlePost = () => {
     const body = {
-      name: "Post title",
+      name: " ",
       description: text,
       media,
     };
@@ -216,7 +216,7 @@ export default function EditorScreen({ navigation }) {
                 )}
               </View>
             </View>
-            <TextInput
+            {/* <TextInput
               placeholder="Write subject...."
               value={title}
               onChangeText={setTitle}
@@ -224,7 +224,7 @@ export default function EditorScreen({ navigation }) {
             />
             <View
               style={{ height: 1, width: "100%", backgroundColor: "grey" }}
-            />
+            /> */}
             <TextInput
               placeholder="Whats happening..."
               value={text}
